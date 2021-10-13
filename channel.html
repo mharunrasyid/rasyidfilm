@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rasyid Film</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body data-theme="dar">
+  <div class="container">
+    <header class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-bars nav-hamburger"></i>
+        <a href="#">
+          <img src="image/logo.png" alt="image" class="logo-img" />
+          <img src="image/small-logo.png" alt="image" class="small-logo-img" />
+        </a>
+      </div>
+      <div class="nav-content nav-content-channel">
+        <form action="" class="form-search-video">
+          <input type="search" placeholder="Search" name="searchVideo" />
+          <i class="fas fa-times close-search"></i>
+        </form>
+        <div class="search-btn">
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="nav-upload">
+          <button class="btn-upload">
+            <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
+            <i class="fas fa-video"></i>
+          </button>
+          <div class="nav-user">
+            <a href="#">
+              <img src="image/profile-user.png" class="profile-user-img" alt="image" />
+            </a>
+            <a href="#" class="nav-username-profile">Harun Rasyid</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="sidebar-container">
+        <a href="#" class="sidebar-item-link sidebar-item-link-channel">
+          <i class="fas fa-home icon-item-link"></i>
+          <span class="text-item-link">Home</span>
+        </a>
+        <a href="#" class="sidebar-item-link">
+          <i class="fas fa-video icon-item-link"></i>
+          <span class="text-item-link">Your Channel</span>
+        </a>
+        <div class="sidebar-theme">
+          <i class="fas fa-sun icon-sidebar-theme light-theme-btn"></i>
+          <i class="fas fa-moon icon-sidebar-theme dark-theme-btn"></i>
+        </div>
+      </div>
+      <div class="overlay"></div>
+      <div class="content-container content-container-channel">
+        <div class="header-content-video-container-channel">
+          <div class="header-profile-content-video-container-channel">
+            <img src="image/profile.png" alt="image" />
+            <div>Harun Rasyid</div>
+          </div>
+          <div class="header-btn-content-video-container-channel">
+            <a href="#" class="btn-video">Video</a>
+            <div class="input-search-container-channel">
+              <label for="searchVideoChannel">
+                <i class="fas fa-search"></i>
+              </label>
+              <input type="search" name="searchVideoChannel" id="searchVideoChannel" placeholder="Search Video" />
+            </div>
+          </div>
+        </div>
+        <div class="content-video-container-channel">
+          <div class="video-container-channel">
+            <div class="video-thumbnail loading">
+              <div class="video-duration">15.45</div>
+            </div>
+            <div class="text-video-container">
+              <div class="text-video-user-container text-video-user-container-channel">
+                <a href="#" class="title-video loading">Ini Caption Aja Ya</a>
+                <div class="username-video info-video loading">
+                  <span class="view-info">1.33 M</span> views &bull;
+                  <span class="date-info">7 Oktober 2021</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  const renderCardVideo = () => {
+    $(".video-thumbnail").removeClass("loading");
+    $(".video-duration").css({
+      "visibility": "visible"
+    });
+    $(".container-video-profile-img").removeClass("loading");
+    $(".video-profile-img").css({
+      "visibility": "visible"
+    });
+    $(".title-video").removeClass("loading");
+    $(".title-video").addClass("color-title-video")
+    $(".username-video").removeClass("loading");
+    $(".username-video").addClass("color-title-video-transparent")
+  }
+
+  setTimeout(() => {
+    renderCardVideo()
+  }, 2000)
+
+  $(document).ready(function () {
+    $('.nav-hamburger').click(function () {
+      if ($(".sidebar-container").css('width') == '255px') {
+        if (window.matchMedia('(max-width: 400px)').matches) {
+          $('.sidebar-container').animate({
+            width: "0"
+          });
+        } else {
+          $('.sidebar-container').animate({
+            width: "52px"
+          });
+        }
+
+        $('.sidebar-item-link').animate({
+          paddingLeft: "13px"
+        });
+        $('.content-container').animate({
+          marginLeft: "52px"
+        });
+        $('.sidebar-theme').css({
+          "visibility": "hidden"
+        });
+        $(".overlay").removeClass("overlay-show");
+        $(".nav-content").removeClass("hide-all");
+        $(".small-logo-img").removeClass("small-logo-img-block");
+      } else {
+        $('.sidebar-container').animate({
+          width: "255px"
+        });
+        $('.sidebar-item-link').animate({
+          paddingLeft: "20px"
+        });
+        $('.content-container').animate({
+          marginLeft: "255px"
+        });
+        $('.sidebar-theme').css({
+          "visibility": "visible"
+        });
+        $(".overlay").addClass("overlay-show");
+        $(".nav-content").addClass("hide-all");
+        $(".small-logo-img").addClass("small-logo-img-block");
+      }
+    })
+  })
+
+  $(".search-btn").on("click", function () {
+    console.log('hai');
+    $(".form-search-video").addClass("form-search-video-fixed");
+    $(".close-search").addClass("close-search-fixed");
+    $(".form-search-video input").addClass("input-fixed");
+    $(".sidebar-container").css({
+      "z-index": "-1"
+    });
+    $('.sidebar-container').css({
+      "width": "52px"
+    });
+    $('.sidebar-item-link').css({
+      "paddingLeft": "13px"
+    });
+    $('.sidebar-theme').css({
+      "visibility": "hidden"
+    });
+
+  })
+
+  $(".close-search").on("click", function () {
+    console.log('hai');
+    $(".form-search-video").removeClass("form-search-video-fixed");
+    $(".close-search").removeClass("close-search-fixed");
+    $(".form-search-video input").removeClass("input-fixed");
+    $(".sidebar-container").css({
+      "z-index": "1000"
+    });
+  })
+
+  $(".overlay").on("click", function () {
+    if (window.matchMedia('(max-width: 400px)').matches) {
+      $('.sidebar-container').animate({
+        width: "0"
+      });
+    } else {
+      $('.sidebar-container').animate({
+        width: "52px"
+      });
+    }
+    $('.sidebar-item-link').animate({
+      paddingLeft: "13px"
+    });
+    $('.content-container').animate({
+      marginLeft: "52px"
+    });
+    $('.sidebar-theme').css({
+      "visibility": "hidden"
+    });
+    $(".overlay").removeClass("overlay-show");
+    $(".nav-content").removeClass("hide-all");
+    $(".small-logo-img").removeClass("small-logo-img-block");
+  })
+
+  $(".light-theme-btn").click(function () {
+    $(".light-theme-btn").addClass("icon-sidebar-theme-active");
+    $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
+  })
+
+  $(".dark-theme-btn").click(function () {
+    $(".dark-theme-btn").addClass("icon-sidebar-theme-active");
+    $(".light-theme-btn").removeClass("icon-sidebar-theme-active");
+  })
+
+  $("#searchVideoChannel").focus(function () {
+    $(this).addClass("input-search-channel-active");
+  });
+  $("#searchVideoChannel").blur(function () {
+    $(this).removeClass("input-search-channel-active");
+
+  });
+
+  // $(".video-container-channel").click(function () {
+  //   window.location.assign("https://www.w3schools.com")
+  // })
+
+  // $(".text-video-user-container text-video-user-container-channel a").click(function (e) {
+  //   e.stopPropagation();
+  // })
+</script>
+
+</html>
