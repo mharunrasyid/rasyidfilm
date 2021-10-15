@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rasyid Film</title>
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body data-theme="dar">
+    <div class="container">
+        <header class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-bars nav-hamburger"></i>
+                <a href="#">
+                    <img src="../images/default-img/logo.png" alt="image" class="logo-img" />
+                    <img src="../images/default-img/small-logo.png" alt="image" class="small-logo-img" />
+                </a>
+            </div>
+            <div class="nav-content nav-content-studio">
+                <form action="" class="form-search-video">
+                    <input type="search" placeholder="Search Title" name="searchVideo" />
+                    <i class="fas fa-times close-search"></i>
+                </form>
+                <div class="search-btn">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="nav-upload">
+                    <div class="nav-user">
+                        <a href="#">
+                            <img src="../images/default-img/profile-user.png" class="profile-user-img" alt="image" />
+                        </a>
+                        <a href="#" class="nav-username-profile">Harun Rasyid</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="sidebar-container">
+                <div class="image-profile-content-container">
+                    <a href="#" class="a-image-profile-content">
+                        <img src="../images/default-img/profile.png" alt="image" class="image-profile-content">
+                    </a>
+                    <div class="title-profile-content-container">
+                        <div class="title-profile-content">Channel Anda</div>
+                        <div class="subtitle-profile-content" style="font-size: 14px;">Harun Rasyid</div>
+                    </div>
+                </div>
+                <a href="#" class="sidebar-item-link" id="sidebar-item-link">
+                    <i class="fas fa-video icon-item-link"></i>
+                    <span class="text-item-link">Content</span>
+                </a>
+                <div class="sidebar-theme">
+                    <i class="fas fa-sun icon-sidebar-theme light-theme-btn"></i>
+                    <i class="fas fa-moon icon-sidebar-theme dark-theme-btn"></i>
+                </div>
+            </div>
+            <div class="overlay"></div>
+            <div class="content-container content-container-content">
+                <div class="header-content-container-content">Channel Content</div>
+                <div class="container-table-content">
+                    <div class="container-table-content-1">
+                        <div class="container-table-content-2">
+                            <table class="table-content">
+                                <thead>
+                                    <th>#</th>
+                                    <th>Title</th>
+                                    <th>URL</th>
+                                    <th>Like</th>
+                                    <th>Views</th>
+                                    <th>Thumbnail</th>
+                                    <th>Private</th>
+                                    <th>Created At</th>
+                                    <th>Updated At</th>
+                                    <th>action</th>
+                                </thead>
+                                <tbody>
+                                    <td>2</td>
+                                    <td>main main main main main main main main </td>
+                                    <td>/uploads/videos/tes-1633599842477.mp4</td>
+                                    <td>10000</td>
+                                    <td>400000</td>
+                                    <td>/uploads/thumbnails/safari-1633599842478.jpg</td>
+                                    <td>True</td>
+                                    <td>7 Oktober 2021</td>
+                                    <td>7 Oktober 2021</td>
+                                    <td>
+                                        <button class="btn-edit-table-content">Edit</button>
+                                        <button class="btn-delete-table-content">Delete</button>
+                                    </td>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-pagination-content-container">
+                    <button class="btn-pagination-table-content">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="btn-pagination-table-content">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.nav-hamburger').click(function () {
+            if ($(".sidebar-container").css('width') == '255px') {
+                if (window.matchMedia('(max-width: 400px)').matches) {
+                    $('.sidebar-container').animate({
+                        width: "0"
+                    });
+                } else {
+                    $('.sidebar-container').animate({
+                        width: "52px"
+                    });
+                }
+
+                $('.sidebar-item-link').animate({
+                    paddingLeft: "13px"
+                });
+                $('.content-container').animate({
+                    marginLeft: "52px"
+                });
+                $('.sidebar-theme').css({
+                    "visibility": "hidden"
+                });
+                $(".title-profile-content-container").css({
+                    "display": "none"
+                });
+                $(".overlay").removeClass("overlay-show");
+                $(".nav-content").removeClass("hide-all");
+                $(".small-logo-img").removeClass("small-logo-img-block");
+            } else {
+                $('.sidebar-container').animate({
+                    width: "255px"
+                });
+                $('.sidebar-item-link').animate({
+                    paddingLeft: "20px"
+                });
+                setTimeout(() => {
+                    $(".title-profile-content-container").css({
+                        "display": "block"
+                    });
+                }, 150);
+                $('.content-container').animate({
+                    marginLeft: "255px"
+                });
+                $('.sidebar-theme').css({
+                    "visibility": "visible"
+                });
+                $(".overlay").addClass("overlay-show");
+                $(".nav-content").addClass("hide-all");
+                $(".small-logo-img").addClass("small-logo-img-block");
+            }
+        })
+    })
+
+    $(".search-btn").on("click", function () {
+        console.log('hai');
+        $(".form-search-video").addClass("form-search-video-fixed");
+        $(".close-search").addClass("close-search-fixed");
+        $(".form-search-video input").addClass("input-fixed");
+        $(".sidebar-container").css({
+            "z-index": "-1"
+        });
+        $('.sidebar-container').css({
+            "width": "52px"
+        });
+        $('.sidebar-item-link').css({
+            "paddingLeft": "13px"
+        });
+        $(".title-profile-content-container").css({
+            "display": "none"
+        });
+        $('.sidebar-theme').css({
+            "visibility": "hidden"
+        });
+
+    })
+
+    $(".close-search").on("click", function () {
+        console.log('hai');
+        $(".form-search-video").removeClass("form-search-video-fixed");
+        $(".close-search").removeClass("close-search-fixed");
+        $(".form-search-video input").removeClass("input-fixed");
+        $(".sidebar-container").css({
+            "z-index": "1000"
+        });
+    })
+
+    $(".overlay").on("click", function () {
+        if (window.matchMedia('(max-width: 400px)').matches) {
+            $('.sidebar-container').animate({
+                width: "0"
+            });
+        } else {
+            $('.sidebar-container').animate({
+                width: "52px"
+            });
+        }
+        $(".title-profile-content-container").css({
+            "display": "none"
+        });
+        $('.sidebar-item-link').animate({
+            paddingLeft: "13px"
+        });
+        $('.content-container').animate({
+            marginLeft: "52px"
+        });
+        $('.sidebar-theme').css({
+            "visibility": "hidden"
+        });
+        $(".overlay").removeClass("overlay-show");
+        $(".nav-content").removeClass("hide-all");
+        $(".small-logo-img").removeClass("small-logo-img-block");
+    })
+
+    $(".light-theme-btn").click(function () {
+        $(".light-theme-btn").addClass("icon-sidebar-theme-active");
+        $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
+    })
+
+    $(".dark-theme-btn").click(function () {
+        $(".dark-theme-btn").addClass("icon-sidebar-theme-active");
+        $(".light-theme-btn").removeClass("icon-sidebar-theme-active");
+    })
+</script>
+
+</html>

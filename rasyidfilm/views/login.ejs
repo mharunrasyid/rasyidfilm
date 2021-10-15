@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body data-theme="" class="body-login">
+    <div class="container-login">
+        <img src="images/default-img/login-img.png" alt="image" class="image-login" />
+        <form action="" class="input-login-container">
+            <img src="images/default-img/logo-login.png" alt="image" class="logo-login" />
+            <img src="images/default-img/logo.png" alt="image" class="logo-login-2" />
+            <div class="input-login-parent">
+                <i class="fas fa-user"></i>
+                <input type="email" class="input-login" placeholder="Email" />
+            </div>
+            <div class="input-login-parent">
+                <i class="fas fa-lock"></i>
+                <input type="password" class="input-login" placeholder="Password" />
+            </div>
+            <button type="submit" class="btn-submit-login">Login</button>
+        </form>
+    </div>
+    <a href="https://storyset.com/media" style="position: absolute;bottom: 0;">Media illustrations by Storyset</a>
+    <div style="position: absolute;bottom: 30px;">
+        Icon by <a href='https://iconpacks.net/?utm_source=link-attribution&utm_content=4254'>Iconpacks</a>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(".input-login").focus(function () {
+        $(this).parent().children("i").css("color", "rgb(252, 116, 25)");
+        $(this).css("border-bottom-color", "rgb(252, 116, 25)");
+    });
+    $(".input-login").blur(function () {
+        $(this).parent().children("i").css("color", "rgb(55,58,36)");
+        $(this).css("border-bottom-color", "#DCDCDA");
+    });
+</script>
+
+</html>
