@@ -19,41 +19,33 @@
         <header class="nav-container">
             <div class="nav-logo">
                 <i class="fas fa-bars nav-hamburger"></i>
-                <a href="#">
+                <a href="http://localhost:3000/">
                     <img src="../images/default-img/logo.png" alt="image" class="logo-img" />
                     <img src="../images/default-img/small-logo.png" alt="image" class="small-logo-img" />
                 </a>
             </div>
             <div class="nav-content nav-content-studio">
                 <form action="" class="form-search-video">
-                    <input type="search" placeholder="Search Title" name="searchVideo" />
+                    <input type="search" placeholder="Search For Your Video Title" />
                     <i class="fas fa-times close-search"></i>
                 </form>
                 <div class="search-btn">
                     <i class="fas fa-search"></i>
                 </div>
-                <div class="nav-upload">
-                    <div class="nav-user">
-                        <a href="#">
-                            <img src="../images/default-img/profile-user.png" class="profile-user-img" alt="image" />
-                        </a>
-                        <a href="#" class="nav-username-profile">Harun Rasyid</a>
-                    </div>
-                </div>
+                <div class="nav-upload"></div>
             </div>
         </header>
         <main>
             <div class="sidebar-container">
                 <div class="image-profile-content-container">
-                    <a href="#" class="a-image-profile-content">
-                        <img src="../images/default-img/profile.png" alt="image" class="image-profile-content">
+                    <a href="http://localhost:3000/studio" class="a-image-profile-content">
+                        <img src="../images/default-img/profile.png" alt="image" class="image-profile-content" />
                     </a>
                     <div class="title-profile-content-container">
                         <div class="title-profile-content">Channel Anda</div>
-                        <div class="subtitle-profile-content" style="font-size: 14px;">Harun Rasyid</div>
                     </div>
                 </div>
-                <a href="#" class="sidebar-item-link" id="sidebar-item-link">
+                <a href="http://localhost:3000/studio" class="sidebar-item-link" id="sidebar-item-link">
                     <i class="fas fa-video icon-item-link"></i>
                     <span class="text-item-link">Content</span>
                 </a>
@@ -74,6 +66,7 @@
                                     <th>Title</th>
                                     <th>URL</th>
                                     <th>Like</th>
+                                    <th>Dislike</th>
                                     <th>Views</th>
                                     <th>Thumbnail</th>
                                     <th>Private</th>
@@ -81,23 +74,8 @@
                                     <th>Updated At</th>
                                     <th>action</th>
                                 </thead>
-                                <tbody>
-                                    <td>2</td>
-                                    <td>main main main main main main main main </td>
-                                    <td>/uploads/videos/tes-1633599842477.mp4</td>
-                                    <td>10000</td>
-                                    <td>400000</td>
-                                    <td>/uploads/thumbnails/safari-1633599842478.jpg</td>
-                                    <td>True</td>
-                                    <td>7 Oktober 2021</td>
-                                    <td>7 Oktober 2021</td>
-                                    <td>
-                                        <button class="btn-edit-table-content">Edit</button>
-                                        <button class="btn-delete-table-content">Delete</button>
-                                    </td>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
@@ -117,128 +95,292 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    window.addEventListener("load", () => {
+        if (localStorage.getItem("theme") == "dark") {
+            $('body').attr("data-theme", localStorage.getItem("theme"));
+            $(".dark-theme-btn").addClass("icon-sidebar-theme-active");
+            $(".light-theme-btn").removeClass("icon-sidebar-theme-active");
+        } else {
+            $('body').attr("data-theme", localStorage.getItem("theme"));
+            $(".light-theme-btn").addClass("icon-sidebar-theme-active");
+            $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
+        }
+
+        loadData();
+    });
+
+    const loadData = (queryUrl) => {
+        $.ajax({
+                url: `http://localhost:3000/api/videos/studio${queryUrl ? queryUrl : ""}`,
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            .done(function (data) {
+                let {
+                    videos,
+                    userToken
+                } = data;
+
+                let options = {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                };
+                let trCode = "";
+                videos.forEach((m) => {
+                    trCode += `<tr style="font-family:sans-serif;">
+                                <td>${m.id}</td>
+                                <td>${m.title}</td>
+                                <td>${m.UrlVideo}</td>
+                                <td>${m.likes}</td>
+                                <td>${m.dislikes}</td>
+                                <td>${m.views}</td>
+                                <td>${m.thumbnail}</td>
+                                <td>${m.private}</td>
+                                <td>${new Date(m.createdAt).toLocaleString("id-ID",options)}</td>
+                                <td>${new Date(m.updatedAt).toLocaleString("id-ID",options)}</td>
+                                <td>
+                                    <button class="btn-edit-table-content" onclick="location.href='http://localhost:3000/studio/edit/${m.id}'">Edit</button>
+                                    <button class="btn-delete-table-content" data-idVideo="${m.id}">Delete</button>
+                                </td>
+                            </tr>`;
+                });
+
+                $(".table-content tbody").html(trCode);
+
+                let navUploadCode = `<button class="btn-upload" onclick="location.href='http://localhost:3000/studio/add'">
+                                        <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
+                                        <i class="fas fa-video"></i>
+                                    </button>
+                                    <div class="nav-user">
+                                        <div class="profile-img-container">
+                                            <img src="images/default-img/profile-user.png" class="profile-user-img" alt="image" />
+                                            <div class="dropdown-profile-container">
+                                                <a href="http://localhost:3000/studio" class="dropdown-profile-container-link">
+                                                <i class="fas fa-play-circle"></i>
+                                                Rasyid Film Studio
+                                                </a>
+                                                <a href="http://localhost:3000/login" class="dropdown-profile-container-link dropdown-profile-container-link-signout">
+                                                <i class="fas fa-sign-out-alt"></i>
+                                                Sign Out
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <a href="http://localhost:3000/channel/${userToken.userId}" class="nav-username-profile">${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}</a>
+                                    </div>`;
+
+                $(".nav-upload").html(navUploadCode);
+                $(".sub-title-profile-content").remove();
+                let username =
+                    `<div class="sub-title-profile-content" style="font-size: 14px;">${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}</div>`;
+                $(".title-profile-content-container div:first-child").after(username);
+                $(".title-profile-content-container");
+
+                $(".btn-delete-table-content").click(function () {
+                    deleteData($(this).attr("data-idVideo"));
+                })
+
+                const deleteData = (queryUrl) => {
+                    $.ajax({
+                        method: "DELETE",
+                        url: `http://localhost:3000/api/videos/delete/${queryUrl}`,
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        }
+                    }).done(function () {
+                        window.location.href = `http://localhost:3000/studio`
+                    }).fail(function (err) {
+                        console.log(err);
+                    })
+                };
+            })
+            .fail(function (err) {
+                window.location.href = "http://localhost:3000/login";
+            });
+    };
+
+
+    $(".form-search-video").submit(function (event) {
+        event.preventDefault();
+
+        let inputSearch = $(".form-search-video input").val();
+        urlSearch = `?searchTitle=${inputSearch}`;
+        loadData(urlSearch);
+    });
+
     $(document).ready(function () {
-        $('.nav-hamburger').click(function () {
-            if ($(".sidebar-container").css('width') == '255px') {
-                if (window.matchMedia('(max-width: 400px)').matches) {
-                    $('.sidebar-container').animate({
-                        width: "0"
+        $(".nav-hamburger").click(function () {
+            if ($(".sidebar-container").css("width") == "255px") {
+                if (window.matchMedia("(max-width: 400px)").matches) {
+                    $(".sidebar-container").animate({
+                        width: "0",
                     });
                 } else {
-                    $('.sidebar-container').animate({
-                        width: "52px"
+                    $(".sidebar-container").animate({
+                        width: "52px",
                     });
                 }
 
-                $('.sidebar-item-link').animate({
-                    paddingLeft: "13px"
+                $(".sidebar-item-link").animate({
+                    paddingLeft: "13px",
                 });
-                $('.content-container').animate({
-                    marginLeft: "52px"
+                $(".content-container").animate({
+                    marginLeft: "52px",
                 });
-                $('.sidebar-theme').css({
-                    "visibility": "hidden"
+                $(".sidebar-theme").css({
+                    visibility: "hidden",
                 });
                 $(".title-profile-content-container").css({
-                    "display": "none"
+                    display: "none",
                 });
                 $(".overlay").removeClass("overlay-show");
                 $(".nav-content").removeClass("hide-all");
                 $(".small-logo-img").removeClass("small-logo-img-block");
             } else {
-                $('.sidebar-container').animate({
-                    width: "255px"
+                $(".sidebar-container").animate({
+                    width: "255px",
                 });
-                $('.sidebar-item-link').animate({
-                    paddingLeft: "20px"
+                $(".sidebar-item-link").animate({
+                    paddingLeft: "20px",
                 });
                 setTimeout(() => {
                     $(".title-profile-content-container").css({
-                        "display": "block"
+                        display: "block",
                     });
                 }, 150);
-                $('.content-container').animate({
-                    marginLeft: "255px"
+                $(".content-container").animate({
+                    marginLeft: "255px",
                 });
-                $('.sidebar-theme').css({
-                    "visibility": "visible"
+                $(".sidebar-theme").css({
+                    visibility: "visible",
                 });
                 $(".overlay").addClass("overlay-show");
                 $(".nav-content").addClass("hide-all");
                 $(".small-logo-img").addClass("small-logo-img-block");
             }
-        })
-    })
+        });
+    });
 
     $(".search-btn").on("click", function () {
-        console.log('hai');
+        if (window.matchMedia("(max-width: 400px)").matches) {
+            $(".sidebar-container").animate({
+                width: "0",
+            });
+        } else {
+            $(".sidebar-container").animate({
+                width: "52px",
+            });
+        }
         $(".form-search-video").addClass("form-search-video-fixed");
         $(".close-search").addClass("close-search-fixed");
         $(".form-search-video input").addClass("input-fixed");
         $(".sidebar-container").css({
-            "z-index": "-1"
+            "z-index": "-1",
         });
-        $('.sidebar-container').css({
-            "width": "52px"
-        });
-        $('.sidebar-item-link').css({
-            "paddingLeft": "13px"
+        $(".sidebar-item-link").css({
+            paddingLeft: "13px",
         });
         $(".title-profile-content-container").css({
-            "display": "none"
+            display: "none",
         });
-        $('.sidebar-theme').css({
-            "visibility": "hidden"
+        $(".sidebar-theme").css({
+            visibility: "hidden",
         });
-
-    })
+    });
 
     $(".close-search").on("click", function () {
-        console.log('hai');
         $(".form-search-video").removeClass("form-search-video-fixed");
         $(".close-search").removeClass("close-search-fixed");
         $(".form-search-video input").removeClass("input-fixed");
         $(".sidebar-container").css({
-            "z-index": "1000"
+            "z-index": "1000",
         });
-    })
+    });
+
+    $('.form-search-video input').keyup(function (e) {
+        if (e.keyCode == 13) {
+            $(".form-search-video").removeClass("form-search-video-fixed");
+            $(".close-search").removeClass("close-search-fixed");
+            $(".form-search-video input").removeClass("input-fixed");
+            $(".sidebar-container").css({
+                "z-index": "1000",
+            });
+        }
+    });
+
+    $('.form-search-video input').keyup(function (e) {
+        if (e.keyCode == 13) {
+            $(".form-search-video").removeClass("form-search-video-fixed");
+            $(".close-search").removeClass("close-search-fixed");
+            $(".form-search-video input").removeClass("input-fixed");
+            $(".sidebar-container").css({
+                "z-index": "1000",
+            });
+        }
+    });
 
     $(".overlay").on("click", function () {
-        if (window.matchMedia('(max-width: 400px)').matches) {
-            $('.sidebar-container').animate({
-                width: "0"
+        if (window.matchMedia("(max-width: 400px)").matches) {
+            $(".sidebar-container").animate({
+                width: "0",
             });
         } else {
-            $('.sidebar-container').animate({
-                width: "52px"
+            $(".sidebar-container").animate({
+                width: "52px",
             });
         }
         $(".title-profile-content-container").css({
-            "display": "none"
+            display: "none",
         });
-        $('.sidebar-item-link').animate({
-            paddingLeft: "13px"
+        $(".sidebar-item-link").animate({
+            paddingLeft: "13px",
         });
-        $('.content-container').animate({
-            marginLeft: "52px"
+        $(".content-container").animate({
+            marginLeft: "52px",
         });
-        $('.sidebar-theme').css({
-            "visibility": "hidden"
+        $(".sidebar-theme").css({
+            visibility: "hidden",
         });
         $(".overlay").removeClass("overlay-show");
         $(".nav-content").removeClass("hide-all");
         $(".small-logo-img").removeClass("small-logo-img-block");
-    })
+    });
 
     $(".light-theme-btn").click(function () {
+        localStorage.setItem("theme", "light");
+        $('body').attr("data-theme", localStorage.getItem("theme"));
         $(".light-theme-btn").addClass("icon-sidebar-theme-active");
         $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
-    })
+    });
 
     $(".dark-theme-btn").click(function () {
+        localStorage.setItem("theme", "dark");
+        $('body').attr("data-theme", localStorage.getItem("theme"));
         $(".dark-theme-btn").addClass("icon-sidebar-theme-active");
         $(".light-theme-btn").removeClass("icon-sidebar-theme-active");
-    })
+    });
+
+    $(document).click(function (event) {
+        if (
+            event.target.className != "profile-user-img" &&
+            event.target.className != "dropdown-profile-container-link"
+        ) {
+            $(".dropdown-profile-container").css({
+                visibility: "hidden",
+            });
+        } else {
+            $(".dropdown-profile-container").css({
+                visibility: "visible",
+            });
+        }
+    });
+
+    $(".nav-upload").on("click",
+        ".nav-user .profile-img-container .dropdown-profile-container .dropdown-profile-container-link-signout",
+        function () {
+            localStorage.removeItem("token")
+        })
 </script>
 
 </html>

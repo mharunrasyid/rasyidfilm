@@ -14,6 +14,8 @@ body {
   --border-table-content: #e5e5e5;
   --header-channel-color: rgb(241, 241, 241);
   --main-playvideo-color: #f9f9f9;
+  --item-dropdown-color: rgb(107, 105, 105);
+  --box-shadow-dropdown-color: rgba(100, 100, 111, 0.2);
 }
 
 body[data-theme="dark"] {
@@ -32,6 +34,8 @@ body[data-theme="dark"] {
   --border-table-content: #464444c4;
   --header-channel-color: rgb(34, 34, 34);
   --main-playvideo-color: rgb(21, 21, 23);
+  --item-dropdown-color: rgba(255, 255, 255, 0.8);
+  --box-shadow-dropdown-color: transparent;
 }
 
 body {
@@ -140,7 +144,8 @@ body {
   border-radius: 50%;
 }
 
-.btn-upload {
+.btn-upload,
+.login-btn {
   padding: 7px 15px;
   border-radius: 40px;
   outline: none;
@@ -159,10 +164,67 @@ body {
   background: rgb(252, 116, 25);
 }
 
+.login-btn {
+  color: white;
+  margin-right: 0;
+  padding: 10px 12px;
+  background: rgb(252, 116, 25);
+}
+
 .profile-user-img {
   width: 40px;
   border-radius: 5px;
+}
+
+.profile-img-container {
   margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.dropdown-profile-container {
+  position: absolute;
+  width: 200px;
+  top: 60px;
+  background: var(--primary-color-light);
+  left: -80px;
+  padding: 12px 0;
+  visibility: hidden;
+  border-radius: 5px;
+  box-shadow: var(--box-shadow-dropdown-color) 0px 7px 29px 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-profile-container::before {
+  content: "";
+  height: 0px;
+  position: absolute;
+  width: 0px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: -12px auto;
+  border-bottom: solid 15px var(--primary-color-light);
+  border-left: solid 14px transparent;
+  border-right: solid 14px transparent;
+}
+
+.dropdown-profile-container a {
+  display: block;
+  text-decoration: none;
+  color: var(--item-dropdown-color);
+  padding: 10px 15px;
+}
+
+.dropdown-profile-container a:hover {
+  background: var(--active-sidebar-color) !important;
+}
+
+.dropdown-profile-container a i {
+  font-size: 20px;
+  margin-right: 7px;
 }
 
 .nav-username-profile {
@@ -268,7 +330,8 @@ main {
   width: 100%;
   height: 150px;
   border-radius: 5px;
-  background: url("http://unsplash.it/300?random") no-repeat center center;
+  background-position: center center;
+  background-repeat: no-repeat;
   background-size: cover;
   position: relative;
 }
@@ -293,7 +356,8 @@ main {
 .video-container:nth-child(2) .video-thumbnail,
 .video-container:nth-child(3) .video-thumbnail {
   height: 250px;
-  background: url("http://unsplash.it/800?random") no-repeat center center;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .text-video-container {
@@ -329,7 +393,6 @@ main {
 
 .username-video {
   text-decoration: none;
-  white-space: nowrap;
   color: transparent;
   font-size: 14px;
 }
@@ -394,12 +457,19 @@ main {
 
 .input-login-container {
   display: flex;
+  background: white;
   flex-direction: column;
   justify-content: center;
 }
 
+.input-register-container {
+  width: 70%;
+  max-width: 800px;
+}
+
 .logo-login {
   width: 400px;
+  margin: auto;
   margin-bottom: 50px;
 }
 
@@ -424,7 +494,7 @@ main {
   width: 100%;
   font-size: 18px;
   outline: none;
-  color: rgb(252, 116, 25);
+  color: rgb(55, 58, 36);
   border-bottom: 3px solid #dcdcda;
 }
 
@@ -436,7 +506,8 @@ main {
   transition: all 0.3s ease;
 }
 
-.btn-submit-login {
+.btn-submit-login,
+.btn-submit-register:hover {
   border: none;
   outline: none;
   padding: 15px;
@@ -445,7 +516,16 @@ main {
   background: rgb(252, 116, 25);
   font-weight: bold;
   color: white;
+  cursor: pointer;
   font-size: 20px;
+  box-sizing: border-box;
+  border: 3px solid rgb(252, 116, 25);
+}
+
+.btn-submit-register {
+  background: transparent;
+  margin-top: 5px !important;
+  color: rgb(252, 116, 25);
 }
 
 .container-add-video {
@@ -489,6 +569,7 @@ main {
 .input-add-video-container textarea {
   border: 1px solid rgb(209, 209, 209);
   resize: none;
+  line-height: 27px;
   background: var(--primary-color-dark);
   box-sizing: border-box;
   outline: none;
@@ -912,6 +993,7 @@ main {
 .info-video {
   font-family: sans-serif;
   margin-top: 5px;
+  width: 100%;
 }
 
 .body-playvideo {
@@ -1004,7 +1086,7 @@ main {
 
 .description-sub-desc-sub-video-play-video {
   margin: 15px 0;
-  height: 122px;
+  max-height: 122px;
   font-size: 16px;
   opacity: 0.8;
   color: var(--title-video-color);
@@ -1125,6 +1207,7 @@ main {
 
 .sub-container-video-random-play-video {
   display: flex;
+  cursor: pointer;
   margin-bottom: 10px;
 }
 
@@ -1157,6 +1240,7 @@ main {
 .text-video-user-container-play-video {
   display: flex;
   flex-direction: column;
+  width: 50%;
 }
 
 .text-video-user-container-play-video a {
@@ -1267,6 +1351,18 @@ a.username-video-play-video:hover {
 .lds-spinner div:nth-child(12) {
   transform: rotate(330deg);
   animation-delay: 0s;
+}
+
+.no-data-img {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 50%;
+  min-width: 200px;
+  max-width: 450px;
 }
 
 @keyframes lds-spinner {
@@ -1397,6 +1493,15 @@ a.username-video-play-video:hover {
 }
 
 @media screen and (max-width: 1100px) {
+  .dropdown-profile-container {
+    left: -145px;
+  }
+
+  .dropdown-profile-container::before {
+    margin: -12px 0;
+    margin-left: 150px;
+  }
+
   .video-container:first-child,
   .video-container:nth-child(2) {
     width: 47%;
@@ -1426,7 +1531,7 @@ a.username-video-play-video:hover {
   .container-video-play-video {
     padding-right: 20px !important;
   }
-  
+
   .sub-container-video-play-video {
     width: 100%;
   }
@@ -1530,24 +1635,22 @@ a.username-video-play-video:hover {
     position: sticky;
     top: 65px;
     border-radius: 0;
-    background-color: rgb(224, 30, 30) !important;
+    margin-bottom: 20px;
     z-index: 50;
   }
 
   .sub-container-video-play-video {
     margin-top: -12px;
   }
-  
+
   .header-sub-video-play-video-container {
-    padding-top: 15px;
+    padding-top: 5px;
     margin: 0 15px;
   }
-  
-  
+
   .comment-sub-video-play-video-container {
     margin: 0 15px;
   }
- 
 
   .container-video-random-play-video {
     padding: 0 15px;
@@ -1556,7 +1659,7 @@ a.username-video-play-video:hover {
 
   .desc-sub-video-play-video-container {
     margin: 0 15px;
-  } 
+  }
 
   .content-container-play-video {
     padding: 0 !important;
@@ -1662,8 +1765,8 @@ a.username-video-play-video:hover {
 
 @media screen and (max-width: 574px) {
   .input-login-container {
-    width: 65%;
-    padding: 60px 40px;
+    width: 75%;
+    padding: 60px 30px;
   }
 
   .logo-login-2 {
@@ -1748,8 +1851,32 @@ a.username-video-play-video:hover {
 }
 
 @media screen and (max-width: 360px) {
+  .text-video-user-container-play-video {
+    width: 100%;
+  }
+  .video-play-video {
+    top: 63px;
+  }
+
+  .container-video-play-video {
+    width: 100%;
+  }
+
+  .input-comment-container {
+    width: 200px;
+  }
+
+  .small-logo-img {
+    display: none;
+  }
+
+  .small-logo-img-block {
+    display: block !important;
+  }
+
   .sub-container-video-random-play-video {
     flex-direction: column;
+    width: 100%;
     margin-bottom: 30px;
   }
 
@@ -1771,6 +1898,14 @@ a.username-video-play-video:hover {
 }
 
 @media screen and (max-width: 340px) {
+  .login-btn span {
+    display: none;
+  }
+
+  .username-video .date-info {
+    display: block;
+  }
+
   .drag-area icon {
     font-size: 50px;
   }
@@ -1778,14 +1913,6 @@ a.username-video-play-video:hover {
   .drag-area header {
     font-size: 20px;
     width: 250px;
-  }
-
-  .small-logo-img {
-    display: none;
-  }
-
-  .small-logo-img-block {
-    display: block !important;
   }
 
   .sidebar-container {
@@ -1815,6 +1942,12 @@ a.username-video-play-video:hover {
   }
 }
 
+@media screen and (min-width: 1010px) {
+  .seacrh-videos-padding-right {
+    padding-right: 90px;
+  }
+}
+
 .nav-content-play-video {
   max-width: none;
   padding-left: 0 !important;
@@ -1827,4 +1960,9 @@ a.username-video-play-video:hover {
 
 .form-search-video-play {
   margin: auto;
+}
+
+.content-container-play-video-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }

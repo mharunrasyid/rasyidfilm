@@ -1,6 +1,10 @@
 var express = require('express');
-var router = express.Router();
 var models = require("../models");
+var router = express.Router();
+
+const bcrypt = require('bcrypt');
+const helpers = require("../helpers/util");
+const saltRounds = 10;
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -14,8 +18,19 @@ router.get('/', async function (req, res, next) {
 
 router.post('/add', async function (req, res, next) {
   try {
-    const user = await models.User.create(req.body);
-    res.status(201).json(user)
+    bcrypt.hash(req.body.password, saltRounds, async function (err, hashPassword) {
+      if (err) throw err
+      const checkUser = await models.User.findOne({
+        where: {
+          email: req.body.email,
+        }
+      });
+
+      if (checkUser) return res.status(500).json({ err: "email already exist" })
+      req.body.password = hashPassword;
+      const user = await models.User.create(req.body);
+      res.status(201).json(user)
+    });
   } catch (err) {
     res.status(500).json({ err })
   }

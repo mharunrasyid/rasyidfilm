@@ -14,13 +14,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
 </head>
 
-<body data-theme="dark">
+<body data-theme="">
     <div class="container-add-video">
         <div class="header-add-video">
             <h1>Add Video</h1>
             <hr class="hr-add-video">
         </div>
-        <form action="" class="form-add-video">
+        <form action="" class="form-add-video" encType="multipart/form-data">
             <div class="input-container-without-btn-form-add-video">
                 <div class="container-input-add-video-title">
                     <div class="input-add-video-container">
@@ -44,7 +44,7 @@
                             <i class="fas fa-times"></i>
                         </div>
                         <input type="file" name="thumbAddVideo" id="thumb-add-video" accept="image/*"
-                            style="display: none;" required />
+                            style="opacity: 0;" required />
                     </div>
                 </div>
                 <div class="container-input-add-videos">
@@ -58,7 +58,7 @@
                         <button type="button">Browse File</button>
                     </div>
                     <input type="file" accept="video/*" name="videoAddVideo" class="input-choose-add-video" required
-                        style="display: none;">
+                        style="opacity: 0;" />
                     <div class="remove-thumbnail-btn-video">
                         <i class="fas fa-times"></i>
                     </div>
@@ -66,7 +66,7 @@
             </div>
             <div class="btn-submit-form-video-container">
                 <button type="submit" class="btn-add-form-video-container">Add</button>
-                <button type="button">Cancel</button>
+                <button type="button" onclick="location.href='http://localhost:3000/studio'">Cancel</button>
             </div>
         </form>
     </div>
@@ -144,7 +144,9 @@
                         </video>`;
                     dropArea.innerHTML = videoTag;
                 }
+
                 fileReader.readAsDataURL(file);
+
                 setTimeout(() => {
                     $('.remove-thumbnail-btn-video').css({
                         "display": "block"
@@ -171,7 +173,6 @@
 
             $(".drag-area").children("button").click(function () {
                 $(this).parent().parent().children(".input-choose-add-video").click();
-                console.log('hai',$(this).parent().parent().children(".container-input-add-videos"));
             })
 
             $(".container-input-add-videos").children(".input-choose-add-video").change(function () {
@@ -191,10 +192,55 @@
             $(this).addClass("input-active-add-video")
             $(this).parent().children("label").addClass("input-active-add-video")
         });
+
         $(".input-add-video-container textarea").blur(function () {
             $(this).removeClass("input-active-add-video")
             $(this).parent().children("label").removeClass("input-active-add-video")
         });
+
+        $('body').attr("data-theme", localStorage.getItem("theme"));
+
+        $(".form-add-video").submit(function (event) {
+            event.preventDefault()
+            const titleAddVideo = $("textarea[name = titleAddVideo]").val();
+            const descAddVideo = $("textarea[name = descAddVideo]").val();
+
+            var fd = new FormData();
+
+            var imagesFile = $('#thumb-add-video')[0].files[0];
+            var videoFile = $('.input-choose-add-video')[0].files[0];
+            fd.append('title', titleAddVideo);
+            fd.append('desc', descAddVideo);
+            fd.append('imagesFile', imagesFile);
+            fd.append('videoFile', videoFile);
+
+            addData(fd);
+        })
+
+
+        const addData = (fd) => {
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/api/videos/add",
+                data: fd,
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                },
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != 0) {
+                        alert('file uploaded');
+                    } else {
+                        alert('file not uploaded');
+                    }
+                },
+            }).done(function () {
+                window.location.href = "http://localhost:3000/studio"
+            }).fail(function (err) {
+                console.log(err);
+            })
+        };
     </script>
 </body>
 

@@ -3,13 +3,15 @@ var router = express.Router();
 var models = require("../models");
 
 /* GET comments listing. */
-router.get('/', async function (req, res, next) {
+router.get('/:idVideo', async function (req, res, next) {
     try {
         const comments = await models.Comment.findAll({
             include: [
-                { model: models.User },
+                { model: models.User, attributes: ['id', 'email','firstname' ,'lastname', 'createdAt'] },
                 { model: models.Video }
-            ]
+            ],where: {
+              VideoId: req.params.idVideo,
+            },
         });
         res.json(comments)
     } catch (err) {
@@ -17,7 +19,7 @@ router.get('/', async function (req, res, next) {
     }
 });
 
-router.post('/add', async function (req, res, next) {
+router.post('/:idVideo/add', async function (req, res, next) {
     try {
         const comment = await models.Comment.create(req.body);
         res.status(201).json(comment)
@@ -26,10 +28,11 @@ router.post('/add', async function (req, res, next) {
     }
 });
 
-router.put('/edit/:id', async function (req, res, next) {
+router.put('/:idVideo/edit/:id', async function (req, res, next) {
     try {
         const comment = await models.Comment.update(req.body, {
             where: {
+                VideoId: req.params.idVideo,
                 id: Number(req.params.id)
             },
             returning: true,
@@ -41,10 +44,11 @@ router.put('/edit/:id', async function (req, res, next) {
     }
 });
 
-router.delete('/delete/:id', async function (req, res, next) {
+router.delete('/:idUser/delete/:id', async function (req, res, next) {
     try {
         const comment = await models.Comment.destroy({
             where: {
+                VideoId: req.params.idVideo,
                 id: Number(req.params.id)
             }
         });

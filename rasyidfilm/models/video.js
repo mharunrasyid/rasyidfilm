@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Video.belongsTo(models.User);
-      Video.hasMany(models.Comment);
+      Video.hasMany(models.Comment, { onDelete: 'cascade' });
     }
   };
   Video.init({
@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     UrlVideo: DataTypes.STRING,
     likes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    dislikes: {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
