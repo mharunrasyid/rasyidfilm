@@ -34,3 +34,4 @@ module.exports = {
     await queryInterface.dropTable("Videos");
   },
 };
+

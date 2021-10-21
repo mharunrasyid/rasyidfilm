@@ -17,26 +17,22 @@ module.exports = (sequelize, DataTypes) => {
   };
   Video.init({
     UserId: DataTypes.INTEGER,
-    title: DataTypes.STRING,
-    UrlVideo: DataTypes.STRING,
+    title: DataTypes.STRING(100),
+    UrlVideo: DataTypes.TEXT,
     likes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      defaultValue: []
     },
     dislikes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      defaultValue: []
     },
     views: {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
-    private: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true
-    },
-    desc: DataTypes.STRING,
-    thumbnail: DataTypes.STRING
+    desc: DataTypes.TEXT,
+    thumbnail: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Video',

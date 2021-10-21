@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body data-theme="">
@@ -66,7 +67,7 @@
             </div>
             <div class="btn-submit-form-video-container">
                 <button type="submit" class="btn-add-form-video-container">Add</button>
-                <button type="button" onclick="location.href='http://localhost:3000/studio'">Cancel</button>
+                <button type="button" onclick="location.href='/studio'">Cancel</button>
             </div>
         </form>
     </div>
@@ -221,7 +222,7 @@
         const addData = (fd) => {
             $.ajax({
                 method: "POST",
-                url: "http://localhost:3000/api/videos/add",
+                url: "/api/videos/add",
                 data: fd,
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem("token")}`
@@ -236,7 +237,7 @@
                     }
                 },
             }).done(function () {
-                window.location.href = "http://localhost:3000/studio"
+                window.location.href = "/studio"
             }).fail(function (err) {
                 console.log(err);
             })

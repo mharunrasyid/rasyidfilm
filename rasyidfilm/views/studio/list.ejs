@@ -6,12 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rasyid Film</title>
-    <link rel="stylesheet" href="../stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body data-theme="dar">
@@ -19,9 +20,9 @@
         <header class="nav-container">
             <div class="nav-logo">
                 <i class="fas fa-bars nav-hamburger"></i>
-                <a href="http://localhost:3000/">
-                    <img src="../images/default-img/logo.png" alt="image" class="logo-img" />
-                    <img src="../images/default-img/small-logo.png" alt="image" class="small-logo-img" />
+                <a href="/">
+                    <img src="/images/default-img/logo.png" alt="image" class="logo-img" />
+                    <img src="/images/default-img/small-logo.png" alt="image" class="small-logo-img" />
                 </a>
             </div>
             <div class="nav-content nav-content-studio">
@@ -32,20 +33,43 @@
                 <div class="search-btn">
                     <i class="fas fa-search"></i>
                 </div>
-                <div class="nav-upload"></div>
+                <div class="nav-upload">
+                    <button class="btn-upload" onclick="location.href='/studio/add'">
+                        <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <div class="nav-user">
+                        <div class="profile-img-container">
+                            <img src="/images/default-img/profile-user.png" class="profile-user-img" alt="image" />
+                            <div class="dropdown-profile-container">
+                                <a href="/studio" class="dropdown-profile-container-link">
+                                    <i class="fas fa-play-circle"></i>
+                                    Rasyid Film Studio
+                                </a>
+                                <a href="/login"
+                                    class="dropdown-profile-container-link dropdown-profile-container-link-signout">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Sign Out
+                                </a>
+                            </div>
+                        </div>
+                        <a class="nav-username-profile"></a>
+                    </div>
+                </div>
             </div>
         </header>
         <main>
             <div class="sidebar-container">
                 <div class="image-profile-content-container">
-                    <a href="http://localhost:3000/studio" class="a-image-profile-content">
-                        <img src="../images/default-img/profile.png" alt="image" class="image-profile-content" />
+                    <a href="/studio" class="a-image-profile-content">
+                        <img src="/images/default-img/profile.png" alt="image" class="image-profile-content" />
                     </a>
                     <div class="title-profile-content-container">
                         <div class="title-profile-content">Channel Anda</div>
+                        <div class="sub-title-profile-content" style="font-size: 14px;"></div>
                     </div>
                 </div>
-                <a href="http://localhost:3000/studio" class="sidebar-item-link" id="sidebar-item-link">
+                <a href="/studio" class="sidebar-item-link" id="sidebar-item-link">
                     <i class="fas fa-video icon-item-link"></i>
                     <span class="text-item-link">Content</span>
                 </a>
@@ -63,13 +87,12 @@
                             <table class="table-content">
                                 <thead>
                                     <th>#</th>
-                                    <th>Title</th>
-                                    <th>URL</th>
+                                    <th class="th-style">Title</th>
+                                    <th class="th-style">URL</th>
                                     <th>Like</th>
                                     <th>Dislike</th>
                                     <th>Views</th>
-                                    <th>Thumbnail</th>
-                                    <th>Private</th>
+                                    <th class="th-style">Thumbnail</th>
                                     <th>Created At</th>
                                     <th>Updated At</th>
                                     <th>action</th>
@@ -80,10 +103,11 @@
                     </div>
                 </div>
                 <div class="btn-pagination-content-container">
-                    <button class="btn-pagination-table-content">
+                    <button class="btn-pagination-table-content btn-prev-studio" disabled
+                        style="opacity: .8;cursor: not-allowed;">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button class="btn-pagination-table-content">
+                    <button class="btn-pagination-table-content btn-next-studio">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
@@ -95,7 +119,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    window.addEventListener("load", () => {
+    let dataQuery = null;
+
+    $(document).ready(function () {
         if (localStorage.getItem("theme") == "dark") {
             $('body').attr("data-theme", localStorage.getItem("theme"));
             $(".dark-theme-btn").addClass("icon-sidebar-theme-active");
@@ -106,160 +132,248 @@
             $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
         }
 
-        loadData();
+        loadData().done(function (data) {
+            let {
+                videos,
+                videosNoLimit,
+                userToken,
+                pIndex,
+            } = data;
+
+            dataQuery = {
+                pIndex,
+                videosNoLimit
+            }
+
+            drawTable(videos)
+            drawProfile(userToken)
+        })
     });
 
     const loadData = (queryUrl) => {
-        $.ajax({
-                url: `http://localhost:3000/api/videos/studio${queryUrl ? queryUrl : ""}`,
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                }
-            })
-            .done(function (data) {
-                let {
-                    videos,
-                    userToken
-                } = data;
-
-                let options = {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                };
-                let trCode = "";
-                videos.forEach((m) => {
-                    trCode += `<tr style="font-family:sans-serif;">
-                                <td>${m.id}</td>
-                                <td>${m.title}</td>
-                                <td>${m.UrlVideo}</td>
-                                <td>${m.likes}</td>
-                                <td>${m.dislikes}</td>
-                                <td>${m.views}</td>
-                                <td>${m.thumbnail}</td>
-                                <td>${m.private}</td>
-                                <td>${new Date(m.createdAt).toLocaleString("id-ID",options)}</td>
-                                <td>${new Date(m.updatedAt).toLocaleString("id-ID",options)}</td>
-                                <td>
-                                    <button class="btn-edit-table-content" onclick="location.href='http://localhost:3000/studio/edit/${m.id}'">Edit</button>
-                                    <button class="btn-delete-table-content" data-idVideo="${m.id}">Delete</button>
-                                </td>
-                            </tr>`;
-                });
-
-                $(".table-content tbody").html(trCode);
-
-                let navUploadCode = `<button class="btn-upload" onclick="location.href='http://localhost:3000/studio/add'">
-                                        <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
-                                        <i class="fas fa-video"></i>
-                                    </button>
-                                    <div class="nav-user">
-                                        <div class="profile-img-container">
-                                            <img src="images/default-img/profile-user.png" class="profile-user-img" alt="image" />
-                                            <div class="dropdown-profile-container">
-                                                <a href="http://localhost:3000/studio" class="dropdown-profile-container-link">
-                                                <i class="fas fa-play-circle"></i>
-                                                Rasyid Film Studio
-                                                </a>
-                                                <a href="http://localhost:3000/login" class="dropdown-profile-container-link dropdown-profile-container-link-signout">
-                                                <i class="fas fa-sign-out-alt"></i>
-                                                Sign Out
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <a href="http://localhost:3000/channel/${userToken.userId}" class="nav-username-profile">${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}</a>
-                                    </div>`;
-
-                $(".nav-upload").html(navUploadCode);
-                $(".sub-title-profile-content").remove();
-                let username =
-                    `<div class="sub-title-profile-content" style="font-size: 14px;">${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}</div>`;
-                $(".title-profile-content-container div:first-child").after(username);
-                $(".title-profile-content-container");
-
-                $(".btn-delete-table-content").click(function () {
-                    deleteData($(this).attr("data-idVideo"));
-                })
-
-                const deleteData = (queryUrl) => {
-                    $.ajax({
-                        method: "DELETE",
-                        url: `http://localhost:3000/api/videos/delete/${queryUrl}`,
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem("token")}`
-                        }
-                    }).done(function () {
-                        window.location.href = `http://localhost:3000/studio`
-                    }).fail(function (err) {
-                        console.log(err);
-                    })
-                };
-            })
-            .fail(function (err) {
-                window.location.href = "http://localhost:3000/login";
-            });
+        return $.ajax({
+            url: `/api/videos/studio`,
+            method: 'GET',
+            data: queryUrl,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        }).fail(function (err) {
+            window.location.href = "/login";
+        });
     };
 
+    const drawTable = (videos) => {
+        let options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        };
+        let trCode = "";
+        videos.forEach((m) => {
+            trCode += `<tr style="font-family:sans-serif;">
+                                    <td>${m.id}</td>
+                                    <td>${m.title}</td>
+                                    <td>${m.UrlVideo}</td>
+                                    <td>${m.likes}</td>
+                                    <td>${m.dislikes}</td>
+                                    <td>${m.views}</td>
+                                    <td>${m.thumbnail}</td>
+                                    <td>${new Date(m.createdAt).toLocaleString("id-ID",options)}</td>
+                                    <td>${new Date(m.updatedAt).toLocaleString("id-ID",options)}</td>
+                                    <td>
+                                        <button class="btn-edit-table-content" onclick="location.href='/studio/edit/${m.id}'">Edit</button>
+                                        <button class="btn-delete-table-content" data-idVideo="${m.id}">Delete</button>
+                                    </td>
+                                </tr>`;
+        });
+
+        $(".table-content tbody").html(trCode);
+    }
+
+    const drawProfile = (userToken) => {
+
+        $(".nav-username-profile").attr('href', `/channel/${userToken.userId}`);
+        $(".nav-username-profile").text(
+            `${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}`);
+        $(".sub-title-profile-content").text(
+            `${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}`);
+    }
+
+    $(".table-content").on("click", ".btn-delete-table-content", function () {
+        deleteData($(this).attr("data-idVideo"));
+    })
+
+    const deleteData = (deleteTableUrl) => {
+        $.ajax({
+            method: "DELETE",
+            url: `/api/videos/delete/${deleteTableUrl}`,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        }).done(function () {
+            window.location.href = `/studio`
+        }).fail(function (err) {
+            console.log(err);
+        })
+    };
+
+    $(".btn-prev-studio").click(function () {
+        loadData({
+            searchTitle: $(".form-search-video input").val(),
+            page: dataQuery.pIndex - 1
+        }).done(function (data) {
+            let {
+                videos,
+                videosNoLimit,
+                userToken,
+                pIndex,
+            } = data;
+
+            dataQuery = {
+                pIndex,
+                videosNoLimit
+            }
+
+            drawTable(videos);
+
+            if (pIndex < 2) {
+                $(".btn-prev-studio").attr("disabled", true);
+                $(".btn-prev-studio").css({
+                    opacity: ".8",
+                    cursor: "not-allowed"
+                });
+            }
+
+            $(".btn-next-studio").attr("disabled", false);
+            $(".btn-next-studio").css({
+                opacity: "1",
+                cursor: "pointer"
+            });
+        })
+
+    })
+
+    $(".btn-next-studio").click(function () {
+        loadData({
+            searchTitle: $(".form-search-video input").val(),
+            page: dataQuery.pIndex + 1
+        }).done(function (data) {
+            let {
+                videos,
+                videosNoLimit,
+                userToken,
+                pIndex,
+            } = data;
+
+            dataQuery = {
+                pIndex,
+                videosNoLimit
+            }
+
+            drawTable(videos)
+
+            if (pIndex == Math.ceil(videosNoLimit / 5)) {
+                $(".btn-next-studio").attr("disabled", true);
+                $(".btn-next-studio").css({
+                    opacity: ".8",
+                    cursor: "not-allowed"
+                });
+            }
+
+            $(".btn-prev-studio").attr("disabled", false);
+            $(".btn-prev-studio").css({
+                opacity: "1",
+                cursor: "pointer"
+            });
+        })
+    })
 
     $(".form-search-video").submit(function (event) {
         event.preventDefault();
 
-        let inputSearch = $(".form-search-video input").val();
-        urlSearch = `?searchTitle=${inputSearch}`;
-        loadData(urlSearch);
+        loadData({
+            searchTitle: $(".form-search-video input").val()
+        }).done(function (data) {
+            let {
+                videos,
+                videosNoLimit,
+                userToken,
+                pIndex,
+            } = data;
+
+            dataQuery = {
+                pIndex,
+                videosNoLimit
+            }
+
+            drawTable(videos)
+
+            if (videosNoLimit < 6) {
+                $(".btn-next-studio").attr("disabled", true);
+                $(".btn-next-studio").css({
+                    opacity: ".8",
+                    cursor: "not-allowed"
+                });
+            } else {
+                $(".btn-next-studio").attr("disabled", false);
+                $(".btn-next-studio").css({
+                    opacity: "1",
+                    cursor: "pointer"
+                });
+            }
+        })
     });
 
-    $(document).ready(function () {
-        $(".nav-hamburger").click(function () {
-            if ($(".sidebar-container").css("width") == "255px") {
-                if (window.matchMedia("(max-width: 400px)").matches) {
-                    $(".sidebar-container").animate({
-                        width: "0",
-                    });
-                } else {
-                    $(".sidebar-container").animate({
-                        width: "52px",
-                    });
-                }
-
-                $(".sidebar-item-link").animate({
-                    paddingLeft: "13px",
+    $(".nav-hamburger").click(function () {
+        if ($(".sidebar-container").css("width") == "255px") {
+            if (window.matchMedia("(max-width: 400px)").matches) {
+                $(".sidebar-container").animate({
+                    width: "0",
                 });
-                $(".content-container").animate({
-                    marginLeft: "52px",
-                });
-                $(".sidebar-theme").css({
-                    visibility: "hidden",
-                });
-                $(".title-profile-content-container").css({
-                    display: "none",
-                });
-                $(".overlay").removeClass("overlay-show");
-                $(".nav-content").removeClass("hide-all");
-                $(".small-logo-img").removeClass("small-logo-img-block");
             } else {
                 $(".sidebar-container").animate({
-                    width: "255px",
+                    width: "52px",
                 });
-                $(".sidebar-item-link").animate({
-                    paddingLeft: "20px",
-                });
-                setTimeout(() => {
-                    $(".title-profile-content-container").css({
-                        display: "block",
-                    });
-                }, 150);
-                $(".content-container").animate({
-                    marginLeft: "255px",
-                });
-                $(".sidebar-theme").css({
-                    visibility: "visible",
-                });
-                $(".overlay").addClass("overlay-show");
-                $(".nav-content").addClass("hide-all");
-                $(".small-logo-img").addClass("small-logo-img-block");
             }
-        });
+
+            $(".sidebar-item-link").animate({
+                paddingLeft: "13px",
+            });
+            $(".content-container").animate({
+                marginLeft: "52px",
+            });
+            $(".sidebar-theme").css({
+                visibility: "hidden",
+            });
+            $(".title-profile-content-container").css({
+                display: "none",
+            });
+            $(".overlay").removeClass("overlay-show");
+            $(".nav-content").removeClass("hide-all");
+            $(".small-logo-img").removeClass("small-logo-img-block");
+        } else {
+            $(".sidebar-container").animate({
+                width: "255px",
+            });
+            $(".sidebar-item-link").animate({
+                paddingLeft: "20px",
+            });
+            setTimeout(() => {
+                $(".title-profile-content-container").css({
+                    display: "block",
+                });
+            }, 150);
+            $(".content-container").animate({
+                marginLeft: "255px",
+            });
+            $(".sidebar-theme").css({
+                visibility: "visible",
+            });
+            $(".overlay").addClass("overlay-show");
+            $(".nav-content").addClass("hide-all");
+            $(".small-logo-img").addClass("small-logo-img-block");
+        }
     });
 
     $(".search-btn").on("click", function () {

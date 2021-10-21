@@ -43,7 +43,7 @@ body {
   background: var(--primary-color-dark);
   padding: 0;
   box-sizing: border-box;
-  font-family: "Raleway", sans-serif;
+  font-family:  sans-serif;
 }
 
 .nav-container,
@@ -575,7 +575,7 @@ main {
   outline: none;
   border-radius: 5px;
   padding: 15px;
-  font-family: "Raleway", sans-serif;
+  font-family: sans-serif;
   font-size: 18px;
   color: var(--textarea-color);
   margin-bottom: 10px;
@@ -818,6 +818,12 @@ main {
   padding: 10px;
 }
 
+.th-style {
+  text-align: left;
+  box-sizing: border-box;
+  padding-left: 28px !important;
+}
+
 .table-content td {
   padding: 10px 30px;
 }
@@ -1003,6 +1009,7 @@ main {
 .container-video-play-video {
   font-family: sans-serif;
   display: flex;
+  margin: auto;
   margin-top: 15px;
 }
 
@@ -1157,6 +1164,7 @@ main {
 
 .sub-comments-container {
   display: flex;
+  justify-content: space-between;
   margin-bottom: 30px;
 }
 
@@ -1175,6 +1183,10 @@ main {
   overflow: hidden;
   font-size: 16px;
   font-weight: bold;
+}
+
+.text-sub-comments-container {
+  width: 100%;
 }
 
 .text-sub-comments-container span {
@@ -1201,7 +1213,7 @@ main {
   cursor: pointer;
 }
 
-.sub-comments-container:hover i {
+.sub-comments-container:hover .comment-delete-active {
   visibility: visible;
 }
 
@@ -1232,9 +1244,14 @@ main {
   bottom: 4px;
   right: 5px;
   color: white;
+  transition:all .3s ease;
   padding: 5px;
   font-size: 14px;
   background: rgba(0, 0, 0, 0.5);
+}
+
+.video-container-play-video:hover .video-duration-play-video {
+  opacity: 0;
 }
 
 .text-video-user-container-play-video {
@@ -1627,6 +1644,10 @@ a.username-video-play-video:hover {
 
   .sidebar-container-play-video {
     width: 0;
+  }
+
+  .sidebar-theme {
+    visibility: hidden;
   }
 }
 

@@ -17,6 +17,7 @@ router.get("/", async function (req, res, next) {
           attributes: ["id", "email", "firstname", "lastname", "createdAt"],
         },
       ],
+      order: [["views", "DESC"]],
       where: {
         title: {
           [Op.like]: `%${req.query.searchName ? req.query.searchName : ""}%`,
@@ -32,7 +33,27 @@ router.get("/", async function (req, res, next) {
 
 router.get("/studio", helpers.isLoggedIn, async function (req, res, next) {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = 5;
+
     const videos = await models.Video.findAll({
+      limit: limit,
+      offset: (page - 1) * limit,
+      include: [
+        {
+          model: models.User,
+          attributes: ["id", "email", "firstname", "lastname", "createdAt"],
+        },
+      ],
+      where: {
+        UserId: req.body.userToken.userId,
+        title: {
+          [Op.like]: `%${req.query.searchTitle ? req.query.searchTitle : ""}%`,
+        },
+      },
+    });
+
+    const videosNoLimit = await models.Video.findAll({
       include: [
         {
           model: models.User,
@@ -49,7 +70,9 @@ router.get("/studio", helpers.isLoggedIn, async function (req, res, next) {
 
     data = {
       videos,
+      videosNoLimit: videosNoLimit.length,
       userToken: req.body.userToken,
+      pIndex: page,
     };
 
     res.json(data);
@@ -68,6 +91,7 @@ router.get("/watch/:id", async function (req, res, next) {
           attributes: ["id", "email", "firstname", "lastname", "createdAt"],
         },
       ],
+      order: [["views", "DESC"]],
       where: {
         id: {
           [Op.not]: req.params.id,
@@ -88,6 +112,15 @@ router.get("/watch/:id", async function (req, res, next) {
     });
 
     if (!video) return res.status(500).json({ err: "video not found!" });
+
+    req.body.views = video.views + 1;
+    const videoEdit = await models.Video.update(req.body, {
+      where: {
+        id: Number(req.params.id),
+      },
+      returning: true,
+      plain: true,
+    });
 
     data = {
       videos,
@@ -124,6 +157,7 @@ router.get("/channel/:id", async function (req, res, next) {
           attributes: ["id", "email", "firstname", "lastname", "createdAt"],
         },
       ],
+      order: [["createdAt", "DESC"]],
       where: {
         UserId: req.params.id,
         title: {
@@ -254,9 +288,7 @@ router.delete(
       );
 
       fs.unlinkSync(
-        __dirname +
-          "/../public/video/" +
-          getVideo.dataValues.UrlVideo
+        __dirname + "/../public/video/" + getVideo.dataValues.UrlVideo
       );
 
       const video = await models.Video.destroy({
@@ -272,5 +304,60 @@ router.delete(
     }
   }
 );
+
+router.get("/like/:id", helpers.isLoggedIn, async function (req, res, next) {
+  try {
+    const videoLike = await models.Video.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!videoLike) return res.status(500).json({ err: "video not found!" });
+
+    req.body.likes = [];
+
+    if (videoLike.dataValues.likes.length == 0) {
+      if (req.query.likes) {
+        req.body.likes.push(Number(req.query.likes));
+      }
+    } else {
+      req.body.likes = [...videoLike.dataValues.likes]
+      videoLike.dataValues.likes.forEach((m) => {
+        if (Number(m) != req.body.userToken.userId && req.query.likes) {
+          req.body.likes.push(Number(req.query.likes));
+        }
+      });
+    }
+
+    req.body.dislikes = [];
+
+    if (videoLike.dataValues.dislikes.length == 0) {
+      if (req.query.dislikes) {
+        req.body.dislikes.push(Number(req.query.dislikes));
+      }
+    } else {
+      req.body.dislikes = [...videoLike.dataValues.dislikes];
+      videoLike.dataValues.dislikes.forEach((m) => {
+        if (Number(m) != req.body.userToken.userId && req.query.dislikes) {
+          req.body.dislikes.push(Number(req.query.dislikes));
+        }
+      });
+    }
+
+    const videoEdit = await models.Video.update(req.body, {
+      where: {
+        id: Number(req.params.id),
+      },
+      returning: true,
+      plain: true,
+    });
+
+    res.json(videoLike);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err });
+  }
+});
 
 module.exports = router;

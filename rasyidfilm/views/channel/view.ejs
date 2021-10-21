@@ -6,12 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rasyid Film</title>
-  <link rel="stylesheet" href="../stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="#">
 </head>
 
 <body data-theme="dar">
@@ -19,9 +20,9 @@
     <header class="nav-container">
       <div class="nav-logo">
         <i class="fas fa-bars nav-hamburger"></i>
-        <a href="http://localhost:3000/">
-          <img src="../images/default-img/logo.png" alt="image" class="logo-img" />
-          <img src="../images/default-img/small-logo.png" alt="image" class="small-logo-img" />
+        <a href="/">
+          <img src="/images/default-img/logo.png" alt="image" class="logo-img" />
+          <img src="/images/default-img/small-logo.png" alt="image" class="small-logo-img" />
         </a>
       </div>
       <div class="nav-content nav-content-channel">
@@ -33,7 +34,27 @@
           <i class="fas fa-search"></i>
         </div>
         <div class="nav-upload">
-          <button class="login-btn" onclick="location.href='http://localhost:3000/login'">
+          <button class="btn-upload" onclick="location.href='/studio/add'" style="display: none;">
+            <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
+            <i class="fas fa-video"></i>
+          </button>
+          <div class="nav-user" style="display: none;">
+            <div class="profile-img-container">
+              <img src="/images/default-img/profile-user.png" class="profile-user-img" alt="image" />
+              <div class="dropdown-profile-container">
+                <a href="/studio" class="dropdown-profile-container-link">
+                  <i class="fas fa-play-circle"></i>
+                  Rasyid Film Studio
+                </a>
+                <a href="/login" class="dropdown-profile-container-link dropdown-profile-container-link-signout">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign Out
+                </a>
+              </div>
+            </div>
+            <a class="nav-username-profile"></a>
+          </div>
+          <button class="login-btn" onclick="location.href='/login'">
             <i class="fas fa-sign-in-alt"></i>
             <span>Login</span>
           </button>
@@ -42,9 +63,13 @@
     </header>
     <main>
       <div class="sidebar-container">
-        <a href="http://localhost:3000/" class="sidebar-item-link sidebar-item-link-channel">
+        <a href="/" class="sidebar-item-link sidebar-item-link-channel">
           <i class="fas fa-home icon-item-link"></i>
           <span class="text-item-link">Home</span>
+        </a>
+        <a class="sidebar-item-link sidebar-item-link-channel-sb" style="display: none;">
+          <i class="fas fa-video icon-item-link"></i>
+          <span class="text-item-link">Your Channel</span>
         </a>
         <div class="sidebar-theme">
           <i class="fas fa-sun icon-sidebar-theme light-theme-btn"></i>
@@ -55,15 +80,18 @@
       <div class="content-container content-container-channel">
         <div class="header-content-video-container-channel">
           <div class="header-profile-content-video-container-channel">
-            <img src="../images/default-img/profile.png" alt="image" />
+            <img src="/images/default-img/profile.png" alt="image" />
+            <div class="title-text-js"></div>
           </div>
           <div class="header-btn-content-video-container-channel">
+            <a class="btn-video">Video</a>
             <div class="input-search-container-channel">
               <label for="searchVideoChannel">
                 <i class="fas fa-search"></i>
               </label>
               <form action="" id="formSearchVideoChannel">
-                <input type="search" name="searchVideoChannel" id="searchVideoChannel" placeholder="Search Video" />
+                <input type="search" name="searchVideoChannel" id="searchVideoChannel" placeholder="Search Video"
+                  autocomplete="off" />
               </form>
             </div>
           </div>
@@ -111,63 +139,42 @@
   const loadData = (queryUrl, search) => {
     if (localStorage.getItem("token")) {
       $.ajax({
-        url: 'http://localhost:3000/api/videos/studio',
+        url: '/api/token',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`
         }
       }).done(function (data) {
-        let {
-          videos,
-          userToken
-        } = data;
+        $(".btn-upload").css({
+          "display": "flex"
+        });
 
-        let navUploadCode = `<button class="btn-upload" onclick="location.href='http://localhost:3000/studio/add'">
-                                  <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
-                                  <i class="fas fa-video"></i>
-                              </button>
-                              <div class="nav-user">
-                                <div class="profile-img-container">
-                                  <img src="../images/default-img/profile-user.png" class="profile-user-img" alt="image" />
-                                  <div class="dropdown-profile-container">
-                                    <a href="http://localhost:3000/studio" class="dropdown-profile-container-link">
-                                      <i class="fas fa-play-circle"></i>
-                                      Rasyid Film Studio
-                                    </a>
-                                    <a href="http://localhost:3000/login" class="dropdown-profile-container-link dropdown-profile-container-link-signout">
-                                      <i class="fas fa-sign-out-alt"></i>
-                                      Sign Out
-                                    </a>
-                                  </div>
-                                </div>
-                                <a href="http://localhost:3000/channel/${userToken.userId}" class="nav-username-profile">${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}</a>
-                              </div>`;
+        $(".nav-user").css({
+          "display": "flex"
+        });
 
-        $(".nav-upload").html(navUploadCode);
-        $(".sidebar-item-link-channel-sb").remove();
+        $(".login-btn").css({
+          "display": "none"
+        });
 
-        let linkSidebarCode = '';
+        $(".sidebar-item-link-channel-sb").css({
+          "display": "block"
+        });
+
+        $(".nav-username-profile").attr('href', `/channel/${data.id}`);
+        $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
+
+        $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
 
         let queryUrlChannel = window.location.href.split("channel/").pop();
 
-        if (queryUrlChannel == userToken.userId) {
-          linkSidebarCode = `<a href="http://localhost:3000/channel/${userToken.userId}" class="sidebar-item-link sidebar-item-link-channel-sb sidebar-item-link-active">
-                              <i class="fas fa-video icon-item-link"></i>
-                              <span class="text-item-link">Your Channel</span>
-                            </a>`;
-        } else {
-          linkSidebarCode = `<a href="http://localhost:3000/channel/${userToken.userId}" class="sidebar-item-link sidebar-item-link-channel-sb">
-                              <i class="fas fa-video icon-item-link"></i>
-                              <span class="text-item-link">Your Channel</span>
-                            </a>`;
+        if (queryUrlChannel == data.id) {
+          $(".sidebar-item-link-channel-sb").addClass("sidebar-item-link-active");
         }
-
-
-        $(".sidebar-container a:first-child").after(linkSidebarCode);
       });
     }
 
     $.ajax({
-      url: `http://localhost:3000/api/videos/channel/${queryUrl}${search}`,
+      url: `/api/videos/channel/${queryUrl}${search}`,
     }).done(function (data) {
       let options = {
         year: "numeric",
@@ -180,24 +187,18 @@
         videos
       } = data;
 
-      $(".title-text-js").remove();
-      let titleText =
-        `<div class="title-text-js">${user.firstname.toUpperCase()} ${user.lastname.toUpperCase()}</div>`;
-      $(".header-profile-content-video-container-channel img:first-child").after(titleText)
+      $(".title-text-js").text(`${user.firstname.toUpperCase()} ${user.lastname.toUpperCase()}`);
 
-      $(".btn-video").remove();
-      let linkChannelVideo =
-        `<a href="http://localhost:3000/channel/${user.id}" class="btn-video">Video</a>`
-      $(".header-btn-content-video-container-channel").prepend(linkChannelVideo)
+      $(".btn-video").attr('href', `/channel/${user.id}`);
 
       if (videos.length == 0) {
         $(".content-video-container-channel").html(
-          `<img src="../images/default-img/no-data.png" alt="image" class="no-data-img" style="top:200px;" />`)
+          `<img src="/images/default-img/no-data.png" alt="image" class="no-data-img" style="top:200px;" />`)
       } else {
         let videoCode = ''
         for (let i = 0; i < videos.length; i++) {
-          videoCode += `<div class="video-container-channel" onclick="location.href='http://localhost:3000/watch/${videos[i].id}'">
-                          <div class="video-thumbnail loading" style="background-image: url(../images/thumbnail/${videos[i].thumbnail}); background-repeat: no-repeat;width: 100%;">
+          videoCode += `<div class="video-container-channel" onclick="location.href='/watch/${videos[i].id}'">
+                          <div class="video-thumbnail loading" style="background-image: url(/images/thumbnail/${videos[i].thumbnail}); background-repeat: no-repeat;width: 100%;">
                             <div class="video-duration">15.45</div>
                           </div>
                           <div class="text-video-container">
@@ -220,11 +221,11 @@
 
   const searchData = (queryUrl) => {
     $.ajax({
-      url: `http://localhost:3000/api/videos${queryUrl ? queryUrl : ""}`
+      url: `/api/videos${queryUrl ? queryUrl : ""}`
     }).done(function (data) {
-      window.location.href = `http://localhost:3000${queryUrl ? queryUrl : ""}`;
+      window.location.href = `/${queryUrl ? queryUrl : ""}`;
     }).fail(function (err) {
-      window.location.href = `http://localhost:3000${queryUrl ? queryUrl : ""}`;
+      window.location.href = `/${queryUrl ? queryUrl : ""}`;
     });
   };
 
@@ -245,49 +246,47 @@
     loadData(queryUrlChannel, urlSearchVideo);
   });
 
-  $(document).ready(function () {
-    $('.nav-hamburger').click(function () {
-      if ($(".sidebar-container").css('width') == '255px') {
-        if (window.matchMedia('(max-width: 400px)').matches) {
-          $('.sidebar-container').animate({
-            width: "0"
-          });
-        } else {
-          $('.sidebar-container').animate({
-            width: "52px"
-          });
-        }
-
-        $('.sidebar-item-link').animate({
-          paddingLeft: "13px"
+  $('.nav-hamburger').click(function () {
+    if ($(".sidebar-container").css('width') == '255px') {
+      if (window.matchMedia('(max-width: 400px)').matches) {
+        $('.sidebar-container').animate({
+          width: "0"
         });
-        $('.content-container').animate({
-          marginLeft: "52px"
-        });
-        $('.sidebar-theme').css({
-          "visibility": "hidden"
-        });
-        $(".overlay").removeClass("overlay-show");
-        $(".nav-content").removeClass("hide-all");
-        $(".small-logo-img").removeClass("small-logo-img-block");
       } else {
         $('.sidebar-container').animate({
-          width: "255px"
+          width: "52px"
         });
-        $('.sidebar-item-link').animate({
-          paddingLeft: "20px"
-        });
-        $('.content-container').animate({
-          marginLeft: "255px"
-        });
-        $('.sidebar-theme').css({
-          "visibility": "visible"
-        });
-        $(".overlay").addClass("overlay-show");
-        $(".nav-content").addClass("hide-all");
-        $(".small-logo-img").addClass("small-logo-img-block");
       }
-    })
+
+      $('.sidebar-item-link').animate({
+        paddingLeft: "13px"
+      });
+      $('.content-container').animate({
+        marginLeft: "52px"
+      });
+      $('.sidebar-theme').css({
+        "visibility": "hidden"
+      });
+      $(".overlay").removeClass("overlay-show");
+      $(".nav-content").removeClass("hide-all");
+      $(".small-logo-img").removeClass("small-logo-img-block");
+    } else {
+      $('.sidebar-container').animate({
+        width: "255px"
+      });
+      $('.sidebar-item-link').animate({
+        paddingLeft: "20px"
+      });
+      $('.content-container').animate({
+        marginLeft: "255px"
+      });
+      $('.sidebar-theme').css({
+        "visibility": "visible"
+      });
+      $(".overlay").addClass("overlay-show");
+      $(".nav-content").addClass("hide-all");
+      $(".small-logo-img").addClass("small-logo-img-block");
+    }
   })
 
   $(".search-btn").on("click", function () {

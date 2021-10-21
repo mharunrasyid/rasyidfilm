@@ -6,12 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rasyid Film</title>
-  <link rel="stylesheet" href="../stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="#">
 </head>
 
 <body data-theme="" class="body-playvideo">
@@ -20,9 +21,9 @@
       style="box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;">
       <div class="nav-logo">
         <i class="fas fa-bars nav-hamburger"></i>
-        <a href="http://localhost:3000">
-          <img src="../images/default-img/logo.png" alt="image" class="logo-img logo-img-play-video" />
-          <img src="../images/default-img/small-logo.png" alt="image" class="small-logo-img" />
+        <a href="/">
+          <img src="/images/default-img/logo.png" alt="image" class="logo-img logo-img-play-video" />
+          <img src="/images/default-img/small-logo.png" alt="image" class="small-logo-img" />
         </a>
       </div>
       <div class="nav-content nav-content-play-video">
@@ -34,7 +35,27 @@
           <i class="fas fa-search"></i>
         </div>
         <div class="nav-upload">
-          <button class="login-btn" onclick="location.href='http://localhost:3000/login'">
+          <button class="btn-upload" onclick="location.href='/studio/add'" style="display: none;">
+            <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
+            <i class="fas fa-video"></i>
+          </button>
+          <div class="nav-user" style="display: none;">
+            <div class="profile-img-container">
+              <img src="/images/default-img/profile-user.png" class="profile-user-img" alt="image" />
+              <div class="dropdown-profile-container">
+                <a href="/studio" class="dropdown-profile-container-link">
+                  <i class="fas fa-play-circle"></i>
+                  Rasyid Film Studio
+                </a>
+                <a href="/login" class="dropdown-profile-container-link dropdown-profile-container-link-signout">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign Out
+                </a>
+              </div>
+            </div>
+            <a class="nav-username-profile"></a>
+          </div>
+          <button class="login-btn" onclick="location.href='/login'">
             <i class="fas fa-sign-in-alt"></i>
             <span>Login</span>
           </button>
@@ -43,9 +64,13 @@
     </header>
     <main>
       <div class="sidebar-container sidebar-container-play-video">
-        <a href="http://localhost:3000" class="sidebar-item-link">
+        <a href="/" class="sidebar-item-link">
           <i class="fas fa-home icon-item-link"></i>
           <span class="text-item-link">Home</span>
+        </a>
+        <a class="sidebar-item-link sidebar-item-link-channel-sb" style="display: none;">
+          <i class="fas fa-video icon-item-link"></i>
+          <span class="text-item-link">Your Channel</span>
         </a>
         <div class="sidebar-theme">
           <i class="fas fa-sun icon-sidebar-theme light-theme-btn"></i>
@@ -55,7 +80,55 @@
       <div class="overlay"></div>
       <div class="content-container content-container-play-video">
         <div class="container-video-play-video" style="padding-top: 10px;padding:0 15px;">
-          <div class="sub-container-video-play-video"></div>
+          <div class="sub-container-video-play-video">
+            <video class="video-play-video" controls autoplay>
+              <source>
+              Your browser does not support HTML video.
+            </video>
+            <div class="header-sub-video-play-video-container">
+              <div class="title"></div>
+              <div class="info-play-video">
+                <span class="view-info"></span> Views &bull;
+                <span class="date-info"></span>
+              </div>
+              <div class="btn-like-unlike-container">
+                <button class="btn-like-container button-like-container">
+                  <i class="far fa-thumbs-up"></i>
+                  <span class="angka-like"></span>
+                </button>
+                <button class="btn-like-container button-unlike-container">
+                  <i class="far fa-thumbs-down"></i>
+                  <span class="angka-like"></span>
+                </button>
+              </div>
+            </div>
+            <div class="desc-sub-video-play-video-container">
+              <img src="/images/default-img/profile.png" alt="image" />
+              <div class="sub-desc-sub-video-play-video">
+                <div class="username-sub-desc-sub-video-play-video"></div>
+                <div class="description-sub-desc-sub-video-play-video"></div>
+                <div class="text-custom-height">MORE</div>
+              </div>
+            </div>
+            <div class="comment-sub-video-play-video-container">
+              <div class="total-comment-play-video">
+                <span></span> Comments
+              </div>
+              <form action="" class="add-comment-container">
+                <img src="/images/default-img/profile.png" alt="image" />
+                <div class="input-comment-container">
+                  <input type="text" name="inputAdd" id="inputAdd" placeholder="Write a public comment..."
+                    autocomplete="off" />
+                  <div class="btn-container-input-comment-container">
+                    <button type="button" class="btn-cancel-add-comment">Cancel</button>
+                    <button class="btn-add-comment" id="btn-add-comment-click">Comment</button>
+                  </div>
+                </div>
+              </form>
+              <div class="comments-container"></div>
+            </div>
+          </div>
+          <div class="container-video-random-play-video"></div>
         </div>
       </div>
     </main>
@@ -65,6 +138,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+  let queryUrl = window.location.href.split("/").pop()
+
   window.addEventListener("load", () => {
     if (localStorage.getItem("theme") == "dark") {
       $('body').attr("data-theme", localStorage.getItem("theme"));
@@ -76,9 +151,9 @@
       $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
     }
 
-    let queryUrl = window.location.href.split("/").pop()
-
     loadData(queryUrl);
+    loadComment(queryUrl);
+    loadLike();
   });
 
   const loadData = (queryUrl) => {
@@ -86,51 +161,34 @@
       $(".form-search-video-play").removeClass("seacrh-videos-padding-right")
 
       $.ajax({
-        url: 'http://localhost:3000/api/videos/studio',
+        url: '/api/token',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`
         }
       }).done(function (data) {
-        let {
-          videos,
-          userToken
-        } = data;
+        $(".btn-upload").css({
+          "display": "flex"
+        });
+        $(".nav-user").css({
+          "display": "flex"
+        });
+        $(".login-btn").css({
+          "display": "none"
+        });
+        $(".sidebar-item-link-channel-sb").css({
+          "display": "block"
+        });
 
-        let navUploadCode = `<button class="btn-upload" onclick="location.href='http://localhost:3000/studio/add'">
-                                        <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
-                                        <i class="fas fa-video"></i>
-                                    </button>
-                                    <div class="nav-user">
-                                        <div class="profile-img-container">
-                                        <img src="../images/default-img/profile-user.png" class="profile-user-img" alt="image" />
-                                        <div class="dropdown-profile-container">
-                                            <a href="http://localhost:3000/studio" class="dropdown-profile-container-link">
-                                            <i class="fas fa-play-circle"></i>
-                                            Rasyid Film Studio
-                                            </a>
-                                            <a href="http://localhost:3000/login" class="dropdown-profile-container-link dropdown-profile-container-link-signout">
-                                            <i class="fas fa-sign-out-alt"></i>
-                                            Sign Out
-                                            </a>
-                                        </div>
-                                        </div>
-                                        <a href="http://localhost:3000/channel/${userToken.userId}" class="nav-username-profile">${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}</a>
-                                    </div>`;
+        $(".nav-username-profile").attr('href', `/channel/${data.id}`);
+        $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
 
-        $(".nav-upload").html(navUploadCode);
-        $(".sidebar-item-link-channel-sb").remove();
+        $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
 
-        let linkSidebarCode = `<a href="http://localhost:3000/channel/${userToken.userId}" class="sidebar-item-link sidebar-item-link-channel-sb">
-                                <i class="fas fa-video icon-item-link"></i>
-                                <span class="text-item-link">Your Channel</span>
-                              </a>`;
-
-        $(".sidebar-container a:first-child").after(linkSidebarCode);
       });
     }
 
     $.ajax({
-      url: `http://localhost:3000/api/videos/watch/${queryUrl}`,
+      url: `/api/videos/watch/${queryUrl}`,
     }).done(function (data) {
       let options = {
         year: "numeric",
@@ -143,95 +201,38 @@
         video
       } = data;
 
-      $(".video-play-video").remove();
-      $(".header-sub-video-play-video-container").remove();
-      $(".desc-sub-video-play-video-container").remove();
+      $(".video-play-video source").attr('src', `/video/${video.UrlVideo}`);
+      $(".video-play-video")[0].load();
 
-      let videoCode = `<video class="video-play-video" controls autoplay>
-                        <source src="../video/${video.UrlVideo}">
-                        Your browser does not support HTML video.
-                      </video>
-                      <div class="header-sub-video-play-video-container">
-                        <div class="title">${video.title}</div>
-                        <div class="info-play-video">
-                          <span class="view-info">${video.views}</span> View &bull;
-                          <span class="date-info">${new Date(video.createdAt).toLocaleString("id-ID", options)}</span>
-                        </div>
-                        <div class="btn-like-unlike-container">
-                          <button class="btn-like-container button-like-container">
-                            <i class="far fa-thumbs-up"></i>
-                            <span class="angka-like">${video.likes}</span>
-                          </button>
-                          <button class="btn-like-container button-unlike-container">
-                            <i class="far fa-thumbs-down"></i>
-                            <span class="angka-like">0</span>
-                          </button>
-                        </div>
-                      </div>
-                      <div class="desc-sub-video-play-video-container">
-                        <img src="../images/default-img/profile.png" alt="image" />
-                        <div class="sub-desc-sub-video-play-video">
-                          <div class="username-sub-desc-sub-video-play-video">
-                            ${video.User.firstname.toUpperCase()} ${video.User.lastname.toUpperCase()} <i class="fas fa-check-circle" style="opacity: .5;"></i>
-                          </div>
-                          <div class="description-sub-desc-sub-video-play-video">
-                            ${video.desc}
-                          </div>
-                          <div class="text-custom-height">MORE</div>
-                        </div>
-                      </div>`;
+      $(".title").text(`${video.title}`);
+      $(".info-play-video .view-info").text(`${video.views + 1}`);
+      $(".info-play-video .date-info").text(`${new Date(video.createdAt).toLocaleString("id-ID", options)}`);
+      $(".button-like-container .angka-like").text(`${video.likes.length}`);
+      $(".button-unlike-container .angka-like").text(`${video.dislikes.length}`);
+      $(".description-sub-desc-sub-video-play-video").text(`${video.desc}`);
 
-      $(".sub-container-video-play-video").append(videoCode);
-
-      $(".text-custom-height").click(function () {
-        if ($(this).text() == "MORE") {
-          $(this).text("LESS");
-          $(".description-sub-desc-sub-video-play-video").css({
-            "max-height": "none"
-          })
-        } else {
-          $(this).text("MORE");
-          $(".description-sub-desc-sub-video-play-video").css({
-            "max-height": "122px"
-          })
-        }
-      })
-
-
-      document.querySelector(".video-play-video").addEventListener("webkitfullscreenchange", function (e) {
-        if (e.target.webkitDisplayingFullscreen) {
-          document.querySelector(".video-play-video").style.objectFit = "contain";
-        } else {
-          document.querySelector(".video-play-video").style.objectFit = "cover";
-        }
-      });
+      $(".username-sub-desc-sub-video-play-video").html(`${video.User.firstname.toUpperCase()} ${video.User.lastname.toUpperCase()} 
+      <i class="fas fa-check-circle" style="opacity: .5;"></i>`)
 
       if (videos.length) {
-        $(".container-video-random-play-video").remove();
-        let videoRandomCode = '<div class="container-video-random-play-video">';
+        let videoRandomCode = '';
         for (let i = 0; i < videos.length; i++) {
-          videoRandomCode += `<div class="sub-container-video-random-play-video" onclick="location.href='http://localhost:3000/watch/${videos[i].id}'">
+          videoRandomCode += `<div class="sub-container-video-random-play-video" onclick="location.href='/watch/${videos[i].id}'">
                                 <div class="video-container-play-video">
-                                  <img src="../images/thumbnail/${videos[i].thumbnail}" alt="image" />
+                                  <img src="/images/thumbnail/${videos[i].thumbnail}" alt="image" />
                                   <div class="video-duration-play-video">2.51</div>
                                 </div>
                                 <div class="text-video-user-container-play-video">
                                   <div class="title-video-play-video">${videos[i].title}</div>
-                                  <a href="http://localhost:3000/channel/${videos[i].UserId}" class="username-video-play-video stopClick">${videos[i].User.firstname.toUpperCase()} ${videos[i].User.lastname.toUpperCase()}</a>
+                                  <a href="/channel/${videos[i].UserId}" class="username-video-play-video stopClick">${videos[i].User.firstname.toUpperCase()} ${videos[i].User.lastname.toUpperCase()}</a>
                                   <div class="username-video-play-video info-video-play-video">
                                     <span class="view-info">${videos[i].views}</span> views &bull;
                                     <span class="date-info">${new Date(videos[i].createdAt).toLocaleString("id-ID", options)}</span>
                                   </div>
                                 </div>
                               </div>`;
-
         }
-        videoRandomCode += '</div>';
-        $(".container-video-play-video").append(videoRandomCode);
-
-        $(".stopClick").click(function (e) {
-          e.stopPropagation();
-        });
+        $(".container-video-random-play-video").html(videoRandomCode);
       } else {
         $(".sub-container-video-play-video").css({
           "width": "100%",
@@ -241,7 +242,7 @@
         })
         $(".video-play-video").css({
           "height": "45vw",
-          "maxHeight": "550px"
+          "maxHeight": "520px"
         })
         $(".content-container-play-video").css({
           "maxWidth": "1200px",
@@ -251,98 +252,133 @@
 
         $(".content-container-play-video").addClass("content-container-play-video-auto");
       }
+    });
+  };
 
-      $.ajax({
-        url: `http://localhost:3000/api/comments/${queryUrl}`,
-      }).done(function (data) {
-        $(".comment-sub-video-play-video-container").remove();
 
-        let commentsCode = `<div class="comment-sub-video-play-video-container">
-                              <div class="total-comment-play-video">
-                                <span>${data.length}</span> Comments
-                              </div>
-                              <form action="" class="add-comment-container">
-                                <img src="../images/default-img/profile.png" alt="image" />
-                                <div class="input-comment-container">
-                                  <input type="text" name="inputAdd" id="inputAdd" placeholder="Write a public comment..." />
-                                  <div class="btn-container-input-comment-container">
-                                    <button type="button" class="btn-cancel-add-comment">Cancel</button>
-                                    <button class="btn-add-comment">Comment</button>
-                                  </div>
-                                </div>
-                              </form>
-                              <div class="comments-container">`;
+  const loadComment = (queryUrl) => {
+    $.ajax({
+      url: `/api/comments/${queryUrl}`,
+    }).done(function (data) {
+      let options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
 
-        for (let i = 0; i < data.length; i++) {
-          commentsCode += `<div class="sub-comments-container">
-                            <a href="http://localhost:3000/channel/${data[i].User.id}">
-                              <img src="../images/default-img/profile.png" alt="image" />
+      let {
+        comments,
+        totalComments
+      } = data
+
+      $(".total-comment-play-video span").text(`${totalComments.length}`);
+      let commentsCode = ``;
+      for (let i = 0; i < comments.length; i++) {
+        commentsCode += `<div class="sub-comments-container">
+                            <a href="/channel/${comments[i].UserId}">
+                              <img src="/images/default-img/profile.png" alt="image" />
                             </a>
                             <div class="text-sub-comments-container">
-                              <a href="http://localhost:3000/channel/${data[i].User.id}" class="username-comment">${data[i].User.firstname.toUpperCase()} ${data[i].User.lastname.toUpperCase()}</a>
-                              <span>7 Oktober 2021</span>
-                              <div class="desc-comment">${data[i].desc}</div>
+                              <a href="/channel/${comments[i].UserId}" class="username-comment">${comments[i].User.firstname.toUpperCase()} ${comments[i].User.lastname.toUpperCase()}</a>
+                              <span>${new Date(comments[i].createdAt).toLocaleString("id-ID", options)}</span>
+                              <div class="desc-comment">${comments[i].desc}</div>
                             </div>
-                            <i class="fas fa-trash-alt delete-comment"></i>
+                            <i class="fas fa-trash-alt delete-comment" data-commentId="${comments[i].id}"></i>
                           </div>`;
+      }
+
+      $(".comments-container").html(commentsCode);
+
+      for (let i = 0; i < comments.length; i++) {
+        if (Number(localStorage.getItem("UserIdLogin")) == comments[i].UserId) {
+          $(`[data-commentId=${comments[i].id}]`).addClass("comment-delete-active");
         }
+      }
+    })
 
-        commentsCode += `</div></div>`
-        $(".sub-container-video-play-video").append(commentsCode);
+    $(".comments-container").on("click", ".comment-delete-active", function () {
+      let commentId = Number($(this).attr("data-commentId"));
+      deleteComment(commentId)
+    })
 
-        $(".input-comment-container input").focus(function () {
-          $(this).addClass("input-add-comment-active");
-        });
-
-        $(".input-comment-container input").blur(function () {
-          $(this).removeClass("input-add-comment-active");
-        });
-
-        $(".button-like-container").click(function () {
-          if ($(this).children("i").hasClass("fas")) {
-            $(this).children("i").attr('class', 'far fa-thumbs-up');
-          } else {
-            $(this).children("i").attr('class', 'fas fa-thumbs-up');
-          }
-          $(".button-unlike-container").children("i").attr('class', 'far fa-thumbs-down');
-        })
-
-        $(".button-unlike-container").click(function () {
-          if ($(this).children("i").hasClass("fas")) {
-            $(this).children("i").attr('class', 'far fa-thumbs-down');
-          } else {
-            $(this).children("i").attr('class', 'fas fa-thumbs-down');
-          }
-          $(".button-like-container").children("i").attr('class', 'far fa-thumbs-up');
-        })
-
-        $(".btn-cancel-add-comment").click(function () {
-          $(".input-comment-container input").val("");
-        })
+    const deleteComment = (idComment) => {
+      $.ajax({
+        method: "DELETE",
+        url: `/api/comments/delete/${idComment}`,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      }).done(function () {
+        let queryUrlInner = window.location.href.split("/").pop()
+        loadComment(queryUrlInner)
+      }).fail(function (err) {
+        console.log(err);
       })
+    };
 
+    if (!localStorage.getItem("token")) {
+      $(".input-comment-container input").focus(function () {
+        window.location.href = "/login"
+      });
+
+      $(".btn-container-input-comment-container button").click(function () {
+        window.location.href = "/login"
+      });
+
+      $(".add-comment-container").submit(function (event) {
+        event.preventDefault();
+        window.location.href = "/login"
+      });
+    }
+
+    $(".add-comment-container").submit(function (event) {
+      event.preventDefault();
+      if ($("#inputAdd").val() != "") {
+        const descComment = $("#inputAdd").val();
+        addComment(descComment);
+        $("#inputAdd").val("")
+      }
     });
-  };
 
-  const searchData = (queryUrl) => {
-    $.ajax({
-      url: `http://localhost:3000/api/videos${queryUrl ? queryUrl : ""}`
-    }).done(function (data) {
-      window.location.href = `http://localhost:3000${queryUrl ? queryUrl : ""}`;
-    }).fail(function (err) {
-      window.location.href = `http://localhost:3000${queryUrl ? queryUrl : ""}`;
+    const addComment = (data) => {
+      $.ajax({
+        method: "POST",
+        url: `/api/comments/${queryUrl}/add`,
+        data: {
+          desc: data
+        },
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      }).done(function (data) {
+        let queryUrlInner = window.location.href.split("/").pop()
+        loadComment(queryUrlInner)
+      })
+    }
+
+
+    $(".container-video-random-play-video").on("click", ".stopClick", function (e) {
+      e.stopPropagation();
     });
-  };
 
-  $(".form-search-video-play").submit(function (event) {
-    event.preventDefault();
+    const searchData = (queryUrl) => {
+      $.ajax({
+        url: `/api/videos${queryUrl ? queryUrl : ""}`
+      }).done(function (data) {
+        window.location.href = `/${queryUrl ? queryUrl : ""}`;
+      }).fail(function (err) {
+        window.location.href = `/${queryUrl ? queryUrl : ""}`;
+      });
+    };
 
-    let inputSearch = $(".form-search-video-play input").val();
-    urlSearch = `?searchName=${inputSearch}`;
-    searchData(urlSearch);
-  })
+    $(".form-search-video-play").submit(function (event) {
+      event.preventDefault();
 
-  $(document).ready(function () {
+      let inputSearch = $(".form-search-video-play input").val();
+      urlSearch = `?searchName=${inputSearch}`;
+      searchData(urlSearch);
+    })
+
     $('.nav-hamburger').click(function () {
       if ($(".sidebar-container").css('width') == '255px') {
         if (window.matchMedia('(max-width: 400px)').matches) {
@@ -392,7 +428,7 @@
         $(".small-logo-img").addClass("small-logo-img-block");
       }
     })
-  })
+  }
 
   $(".search-btn").on("click", function () {
     $(".form-search-video").addClass("form-search-video-fixed");
@@ -496,6 +532,127 @@
     function () {
       localStorage.removeItem("token")
     })
+
+  $(".text-custom-height").click(function () {
+    if ($(this).text() == "MORE") {
+      $(this).text("LESS");
+      $(".description-sub-desc-sub-video-play-video").css({
+        "max-height": "none"
+      })
+    } else {
+      $(this).text("MORE");
+      $(".description-sub-desc-sub-video-play-video").css({
+        "max-height": "122px"
+      })
+    }
+  })
+
+  document.querySelector(".video-play-video").addEventListener("webkitfullscreenchange", function (e) {
+    if (e.target.webkitDisplayingFullscreen) {
+      document.querySelector(".video-play-video").style.objectFit = "contain";
+    } else {
+      document.querySelector(".video-play-video").style.objectFit = "cover";
+    }
+  });
+
+  $(".input-comment-container input").focus(function () {
+    $(this).addClass("input-add-comment-active");
+  });
+
+  $(".input-comment-container input").blur(function () {
+    $(this).removeClass("input-add-comment-active");
+  });
+
+  $(".button-like-container").one("click", function () {
+    $(".button-like-container .angka-like").text(`${Number($(".button-like-container .angka-like").text()) + 1}`);
+    loadLike(localStorage.getItem("UserIdLogin"), "");
+    $(".button-like-container").children("i").attr('class', 'fas fa-thumbs-up');
+    $(".button-like-container").attr("disabled", true);
+    $(".button-unlike-container").attr("disabled", true);
+    $(".btn-like-unlike-container").css({
+      opacity: ".3"
+    })
+
+    $(".button-unlike-container").css({
+      cursor: "not-allowed"
+    })
+
+    $(".button-like-container").css({
+      cursor: "not-allowed"
+    })
+  })
+
+  $(".button-unlike-container").one("click", function () {
+    $(".button-unlike-container .angka-like").text(
+      `${Number($(".button-unlike-container .angka-like").text()) + 1}`);
+    loadLike("", localStorage.getItem("UserIdLogin"));
+    $(".button-unlike-container").children("i").attr('class', 'fas fa-thumbs-down');
+    $(".button-unlike-container").attr("disabled", true);
+    $(".button-like-container").attr("disabled", true);
+    $(".btn-like-unlike-container").css({
+      opacity: ".3"
+    })
+
+    $(".button-unlike-container").css({
+      cursor: "not-allowed"
+    })
+
+    $(".button-like-container").css({
+      cursor: "not-allowed"
+    })
+  })
+
+
+  const loadLike = (likes, dislikes) => {
+    $.ajax({
+      url: `/api/videos/like/${queryUrl}?likes=${likes ? likes : ""}&dislikes=${dislikes ? dislikes : ""}`,
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }
+    }).done(function (data) {
+      data.likes.forEach(m => {
+        if (m == Number(localStorage.getItem("UserIdLogin"))) {
+          $(".button-like-container").children("i").attr('class', 'fas fa-thumbs-up');
+          $(".button-like-container").attr("disabled", true);
+          $(".button-unlike-container").attr("disabled", true);
+          $(".btn-like-unlike-container").css({
+            opacity: ".3"
+          })
+
+          $(".button-unlike-container").css({
+            cursor: "not-allowed"
+          })
+
+          $(".button-like-container").css({
+            cursor: "not-allowed"
+          })
+        }
+      });
+
+      data.dislikes.forEach(m => {
+        if (m == Number(localStorage.getItem("UserIdLogin"))) {
+          $(".button-unlike-container").children("i").attr('class', 'fas fa-thumbs-down');
+          $(".button-unlike-container").attr("disabled", true);
+          $(".button-like-container").attr("disabled", true);
+          $(".btn-like-unlike-container").css({
+            opacity: ".3"
+          })
+
+          $(".button-unlike-container").css({
+            cursor: "not-allowed"
+          })
+
+          $(".button-like-container").css({
+            cursor: "not-allowed"
+          })
+        }
+      });
+    })
+  }
+
+  $(".btn-cancel-add-comment").click(function () {
+    $(".input-comment-container input").val("");
+  })
 </script>
 
 </html>

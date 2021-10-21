@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body data-theme="">
@@ -25,15 +26,20 @@
                 <div class="container-input-add-video-title container-input-edit-video-title">
                     <div class="input-add-video-container input-add-video-container-first">
                         <label for="title-add-video" class="label-add-video">Title</label>
+                        <textarea name="titleAddVideo" id="title-add-video"
+                            placeholder="Add a title that describes your video" maxlength="100" required></textarea>
                     </div>
                     <div class="input-add-video-container input-add-video-container-last">
                         <label for="desc-add-video" class="label-add-video">Description</label>
+                        <textarea name="descAddVideo" id="desc-add-video" placeholder="Tell viewers about your video"
+                            maxlength="1000" required></textarea>
                     </div>
                 </div>
-                <div
-                    class="input-add-video-container input-add-video-container-thumbnail input-edit-video-container-thumbnail">
+                <div class="input-add-video-container input-add-video-container-thumbnail input-edit-video-container-thumbnail">
                     <div class="label-add-video">Edit Thumbnail</div>
-                    <div class="thumbnail-btn-container" style="border: 3px solid rgb(185, 184, 184);"></div>
+                    <div class="thumbnail-btn-container" style="border: 3px solid rgb(185, 184, 184);">
+                        <img alt="gambar" class="thumbnail-add-video" width="100%" height="100%" style="border-radius: 5px;object-fit: cover;">
+                    </div>
                     <div class="remove-thumbnail-btn" style="display: block;">
                         <i class="fas fa-times"></i>
                     </div>
@@ -42,145 +48,125 @@
                 </div>
             </div>
             <div class="btn-submit-form-video-container">
-                <button type="submit" class="btn-add-form-video-container">Add</button>
-                <button type="button" onclick="location.href='http://localhost:3000/studio'">Cancel</button>
+                <button type="submit" class="btn-add-form-video-container">Edit</button>
+                <button type="button" onclick="location.href='/studio'">Cancel</button>
             </div>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+        let queryUrl = window.location.href.split("/").pop()
         window.addEventListener("load", () => {
-            let queryUrl = window.location.href.split("/").pop()
             loadData(queryUrl);
         });
 
         const loadData = (queryUrl) => {
             $.ajax({
-                    url: `http://localhost:3000/api/videos/edit/${queryUrl}`,
+                    url: `/api/videos/edit/${queryUrl}`,
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem("token")}`
                     }
                 })
                 .done(function (video) {
-                    $("#title-add-video").remove();
-                    let textareaTitleCode =
-                        `<textarea name="titleAddVideo" id="title-add-video" placeholder="Add a title that describes your video" maxlength="100" required>${video.title}</textarea>`;
-                    $(".input-add-video-container-first").append(textareaTitleCode);
+                    $("#title-add-video").text(`${video.title}`);
+                    $("#desc-add-video").text(`${video.desc}`);
 
-                    $("#desc-add-video").remove();
-                    let textareaDescCode =
-                        `<textarea name="descAddVideo" id="desc-add-video" placeholder="Tell viewers about your video" maxlength="1000" required>${video.desc}</textarea>`;
-                    $(".input-add-video-container-last").append(textareaDescCode);
-
-                    $(".thumbnail-add-video").remove();
-                    let thumbnailCode =
-                        `<img alt="gambar" src="/images/thumbnail/${video.thumbnail}" class="thumbnail-add-video" width="100%" height="100%" style="border-radius: 5px;object-fit: cover;">`;
-                    $(".thumbnail-btn-container").append(thumbnailCode);
-
-                    $("#thumb-add-video").change(function (event) {
-                        var url = URL.createObjectURL(event.target.files[0]);
-                        $(this).parent().children('.thumbnail-btn-container').html(
-                            '<img alt="gambar" class="thumbnail-add-video" width="100%" height="100%" style="border-radius: 5px;object-fit: cover;">'
-                        );
-                        $(this).parent().children('.thumbnail-btn-container').children(
-                            ".thumbnail-add-video").attr("src", url);
-                        $(".remove-thumbnail-btn").css({
-                            "display": "block"
-                        });
-                        $(".thumbnail-btn-container").css({
-                            "border": "3px solid rgb(185, 184, 184)"
-                        });
-
-                        $(".remove-thumbnail-btn").click(function () {
-                            $("#thumb-add-video").attr('required', true);
-                            $(this).parent().children('.thumbnail-btn-container').html(
-                                `<label for="thumb-add-video" id="label-thumbnai-add-video">
-                                    <i class="fas fa-image"></i>
-                                </label>`
-                            );
-                            $('.input-edit-video-container-thumbnail #thumb-add-video').val('');
-                            $(this).css({
-                                "display": "none"
-                            });
-                            $(".thumbnail-btn-container").css({
-                                "border": "3px dashed rgb(185, 184, 184)"
-                            });
-                        })
-                    });
-
-                    $(".remove-thumbnail-btn").click(function () {
-                        $("#thumb-add-video").attr('required', true);
-                        $('.input-edit-video-container-thumbnail #thumb-add-video').val('');
-
-                        $(this).parent().children('.thumbnail-btn-container').html(
-                            `<label for="thumb-add-video" id="label-thumbnai-add-video">
-                                <i class="fas fa-image"></i>
-                            </label>`
-                        );
-                        $(this).css({
-                            "display": "none"
-                        });
-                        $(".thumbnail-btn-container").css({
-                            "border": "3px dashed rgb(185, 184, 184)"
-                        });
-                        $(".input-delete-hidden").val(`${video.thumbnail}#*#deleted`);
-                    })
-
-                    $(".input-add-video-container textarea").focus(function () {
-                        $(this).addClass("input-active-add-video")
-                        $(this).parent().children("label").addClass("input-active-add-video")
-                    });
-
-                    $(".input-add-video-container textarea").blur(function () {
-                        $(this).removeClass("input-active-add-video")
-                        $(this).parent().children("label").removeClass("input-active-add-video")
-                    });
-
-                    $(".form-add-video").submit(function (event) {
-                        event.preventDefault()
-                        const titleAddVideo = $("textarea[name = titleAddVideo]").val();
-                        const descAddVideo = $("textarea[name = descAddVideo]").val();
-                        const imagesFileHidden = $('.input-delete-hidden').val();
-
-                        var fd = new FormData();
-
-                        var imagesFile = $('#thumb-add-video')[0].files[0];
-                        
-                        fd.append('title', titleAddVideo);
-                        fd.append('desc', descAddVideo);
-                        fd.append('imagesFile', imagesFile);
-                        fd.append('imagesFileHidden', imagesFileHidden);
-
-                        editData(fd);
-                    })
-
-
-                    const editData = (fd) => {
-                        $.ajax({
-                            method: "PUT",
-                            url: `http://localhost:3000/api/videos/edit/${queryUrl}`,
-                            data: fd,
-                            headers: {
-                                'Authorization': `Bearer ${localStorage.getItem("token")}`
-                            },
-                            contentType: false,
-                            processData: false,
-                            success: function (response) {
-                                if (response != 0) {
-                                    alert('video updated');
-                                } else {
-                                    alert('video not updated');
-                                }
-                            },
-                        }).done(function () {
-                            window.location.href = `http://localhost:3000/studio`
-                        }).fail(function (err) {
-                            console.log(err);
-                        })
-                    };
+                    $(".thumbnail-add-video").attr('src', `/images/thumbnail/${video.thumbnail}`);
+                    $(".input-delete-hidden").val(`${video.thumbnail}`);
                 })
         }
+
+        $("#thumb-add-video").change(function (event) {
+            var url = URL.createObjectURL(event.target.files[0]);
+
+            $(this).parent().children('.thumbnail-btn-container').html(
+                `<img alt="gambar" src="${url}" class="thumbnail-add-video" width="100%" height="100%" style="border-radius: 5px;object-fit: cover;">`
+            );
+
+            $(".remove-thumbnail-btn").css({
+                "display": "block"
+            });
+
+            $(".thumbnail-btn-container").css({
+                "border": "3px solid rgb(185, 184, 184)"
+            });
+        });
+
+        $(".remove-thumbnail-btn").click(function () {
+            $("#thumb-add-video").attr('required', true);
+            $('.input-edit-video-container-thumbnail #thumb-add-video').val('');
+
+            $(this).parent().children('.thumbnail-btn-container').html(
+                `<label for="thumb-add-video" id="label-thumbnai-add-video">
+                    <i class="fas fa-image"></i>
+                </label>`
+            );
+
+            $(this).css({
+                "display": "none"
+            });
+
+            $(".thumbnail-btn-container").css({
+                "border": "3px dashed rgb(185, 184, 184)"
+            });
+
+            let deleteValue = $(".input-delete-hidden").val() + "#*#deleted";
+            $(".input-delete-hidden").val(deleteValue);
+        })
+
+        $(".input-add-video-container textarea").focus(function () {
+            $(this).addClass("input-active-add-video")
+            $(this).parent().children("label").addClass("input-active-add-video")
+        });
+
+        $(".input-add-video-container textarea").blur(function () {
+            $(this).removeClass("input-active-add-video")
+            $(this).parent().children("label").removeClass("input-active-add-video")
+        });
+
+        $(".form-add-video").submit(function (event) {
+            event.preventDefault();
+            const titleAddVideo = $("textarea[name = titleAddVideo]").val();
+            const descAddVideo = $("textarea[name = descAddVideo]").val();
+            const imagesFileHidden = $('.input-delete-hidden').val();
+
+            var fd = new FormData();
+
+            var imagesFile = $('#thumb-add-video')[0].files[0];
+
+            fd.append('title', titleAddVideo);
+            fd.append('desc', descAddVideo);
+            fd.append('imagesFile', imagesFile);
+            fd.append('imagesFileHidden', imagesFileHidden);
+
+            editData(fd);
+        })
+
+
+        const editData = (fd) => {
+            $.ajax({
+                method: "PUT",
+                url: `/api/videos/edit/${queryUrl}`,
+                data: fd,
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                },
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != 0) {
+                        alert('video updated');
+                    } else {
+                        alert('video not updated');
+                    }
+                },
+            }).done(function () {
+                window.location.href = `/studio`
+            }).fail(function (err) {
+                console.log(err);
+            })
+        };
 
         $('body').attr("data-theme", localStorage.getItem("theme"));
     </script>

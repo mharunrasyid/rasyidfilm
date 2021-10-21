@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body data-theme="" class="body-login">
@@ -36,7 +37,7 @@
                 <input type="text" class="input-login" id="lastname" placeholder="Last Name" />
             </div>
             <button type="submit" class="btn-submit-login">Register</button>
-            <button type="button" class="btn-submit-login btn-submit-register" onclick="location.href='http://localhost:3000/login'">Back</button>
+            <button type="button" class="btn-submit-login btn-submit-register" onclick="location.href='/login'">Back</button>
         </form>
     </div>
 </body>
@@ -71,7 +72,7 @@
     ) => {
         $.ajax({
             method: "POST",
-            url: "http://localhost:3000/api/users/add",
+            url: "/api/users/add",
             data: {
                 email,
                 password,
@@ -79,7 +80,7 @@
                 lastname
             }
         }).done(function (msg) {
-            window.location.href = "http://localhost:3000/login"
+            window.location.href = "/login"
         }).fail(function (err) {
             console.log(err);
             $("input#email").val('');

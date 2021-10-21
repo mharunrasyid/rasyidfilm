@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models");
 var jwt = require("jsonwebtoken");
+const helpers = require("../helpers/util");
 
 const bcrypt = require("bcrypt");
 const { response } = require("../app");
@@ -33,11 +34,14 @@ router.post("/api/auth", async function (req, res, next) {
       function (err, result) {
         if (err) throw err;
         if (result) {
-          var token = jwt.sign({
-            userId: user.dataValues.id,
-            firstname: user.dataValues.firstname,
-            lastname: user.dataValues.lastname,
-          }, 'shhhhh');
+          var token = jwt.sign(
+            {
+              userId: user.dataValues.id,
+              firstname: user.dataValues.firstname,
+              lastname: user.dataValues.lastname,
+            },
+            "shhhhh"
+          );
           res.json(token);
         } else {
           res.status(500).json({ err: "Terjadi Kesalahan" });
@@ -72,6 +76,20 @@ router.get("/studio/add", function (req, res, next) {
 
 router.get("/studio/edit/:idVideo", function (req, res, next) {
   res.render("studio/form-edit");
+});
+
+router.get("/api/token", helpers.isLoggedIn, async function (req, res, next) {
+  try {
+    const user = await models.User.findOne({
+      where: {
+        id: req.body.userToken.userId,
+      },
+    });
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err });
+  }
 });
 
 module.exports = router;
