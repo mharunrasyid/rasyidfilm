@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body data-theme="" style="display: flex;height: 100vh;">
+    <div class="container-error-page">
+        <img src="/images/default-img/error-img.png" alt="image" class="img-error-page" />
+        <div class="text-container-error-page">
+            <div>Opps! something went <span style="color: rgb(223, 106, 29);">wrong</span></div>
+            <div>We can't find the page you're looking for</div>
+        </div>
+        <button class="btn-back-home-error" onclick="window.location.href='/'">Back to Home</button>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $('body').attr("data-theme", localStorage.getItem("theme"));
+</script>
+
+</html>

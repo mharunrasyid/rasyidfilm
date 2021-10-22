@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rasyid Film</title>
+    <title>Studio</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="#">
 </head>
 
-<body data-theme="dar">
+<body data-theme="">
     <div class="container">
         <header class="nav-container">
             <div class="nav-logo">
@@ -42,6 +42,10 @@
                         <div class="profile-img-container">
                             <img src="/images/default-img/profile-user.png" class="profile-user-img" alt="image" />
                             <div class="dropdown-profile-container">
+                                <a href="/editProfile" class="dropdown-profile-container-link">
+                                    <i class="fas fa-user-circle"></i>
+                                    Edit Your Account
+                                </a>
                                 <a href="/studio" class="dropdown-profile-container-link">
                                     <i class="fas fa-play-circle"></i>
                                     Rasyid Film Studio
@@ -143,6 +147,20 @@
             dataQuery = {
                 pIndex,
                 videosNoLimit
+            }
+
+            if (videosNoLimit < 6) {
+                $(".btn-next-studio").attr("disabled", true);
+                $(".btn-next-studio").css({
+                    opacity: ".8",
+                    cursor: "not-allowed"
+                });
+            } else {
+                $(".btn-next-studio").attr("disabled", false);
+                $(".btn-next-studio").css({
+                    opacity: "1",
+                    cursor: "pointer"
+                });
             }
 
             drawTable(videos)

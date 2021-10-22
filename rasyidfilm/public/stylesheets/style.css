@@ -16,6 +16,7 @@ body {
   --main-playvideo-color: #f9f9f9;
   --item-dropdown-color: rgb(107, 105, 105);
   --box-shadow-dropdown-color: rgba(100, 100, 111, 0.2);
+  --pop-delete-background: #f2f2f4;
 }
 
 body[data-theme="dark"] {
@@ -35,7 +36,8 @@ body[data-theme="dark"] {
   --header-channel-color: rgb(34, 34, 34);
   --main-playvideo-color: rgb(21, 21, 23);
   --item-dropdown-color: rgba(255, 255, 255, 0.8);
-  --box-shadow-dropdown-color: transparent;
+  --box-shadow-dropdown-color: rgba(165, 164, 164, 0.2);
+  --pop-delete-background: rgb(21, 21, 23);
 }
 
 body {
@@ -43,7 +45,7 @@ body {
   background: var(--primary-color-dark);
   padding: 0;
   box-sizing: border-box;
-  font-family:  sans-serif;
+  font-family: sans-serif;
 }
 
 .nav-container,
@@ -313,6 +315,13 @@ main {
   padding: 25px 40px 0;
 }
 
+.content-container-edit-profile {
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+  max-width: 1000px !important;
+  flex-direction: column;
+}
+
 .video-container,
 .video-container-channel {
   cursor: pointer;
@@ -534,9 +543,19 @@ main {
   margin: auto;
 }
 
-.header-add-video h1 {
+.header-edit-profile,
+.form-edit-profile {
+  width: 100%;
+}
+
+.header-add-video h1,
+.header-edit-profile h1 {
   font-size: 45px;
   color: var(--header-add-video);
+}
+
+.header-edit-profile h1 {
+  margin-top: 10px;
 }
 
 .form-add-video {
@@ -545,28 +564,47 @@ main {
   width: 100%;
 }
 
+.input-no-btn-form-edit-profile-container {
+  margin-bottom: 15px;
+  max-width: 800px;
+}
+
 .container-input-add-video-title {
   width: 60%;
 }
 
-.input-add-video-container {
+.input-add-video-container,
+.input-form-edit-profile-container {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
+.input-form-edit-profile-container {
+  margin: 10px 0;
+}
+
 .input-add-video-container .label-add-video,
 .label-add-video,
-.header-content-container-content {
+.header-content-container-content,
+.label-form-edit-profile {
   font-weight: 600;
   font-size: 20px;
-  margin-bottom: 10px;
   color: var(--textarea-color);
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.input-add-video-container textarea {
+.label-form-edit-profile {
+  font-weight: normal;
+}
+
+.label-form-edit-profile {
+  margin: 10px 0;
+}
+
+.input-add-video-container textarea,
+.input-form-edit-profile {
   border: 1px solid rgb(209, 209, 209);
   resize: none;
   line-height: 27px;
@@ -579,6 +617,16 @@ main {
   font-size: 18px;
   color: var(--textarea-color);
   margin-bottom: 10px;
+}
+
+.input-form-edit-profile {
+  padding: 8px 15px;
+}
+
+.input-form-edit-profile-disabled {
+  opacity: 0.8;
+  background: rgb(235, 235, 235);
+  color: #4b4949;
 }
 
 .input-add-video-container textarea#title-add-video {
@@ -708,11 +756,19 @@ main {
   margin: 40px 0;
 }
 
+.btn-form-edit-profile-container {
+  margin: 50px 0;
+}
+
 .btn-submit-form-video-container button,
 .btn-edit-table-content,
 .btn-delete-table-content,
 .btn-pagination-table-content,
-.btn-container-input-comment-container button {
+.btn-container-input-comment-container button,
+.btn-form-edit-profile-container button,
+.btn-delete-account-form-edit-profile,
+.btn-box-popup-delete-account-container button,
+.btn-back-home-error {
   border: none;
   outline: none;
   padding: 10px 15px;
@@ -726,7 +782,14 @@ main {
   margin-right: 4px;
 }
 
-.btn-add-form-video-container {
+.btn-delete-account-form-edit-profile {
+  background: rgb(235, 87, 87) !important;
+  margin-top: 10px;
+}
+
+.btn-add-form-video-container,
+.btn-back-home-error,
+.btn-form-edit-profile-container .btn-edit-form-edit-profile {
   background: rgb(252, 116, 25) !important;
 }
 
@@ -869,6 +932,11 @@ main {
   padding: 0 !important;
 }
 
+.content-container-content {
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+
 .content-video-container-channel {
   width: 100%;
   display: flex;
@@ -1007,6 +1075,7 @@ main {
 }
 
 .container-video-play-video {
+  width: 100%;
   font-family: sans-serif;
   display: flex;
   margin: auto;
@@ -1206,7 +1275,7 @@ main {
 }
 
 .delete-comment {
-  color: red;
+  color: rgb(235, 87, 87);
   visibility: hidden;
   margin-top: 30px;
   font-size: 18px;
@@ -1244,7 +1313,7 @@ main {
   bottom: 4px;
   right: 5px;
   color: white;
-  transition:all .3s ease;
+  transition: all 0.3s ease;
   padding: 5px;
   font-size: 14px;
   background: rgba(0, 0, 0, 0.5);
@@ -1284,92 +1353,6 @@ a.username-video-play-video:hover {
   color: rgb(131, 130, 130);
 }
 
-.lds-spinner {
-  color: official;
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  transform: scale(0.4);
-}
-
-.lds-spinner div {
-  transform-origin: 40px 40px;
-  animation: lds-spinner 1.2s linear infinite;
-}
-
-.lds-spinner div:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 3px;
-  left: 37px;
-  width: 6px;
-  height: 18px;
-  border-radius: 20%;
-  background: #fff;
-}
-
-.lds-spinner div:nth-child(1) {
-  transform: rotate(0deg);
-  animation-delay: -1.1s;
-}
-
-.lds-spinner div:nth-child(2) {
-  transform: rotate(30deg);
-  animation-delay: -1s;
-}
-
-.lds-spinner div:nth-child(3) {
-  transform: rotate(60deg);
-  animation-delay: -0.9s;
-}
-
-.lds-spinner div:nth-child(4) {
-  transform: rotate(90deg);
-  animation-delay: -0.8s;
-}
-
-.lds-spinner div:nth-child(5) {
-  transform: rotate(120deg);
-  animation-delay: -0.7s;
-}
-
-.lds-spinner div:nth-child(6) {
-  transform: rotate(150deg);
-  animation-delay: -0.6s;
-}
-
-.lds-spinner div:nth-child(7) {
-  transform: rotate(180deg);
-  animation-delay: -0.5s;
-}
-
-.lds-spinner div:nth-child(8) {
-  transform: rotate(210deg);
-  animation-delay: -0.4s;
-}
-
-.lds-spinner div:nth-child(9) {
-  transform: rotate(240deg);
-  animation-delay: -0.3s;
-}
-
-.lds-spinner div:nth-child(10) {
-  transform: rotate(270deg);
-  animation-delay: -0.2s;
-}
-
-.lds-spinner div:nth-child(11) {
-  transform: rotate(300deg);
-  animation-delay: -0.1s;
-}
-
-.lds-spinner div:nth-child(12) {
-  transform: rotate(330deg);
-  animation-delay: 0s;
-}
-
 .no-data-img {
   position: absolute;
   top: 0;
@@ -1382,14 +1365,99 @@ a.username-video-play-video:hover {
   max-width: 450px;
 }
 
-@keyframes lds-spinner {
-  0% {
-    opacity: 1;
-  }
+.popup-delete-account {
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  width: 100%;
+  top: 0;
+  z-index: 999999;
+  display: flex;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+}
 
-  100% {
-    opacity: 0;
-  }
+.box-popup-delete-account {
+  margin: auto;
+  width: 85%;
+  max-width: 500px;
+  border-radius: 5px;
+  background: var(--primary-color-light);
+}
+
+.box-popup-delete-account .text-box-popup-delete-account {
+  font-size: 18px;
+  display: block;
+  line-height: 25px;
+  padding: 25px;
+  box-sizing: border-box;
+}
+
+.text-box-popup-delete-account b {
+  color: var(--primary-color-dark-inverted);
+}
+
+.text-box-popup-delete-account div {
+  margin-top: 15px;
+  color: #6f6e76;
+}
+
+.btn-box-popup-delete-account-container {
+  padding: 15px 25px;
+  border-radius: 0 0 5px 5px;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  background: var(--pop-delete-background);
+}
+
+.btn-box-popup-delete-account-container div {
+  margin-right: 25px;
+  color: #7e7f81;
+  cursor: pointer;
+}
+
+.btn-box-popup-delete-account-container button {
+  background: rgb(235, 87, 87);
+}
+
+.container-error-page {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+.img-error-page {
+  width: 80%;
+  min-width: 150px;
+  max-width: 600px;
+}
+
+.text-container-error-page {
+  margin: 10px 0 40px 0;
+}
+
+.text-container-error-page div:first-child {
+  font-size: 35px;
+  font-weight: bold;
+  opacity: 0.9;
+  color: var(--title-video-color);
+  margin-bottom: 10px;
+}
+
+.text-container-error-page div:last-child {
+  opacity: 0.7;
+  color: var(--primary-color-dark-inverted);
+}
+
+.btn-back-home-error {
+  padding: 15px 30px;
+  border-radius: 50px;
 }
 
 @keyframes loading {
@@ -1844,6 +1912,9 @@ a.username-video-play-video:hover {
 }
 
 @media screen and (max-width: 400px) {
+  .text-container-error-page div:first-child {
+    font-size: 25px;
+  }
   .content-container {
     margin-left: 0 !important;
   }
@@ -1986,4 +2057,21 @@ a.username-video-play-video:hover {
 .content-container-play-video-auto {
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+@media screen and (min-width: 1750px) {
+  .form-search-video-edit-profile {
+    margin: auto;
+    width: 870px !important;
+    max-width: none;
+  }
+
+  .form-search-video-edit-profile input {
+    max-width: 600px !important;
+  }
+
+  .content-container-edit-profile {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
 }

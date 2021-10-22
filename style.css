@@ -478,7 +478,6 @@ main {
 }
 
 .container-input-add-video-title {
-  /* background: teal; */
   width: 60%;
 }
 
@@ -486,7 +485,6 @@ main {
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* background: red; */
 }
 
 .input-add-video-container .label-add-video,
@@ -735,10 +733,6 @@ main {
   color: var(--title-video-color);
   font-weight: bold;
 }
-
-/* .content-container-content {
-  background: salmon;
-} */
 
 .container-table-content {
   width: 100%;

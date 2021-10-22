@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rasyid Film</title>
+  <title>Channel</title>
   <link rel="stylesheet" href="/stylesheets/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,6 +42,10 @@
             <div class="profile-img-container">
               <img src="/images/default-img/profile-user.png" class="profile-user-img" alt="image" />
               <div class="dropdown-profile-container">
+                <a href="/editProfile" class="dropdown-profile-container-link">
+                  <i class="fas fa-user-circle"></i>
+                  Edit Your Account
+                </a>
                 <a href="/studio" class="dropdown-profile-container-link">
                   <i class="fas fa-play-circle"></i>
                   Rasyid Film Studio
@@ -120,7 +124,7 @@
     $(".username-video").addClass("color-title-video-transparent")
   }
 
-  window.addEventListener("load", () => {
+  $(document).ready(function () {
     renderCardVideo();
     if (localStorage.getItem("theme") == "dark") {
       $('body').attr("data-theme", localStorage.getItem("theme"));
@@ -199,7 +203,7 @@
         for (let i = 0; i < videos.length; i++) {
           videoCode += `<div class="video-container-channel" onclick="location.href='/watch/${videos[i].id}'">
                           <div class="video-thumbnail loading" style="background-image: url(/images/thumbnail/${videos[i].thumbnail}); background-repeat: no-repeat;width: 100%;">
-                            <div class="video-duration">15.45</div>
+                            <div class="video-duration"></div>
                           </div>
                           <div class="text-video-container">
                             <div class="text-video-user-container text-video-user-container-channel">
@@ -211,6 +215,18 @@
                             </div>
                           </div>
                         </div>`;
+
+          var videoElement = document.createElement('video');
+          videoElement.src = `/video/${videos[i].UrlVideo}`;
+          let videoDuration = ""
+          videoElement.onloadedmetadata = function () {
+            var hour = Math.floor(this.duration / 3600);
+            var minutes = Math.floor((this.duration / 60) % 60);
+            var seconds = Math.round((this.duration % 60));
+
+            videoDuration = `${hour ? hour + "." : ""}${minutes}.${seconds}`;
+            document.querySelectorAll(".video-duration")[i].textContent = videoDuration;
+          }
         }
 
         $(".content-video-container-channel").html(videoCode);

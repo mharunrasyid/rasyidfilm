@@ -2,8 +2,8 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models");
 var jwt = require("jsonwebtoken");
-const helpers = require("../helpers/util");
 
+const helpers = require("../helpers/util");
 const bcrypt = require("bcrypt");
 const { response } = require("../app");
 const saltRounds = 10;
@@ -90,6 +90,14 @@ router.get("/api/token", helpers.isLoggedIn, async function (req, res, next) {
     console.log(err);
     res.status(500).json({ err });
   }
+});
+
+router.get("/editProfile", function (req, res, next) {
+  res.render("edit-profile");
+});
+
+router.get("/error", function (req, res, next) {
+  res.render("error-page.ejs");
 });
 
 module.exports = router;

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body data-theme="">
+    <div class="container">
+        <header class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-bars nav-hamburger"></i>
+                <a href="/">
+                    <img src="/images/default-img/logo.png" alt="image" class="logo-img" />
+                    <img src="/images/default-img/small-logo.png" alt="image" class="small-logo-img" />
+                </a>
+            </div>
+            <div class="nav-content nav-content-channel">
+                <form action="" class="form-search-video form-search-video-edit-profile">
+                    <input type="search" placeholder="Search" name="searchVideo" />
+                    <i class="fas fa-times close-search"></i>
+                </form>
+                <div class="search-btn">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="nav-upload">
+                    <button class="btn-upload" onclick="location.href='/studio/add'" style="display: none;">
+                        <i class="fas fa-plus" style="font-size: 12px;margin-right: 7px;"></i>
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <div class="nav-user" style="display: none;">
+                        <div class="profile-img-container">
+                            <img src="/images/default-img/profile-user.png" class="profile-user-img" alt="image" />
+                            <div class="dropdown-profile-container">
+                                <a href="/editProfile" class="dropdown-profile-container-link">
+                                    <i class="fas fa-user-circle"></i>
+                                    Edit Your Account
+                                </a>
+                                <a href="/studio" class="dropdown-profile-container-link">
+                                    <i class="fas fa-play-circle"></i>
+                                    Rasyid Film Studio
+                                </a>
+                                <a href="/login"
+                                    class="dropdown-profile-container-link dropdown-profile-container-link-signout">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Sign Out
+                                </a>
+                            </div>
+                        </div>
+                        <a class="nav-username-profile"></a>
+                    </div>
+                    <button class="login-btn" onclick="location.href='/login'">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="sidebar-container">
+                <a href="/" class="sidebar-item-link sidebar-item-link-channel">
+                    <i class="fas fa-home icon-item-link"></i>
+                    <span class="text-item-link">Home</span>
+                </a>
+                <a class="sidebar-item-link sidebar-item-link-channel-sb" style="display: none;">
+                    <i class="fas fa-video icon-item-link"></i>
+                    <span class="text-item-link">Your Channel</span>
+                </a>
+                <div class="sidebar-theme">
+                    <i class="fas fa-sun icon-sidebar-theme light-theme-btn"></i>
+                    <i class="fas fa-moon icon-sidebar-theme dark-theme-btn"></i>
+                </div>
+            </div>
+            <div class="overlay"></div>
+            <div class="content-container content-container-edit-profile">
+                <div class="header-edit-profile">
+                    <h1>Edit Profile</h1>
+                    <hr class="hr-add-video">
+                </div>
+                <form action="" class="form-edit-profile">
+                    <div class="input-no-btn-form-edit-profile-container">
+                        <div class="input-form-edit-profile-container">
+                            <label for="emailInput" class="label-form-edit-profile">Email</label>
+                            <input type="email" name="emailInput" id="emailInput"
+                                class="input-form-edit-profile input-form-edit-profile-disabled" disabled />
+                        </div>
+                        <div class="input-form-edit-profile-container">
+                            <label for="passInput" class="label-form-edit-profile">Password</label>
+                            <input type="password" name="passInput" id="passInput" class="input-form-edit-profile" />
+                        </div>
+                        <div class="input-form-edit-profile-container">
+                            <label for="firstNameInput" class="label-form-edit-profile">First Name</label>
+                            <input type="text" name="firstNameInput" id="firstNameInput" class="input-form-edit-profile"
+                                required />
+                        </div>
+                        <div class="input-form-edit-profile-container">
+                            <label for="lastNameInput" class="label-form-edit-profile">Last Name</label>
+                            <input type="text" name="lastNameInput" id="lastNameInput"
+                                class="input-form-edit-profile" />
+                        </div>
+                        <button type="button" class="btn-delete-account-form-edit-profile">Delete Account</button>
+                    </div>
+                    <div class="btn-form-edit-profile-container">
+                        <button type="submit" class="btn-edit-form-edit-profile">Edit</button>
+                        <button type="button" class="btn-cancel-form-edit-profile">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <div class="popup-delete-account">
+        <div class="box-popup-delete-account">
+            <div class="text-box-popup-delete-account">
+                <b>You're about to delete your account</b>
+                <div>Deleting your account will also delete all of your videos and comments</div>
+            </div>
+            <div class="btn-box-popup-delete-account-container">
+                <div>Cancel</div>
+                <button type="button" class="btn-delete-account">Delete</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        if (localStorage.getItem("theme") == "dark") {
+            $('body').attr("data-theme", localStorage.getItem("theme"));
+            $(".dark-theme-btn").addClass("icon-sidebar-theme-active");
+            $(".light-theme-btn").removeClass("icon-sidebar-theme-active");
+        } else {
+            $('body').attr("data-theme", localStorage.getItem("theme"));
+            $(".light-theme-btn").addClass("icon-sidebar-theme-active");
+            $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
+        }
+
+        loadData();
+    });
+
+    const loadData = () => {
+        if (localStorage.getItem("token")) {
+            $.ajax({
+                url: '/api/token',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            }).done(function (data) {
+                $(".btn-upload").css({
+                    "display": "flex"
+                });
+
+                $(".nav-user").css({
+                    "display": "flex"
+                });
+
+                $(".login-btn").css({
+                    "display": "none"
+                });
+
+                $(".sidebar-item-link-channel-sb").css({
+                    "display": "block"
+                });
+
+                $(".nav-username-profile").attr('href', `/channel/${data.id}`);
+                $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
+
+                $(".nav-username-profile").text(
+                    `${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
+                $("#emailInput").val(`${data.email}`);
+                $("#firstNameInput").val(`${data.firstname}`);
+                $("#lastNameInput").val(`${data.lastname}`);
+            });
+        }
+    }
+
+    const searchData = (queryUrl) => {
+        $.ajax({
+            url: `/api/videos${queryUrl ? queryUrl : ""}`
+        }).done(function (data) {
+            window.location.href = `/${queryUrl ? queryUrl : ""}`;
+        }).fail(function (err) {
+            window.location.href = `/${queryUrl ? queryUrl : ""}`;
+        });
+    };
+
+    $(".form-search-video").submit(function (event) {
+        event.preventDefault();
+        let inputSearch = $(".form-search-video input").val();
+        urlSearch = `?searchName=${inputSearch}`;
+        searchData(urlSearch);
+    })
+
+    $('.nav-hamburger').click(function () {
+        if ($(".sidebar-container").css('width') == '255px') {
+            if (window.matchMedia('(max-width: 400px)').matches) {
+                $('.sidebar-container').animate({
+                    width: "0"
+                });
+            } else {
+                $('.sidebar-container').animate({
+                    width: "52px"
+                });
+            }
+
+            $('.sidebar-item-link').animate({
+                paddingLeft: "13px"
+            });
+            $('.content-container').animate({
+                marginLeft: "52px"
+            });
+            $('.sidebar-theme').css({
+                "visibility": "hidden"
+            });
+            $(".overlay").removeClass("overlay-show");
+            $(".nav-content").removeClass("hide-all");
+            $(".small-logo-img").removeClass("small-logo-img-block");
+        } else {
+            $('.sidebar-container').animate({
+                width: "255px"
+            });
+            $('.sidebar-item-link').animate({
+                paddingLeft: "20px"
+            });
+            $('.content-container').animate({
+                marginLeft: "255px"
+            });
+            $('.sidebar-theme').css({
+                "visibility": "visible"
+            });
+            $(".overlay").addClass("overlay-show");
+            $(".nav-content").addClass("hide-all");
+            $(".small-logo-img").addClass("small-logo-img-block");
+        }
+    })
+
+    $(".search-btn").on("click", function () {
+        if (window.matchMedia("(max-width: 400px)").matches) {
+            $(".sidebar-container").animate({
+                width: "0",
+            });
+        } else {
+            $(".sidebar-container").animate({
+                width: "52px",
+            });
+        }
+        $(".form-search-video").addClass("form-search-video-fixed");
+        $(".close-search").addClass("close-search-fixed");
+        $(".form-search-video input").addClass("input-fixed");
+        $(".sidebar-container").css({
+            "z-index": "-1"
+        });
+        $('.sidebar-item-link').css({
+            "paddingLeft": "13px"
+        });
+        $('.sidebar-theme').css({
+            "visibility": "hidden"
+        });
+
+    })
+
+    $(".close-search").on("click", function () {
+        $(".form-search-video").removeClass("form-search-video-fixed");
+        $(".close-search").removeClass("close-search-fixed");
+        $(".form-search-video input").removeClass("input-fixed");
+        $(".sidebar-container").css({
+            "z-index": "1000"
+        });
+    })
+
+    $('.form-search-video input').keyup(function (e) {
+        if (e.keyCode == 13) {
+            $(".form-search-video").removeClass("form-search-video-fixed");
+            $(".close-search").removeClass("close-search-fixed");
+            $(".form-search-video input").removeClass("input-fixed");
+            $(".sidebar-container").css({
+                "z-index": "1000",
+            });
+        }
+    });
+
+    $(".overlay").on("click", function () {
+        if (window.matchMedia('(max-width: 400px)').matches) {
+            $('.sidebar-container').animate({
+                width: "0"
+            });
+        } else {
+            $('.sidebar-container').animate({
+                width: "52px"
+            });
+        }
+        $('.sidebar-item-link').animate({
+            paddingLeft: "13px"
+        });
+        $('.content-container').animate({
+            marginLeft: "52px"
+        });
+        $('.sidebar-theme').css({
+            "visibility": "hidden"
+        });
+        $(".overlay").removeClass("overlay-show");
+        $(".nav-content").removeClass("hide-all");
+        $(".small-logo-img").removeClass("small-logo-img-block");
+    })
+
+    $(".light-theme-btn").click(function () {
+        localStorage.setItem("theme", "light");
+        $('body').attr("data-theme", localStorage.getItem("theme"));
+        $(".light-theme-btn").addClass("icon-sidebar-theme-active");
+        $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
+    });
+
+    $(".dark-theme-btn").click(function () {
+        localStorage.setItem("theme", "dark");
+        $('body').attr("data-theme", localStorage.getItem("theme"));
+        $(".dark-theme-btn").addClass("icon-sidebar-theme-active");
+        $(".light-theme-btn").removeClass("icon-sidebar-theme-active");
+    });
+
+    $(document).click(function (event) {
+        if (
+            event.target.className != "profile-user-img" &&
+            event.target.className != "dropdown-profile-container-link"
+        ) {
+            $(".dropdown-profile-container").css({
+                visibility: "hidden",
+            });
+        } else {
+            $(".dropdown-profile-container").css({
+                visibility: "visible",
+            });
+        }
+
+        if (event.target.className == "popup-delete-account") {
+            $(".popup-delete-account").css({
+                visibility: "hidden",
+                opacity: "0"
+            })
+        }
+    });
+
+    $(".nav-upload").on("click",
+        ".nav-user .profile-img-container .dropdown-profile-container .dropdown-profile-container-link-signout",
+        function () {
+            localStorage.removeItem("token")
+        })
+
+    $(".input-form-edit-profile-container input").focus(function () {
+        $(this).addClass("input-active-add-video")
+        $(this).parent().children("label").addClass("input-active-add-video")
+    });
+
+    $(".input-form-edit-profile-container input").blur(function () {
+        $(this).removeClass("input-active-add-video")
+        $(this).parent().children("label").removeClass("input-active-add-video")
+    });
+
+    $(".btn-delete-account-form-edit-profile").click(function () {
+        $(".popup-delete-account").css({
+            visibility: "visible",
+            opacity: "1"
+        })
+    })
+
+    $(".btn-box-popup-delete-account-container div").click(function () {
+        $(".popup-delete-account").css({
+            visibility: "hidden",
+            opacity: "0"
+        })
+    })
+
+    $(".btn-cancel-form-edit-profile").click(function () {
+        window.location.href = "/editProfile"
+    })
+
+    $(".form-edit-profile").submit(function (event) {
+        event.preventDefault();
+        const password = $("#passInput").val();
+        const firstname = $("#firstNameInput").val();
+        const lastname = $('#lastNameInput').val();
+
+        var data = {
+            password,
+            firstname,
+            lastname
+        };
+
+        editData(data);
+    })
+
+    const editData = (data) => {
+        $.ajax({
+            method: "PUT",
+            url: `/api/users/edit`,
+            data: data,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        }).done(function () {
+            window.location.href = `/editProfile`
+        }).fail(function (err) {
+            console.log(err);
+        })
+    };
+
+    $(".btn-delete-account").click(function () {
+        deleteAccount();
+    })
+
+    const deleteAccount = () => {
+        $.ajax({
+            method: "DELETE",
+            url: `/api/users/delete`,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        }).done(function () {
+            $(".popup-delete-account").css({
+                visibility: "hidden",
+                opacity: "0"
+            })
+            
+            localStorage.removeItem("token")
+            window.location.href = `/login`;
+        }).fail(function (err) {
+            console.log(err);
+        })
+    };
+</script>
+
+</html>

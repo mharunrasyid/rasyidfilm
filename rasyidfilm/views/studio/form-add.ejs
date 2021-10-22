@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>add video</title>
+    <title>Add Video</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,178 +71,179 @@
             </div>
         </form>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
 
-    <script>
-        $("#thumb-add-video").change(function (event) {
-            var url = URL.createObjectURL(event.target.files[0]);
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $("#thumb-add-video").change(function (event) {
+        var url = URL.createObjectURL(event.target.files[0]);
+        $(this).parent().children('.thumbnail-btn-container').html(
+            '<img alt="gambar" class="thumbnail-add-video" width="100%" height="100%" style="border-radius: 5px;object-fit: cover;">'
+        );
+        $(this).parent().children('.thumbnail-btn-container').children(".thumbnail-add-video").attr("src",
+            url);
+        $(".remove-thumbnail-btn").css({
+            "display": "block"
+        });
+        $(".thumbnail-btn-container").css({
+            "border": "3px solid rgb(185, 184, 184)"
+        });
+        $(".remove-thumbnail-btn").click(function () {
             $(this).parent().children('.thumbnail-btn-container').html(
-                '<img alt="gambar" class="thumbnail-add-video" width="100%" height="100%" style="border-radius: 5px;object-fit: cover;">'
-            );
-            $(this).parent().children('.thumbnail-btn-container').children(".thumbnail-add-video").attr("src",
-                url);
-            $(".remove-thumbnail-btn").css({
-                "display": "block"
-            });
-            $(".thumbnail-btn-container").css({
-                "border": "3px solid rgb(185, 184, 184)"
-            });
-            $(".remove-thumbnail-btn").click(function () {
-                $(this).parent().children('.thumbnail-btn-container').html(
-                    `<label for="thumb-add-video" id="label-thumbnai-add-video">
+                `<label for="thumb-add-video" id="label-thumbnai-add-video">
                         <i class="fas fa-image"></i>
                     </label>`
-                );
-                $(this).parent().children('#thumb-add-video').val('');
-                $(this).css({
-                    "display": "none"
-                });
-                $(".thumbnail-btn-container").css({
-                    "border": "3px dashed rgb(185, 184, 184)"
-                });
-            })
-        });
+            );
+            $(this).parent().children('#thumb-add-video').val('');
+            $(this).css({
+                "display": "none"
+            });
+            $(".thumbnail-btn-container").css({
+                "border": "3px dashed rgb(185, 184, 184)"
+            });
+        })
+    });
 
-        const dropArea = document.querySelector(".drag-area"),
-            dragText = dropArea.querySelector("header"),
-            button = dropArea.querySelector("button"),
-            input = document.querySelector(".input-choose-add-video");
-        let file;
+    const dropArea = document.querySelector(".drag-area"),
+        dragText = dropArea.querySelector("header"),
+        button = dropArea.querySelector("button"),
+        input = document.querySelector(".input-choose-add-video");
+    let file;
 
-        input.addEventListener("change", function () {
-            file = this.files[0];
-            dropArea.classList.add("active");
-            showFile();
-        });
+    input.addEventListener("change", function () {
+        file = this.files[0];
+        dropArea.classList.add("active");
+        showFile();
+    });
 
-        dropArea.addEventListener("dragover", (event) => {
-            event.preventDefault();
-            dropArea.classList.add("active");
-            dragText.textContent = "Release to Upload File";
-        });
+    dropArea.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        dropArea.classList.add("active");
+        dragText.textContent = "Release to Upload File";
+    });
 
-        dropArea.addEventListener("dragleave", () => {
-            dropArea.classList.remove("active");
-            dragText.textContent = "Drag & Drop to Upload File";
-        });
+    dropArea.addEventListener("dragleave", () => {
+        dropArea.classList.remove("active");
+        dragText.textContent = "Drag & Drop to Upload File";
+    });
 
-        dropArea.addEventListener("drop", (event) => {
-            event.preventDefault();
-            file = event.dataTransfer.files[0];
-            showFile();
-        });
+    dropArea.addEventListener("drop", (event) => {
+        event.preventDefault();
+        file = event.dataTransfer.files[0];
+        showFile();
+    });
 
-        function showFile() {
-            let fileType = file.type;
-            let validExtensions = ["video/mp4", "video/oog", "video/webm"];
-            if (validExtensions.includes(fileType)) {
-                let fileReader = new FileReader();
-                fileReader.onload = () => {
-                    let fileURL = fileReader.result;
-                    let videoTag =
-                        `<video style="width:100%;height:100%;object-fit: cover;border-radius:5px;">
+    function showFile() {
+        let fileType = file.type;
+        let validExtensions = ["video/mp4", "video/oog", "video/webm"];
+        if (validExtensions.includes(fileType)) {
+            let fileReader = new FileReader();
+            fileReader.onload = () => {
+                let fileURL = fileReader.result;
+                let videoTag =
+                    `<video style="width:100%;height:100%;object-fit: cover;border-radius:5px;">
                         <source src="${fileURL}">
                         </video>`;
-                    dropArea.innerHTML = videoTag;
-                }
-
-                fileReader.readAsDataURL(file);
-
-                setTimeout(() => {
-                    $('.remove-thumbnail-btn-video').css({
-                        "display": "block"
-                    });
-                }, 1500);
-            } else {
-                alert("This is not an Video File!");
-                dropArea.classList.remove("active");
-                dragText.textContent = "Drag & Drop to Upload File";
+                dropArea.innerHTML = videoTag;
             }
-        }
 
-        $(".remove-thumbnail-btn-video").click(function () {
-            dropArea.innerHTML = `<div class="icon">
+            fileReader.readAsDataURL(file);
+
+            setTimeout(() => {
+                $('.remove-thumbnail-btn-video').css({
+                    "display": "block"
+                });
+            }, 1500);
+        } else {
+            alert("This is not an Video File!");
+            dropArea.classList.remove("active");
+            dragText.textContent = "Drag & Drop to Upload File";
+        }
+    }
+
+    $(".remove-thumbnail-btn-video").click(function () {
+        dropArea.innerHTML = `<div class="icon">
                                     <i class="fas fa-cloud-upload-alt"></i>
                                 </div>
                                 <header>Drag & Drop to Upload File</header>
                                 <span>OR</span>
                                 <button type="button">Browse File</button>`;
-            $('.remove-thumbnail-btn-video').css({
-                "display": "none"
-            });
-            input.value = "";
-
-            $(".drag-area").children("button").click(function () {
-                $(this).parent().parent().children(".input-choose-add-video").click();
-            })
-
-            $(".container-input-add-videos").children(".input-choose-add-video").change(function () {
-                file = this.files[0];
-                dropArea.classList.add("active");
-                showFile();
-            });
-
-            dropArea.classList.remove("active");
-        })
+        $('.remove-thumbnail-btn-video').css({
+            "display": "none"
+        });
+        input.value = "";
 
         $(".drag-area").children("button").click(function () {
-            $(".input-choose-add-video").click();
+            $(this).parent().parent().children(".input-choose-add-video").click();
         })
 
-        $(".input-add-video-container textarea").focus(function () {
-            $(this).addClass("input-active-add-video")
-            $(this).parent().children("label").addClass("input-active-add-video")
+        $(".container-input-add-videos").children(".input-choose-add-video").change(function () {
+            file = this.files[0];
+            dropArea.classList.add("active");
+            showFile();
         });
 
-        $(".input-add-video-container textarea").blur(function () {
-            $(this).removeClass("input-active-add-video")
-            $(this).parent().children("label").removeClass("input-active-add-video")
-        });
+        dropArea.classList.remove("active");
+    })
 
-        $('body').attr("data-theme", localStorage.getItem("theme"));
+    $(".drag-area").children("button").click(function () {
+        $(".input-choose-add-video").click();
+    })
 
-        $(".form-add-video").submit(function (event) {
-            event.preventDefault()
-            const titleAddVideo = $("textarea[name = titleAddVideo]").val();
-            const descAddVideo = $("textarea[name = descAddVideo]").val();
+    $(".input-add-video-container textarea").focus(function () {
+        $(this).addClass("input-active-add-video")
+        $(this).parent().children("label").addClass("input-active-add-video")
+    });
 
-            var fd = new FormData();
+    $(".input-add-video-container textarea").blur(function () {
+        $(this).removeClass("input-active-add-video")
+        $(this).parent().children("label").removeClass("input-active-add-video")
+    });
 
-            var imagesFile = $('#thumb-add-video')[0].files[0];
-            var videoFile = $('.input-choose-add-video')[0].files[0];
-            fd.append('title', titleAddVideo);
-            fd.append('desc', descAddVideo);
-            fd.append('imagesFile', imagesFile);
-            fd.append('videoFile', videoFile);
+    $('body').attr("data-theme", localStorage.getItem("theme"));
 
-            addData(fd);
+    $(".form-add-video").submit(function (event) {
+        event.preventDefault()
+        const titleAddVideo = $("textarea[name = titleAddVideo]").val();
+        const descAddVideo = $("textarea[name = descAddVideo]").val();
+
+        var fd = new FormData();
+
+        var imagesFile = $('#thumb-add-video')[0].files[0];
+        var videoFile = $('.input-choose-add-video')[0].files[0];
+        fd.append('title', titleAddVideo);
+        fd.append('desc', descAddVideo);
+        fd.append('imagesFile', imagesFile);
+        fd.append('videoFile', videoFile);
+
+        addData(fd);
+    })
+
+
+    const addData = (fd) => {
+        $.ajax({
+            method: "POST",
+            url: "/api/videos/add",
+            data: fd,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+            },
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response != 0) {
+                    alert('file uploaded');
+                } else {
+                    alert('file not uploaded');
+                }
+            },
+        }).done(function () {
+            window.location.href = "/studio"
+        }).fail(function (err) {
+            console.log(err);
         })
-
-
-        const addData = (fd) => {
-            $.ajax({
-                method: "POST",
-                url: "/api/videos/add",
-                data: fd,
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                },
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    if (response != 0) {
-                        alert('file uploaded');
-                    } else {
-                        alert('file not uploaded');
-                    }
-                },
-            }).done(function () {
-                window.location.href = "/studio"
-            }).fail(function (err) {
-                console.log(err);
-            })
-        };
-    </script>
-</body>
+    };
+</script>
 
 </html>

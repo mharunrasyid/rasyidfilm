@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+
 const helpers = require("../helpers/util");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
@@ -24,6 +25,7 @@ router.get("/", async function (req, res, next) {
         },
       },
     });
+
     res.json(videos);
   } catch (err) {
     console.log(err);
@@ -322,7 +324,7 @@ router.get("/like/:id", helpers.isLoggedIn, async function (req, res, next) {
         req.body.likes.push(Number(req.query.likes));
       }
     } else {
-      req.body.likes = [...videoLike.dataValues.likes]
+      req.body.likes = [...videoLike.dataValues.likes];
       videoLike.dataValues.likes.forEach((m) => {
         if (Number(m) != req.body.userToken.userId && req.query.likes) {
           req.body.likes.push(Number(req.query.likes));
