@@ -35,8 +35,8 @@
         </a>
       </div>
       <div class="nav-content nav-content-play-video">
-        <form action="" class="form-search-video form-search-video-play seacrh-videos-padding-right">
-          <input type="search" placeholder="Search" name="searchVideo" />
+        <form action="" class="form-search-video form-search-video-play seacrh-videos-padding-right" style="max-width: 500px;">
+          <input type="search" placeholder="Search" name="searchVideo" class="input-watch-ft" />
           <i class="fas fa-times close-search"></i>
         </form>
         <div class="search-btn">
@@ -75,7 +75,10 @@
       </div>
     </header>
     <main>
-      <div class="sidebar-container sidebar-container-play-video">
+      <div class="sidebar-container sidebar-container-fixed">
+        <a href="/" class="favicon-fixed">
+          <img src="/images/default-img/logo.png" alt="image" class="logo-img logo-img-fixed" />
+        </a>
         <a href="/" class="sidebar-item-link">
           <i class="fas fa-home icon-item-link"></i>
           <span class="text-item-link">Home</span>
@@ -84,7 +87,7 @@
           <i class="fas fa-video icon-item-link"></i>
           <span class="text-item-link">Your Channel</span>
         </a>
-        <div class="sidebar-theme">
+        <div class="sidebar-theme sidebar-theme-fixed">
           <i class="fas fa-sun icon-sidebar-theme light-theme-btn"></i>
           <i class="fas fa-moon icon-sidebar-theme dark-theme-btn"></i>
         </div>
@@ -470,52 +473,24 @@
     })
 
     $('.nav-hamburger').click(function () {
-      if ($(".sidebar-container").css('width') == '255px') {
-        if (window.matchMedia('(max-width: 400px)').matches) {
-          $('.sidebar-container').animate({
-            width: "0"
-          });
-        } else {
-          $('.sidebar-container').animate({
-            width: "0px"
-          });
-
-          $('.sidebar-container-play-video').animate({
-            width: "0px"
-          });
-        }
-
-        $('.sidebar-item-link').animate({
-          paddingLeft: "13px"
-        });
-
-        $('.content-container').animate({
-          marginLeft: "0px"
-        });
-
+      if ($(".sidebar-container-fixed").css('marginLeft') == '0px') {
         $('.sidebar-theme').css({
           "visibility": "hidden"
         });
 
-        $(".overlay").removeClass("overlay-show-play-video");
-        $(".nav-content").removeClass("hide-all");
-        $(".small-logo-img").removeClass("small-logo-img-block");
+        $(".overlay").removeClass("overlay-show-watch");
       } else {
-        $('.sidebar-container').animate({
-          width: "255px"
-        });
         $('.sidebar-item-link').animate({
           paddingLeft: "20px"
         });
-        $('.content-container').animate({
-          marginLeft: "255px"
-        });
+
         $('.sidebar-theme').css({
           "visibility": "visible"
         });
-        $(".overlay").addClass("overlay-show-play-video");
-        $(".nav-content").addClass("hide-all");
-        $(".small-logo-img").addClass("small-logo-img-block");
+
+        $(".overlay").addClass("overlay-show-watch");
+
+        $(".sidebar-container-fixed").addClass("sidebar-container-fixed-margin-watch");
       }
     })
   }
@@ -525,17 +500,16 @@
     $(".close-search").addClass("close-search-fixed");
     $(".form-search-video input").addClass("input-fixed");
     $(".sidebar-container").css({
-      "z-index": "-1"
+      "z-index": "99"
     });
-    $('.sidebar-container').css({
-      "width": "0px"
-    });
-    $('.sidebar-item-link').css({
-      "paddingLeft": "13px"
-    });
+
     $('.sidebar-theme').css({
       "visibility": "hidden"
     });
+
+    $(".nav-container").css({
+      boxShadow: "none"
+    })
 
   })
 
@@ -544,8 +518,12 @@
     $(".close-search").removeClass("close-search-fixed");
     $(".form-search-video input").removeClass("input-fixed");
     $(".sidebar-container").css({
-      "z-index": "1000"
+      "z-index": "100"
     });
+
+    $(".nav-container").css({
+      boxShadow: "rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 32px"
+    })
   })
 
   $('.form-search-video input').keyup(function (e) {
@@ -560,31 +538,13 @@
   });
 
   $(".overlay").on("click", function () {
-    if (window.matchMedia('(max-width: 400px)').matches) {
-      $('.sidebar-container').animate({
-        width: "0"
-      });
-    } else {
-      $('.sidebar-container').animate({
-        width: "0px"
-      });
-
-      $('.sidebar-container-play-video').animate({
-        width: "0px"
-      });
-    }
-    $('.sidebar-item-link').animate({
-      paddingLeft: "13px"
-    });
-    $('.content-container').animate({
-      marginLeft: "0px"
-    });
     $('.sidebar-theme').css({
       "visibility": "hidden"
     });
-    $(".overlay").removeClass("overlay-show-play-video");
-    $(".nav-content").removeClass("hide-all");
-    $(".small-logo-img").removeClass("small-logo-img-block");
+
+    $(".sidebar-container-fixed").removeClass("sidebar-container-fixed-margin-watch");
+
+    $(".overlay").removeClass("overlay-show-watch");
   })
 
   $(".light-theme-btn").click(function () {
@@ -640,8 +600,10 @@
   document.querySelector(".video-play-video").addEventListener("webkitfullscreenchange", function (e) {
     if (e.target.webkitDisplayingFullscreen) {
       document.querySelector(".video-play-video").style.objectFit = "contain";
+      document.querySelector(".video-play-video").style.borderRadius = "0";
     } else {
       document.querySelector(".video-play-video").style.objectFit = "cover";
+      document.querySelector(".video-play-video").style.borderRadius = "15px";
     }
   });
 
