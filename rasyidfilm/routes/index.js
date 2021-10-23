@@ -18,7 +18,6 @@ router.get("/login", function (req, res, next) {
 });
 
 router.post("/api/auth", async function (req, res, next) {
-  // todo: buat req session
   try {
     const user = await models.User.findOne({
       where: {
@@ -49,8 +48,7 @@ router.post("/api/auth", async function (req, res, next) {
       }
     );
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -87,17 +85,12 @@ router.get("/api/token", helpers.isLoggedIn, async function (req, res, next) {
     });
     res.json(user);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
 router.get("/editProfile", function (req, res, next) {
   res.render("edit-profile");
-});
-
-router.get("/error", function (req, res, next) {
-  res.render("error-page.ejs");
 });
 
 module.exports = router;

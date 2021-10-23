@@ -28,8 +28,7 @@ router.get("/", async function (req, res, next) {
 
     res.json(videos);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -79,8 +78,7 @@ router.get("/studio", helpers.isLoggedIn, async function (req, res, next) {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -131,8 +129,7 @@ router.get("/watch/:id", async function (req, res, next) {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -175,8 +172,7 @@ router.get("/channel/:id", async function (req, res, next) {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -209,8 +205,7 @@ router.post("/add", helpers.isLoggedIn, async function (req, res, next) {
     const video = await models.Video.create(req.body);
     res.status(201).json(video);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -227,7 +222,7 @@ router.get("/edit/:id", helpers.isLoggedIn, async function (req, res, next) {
 
     res.status(201).json(video);
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -267,7 +262,7 @@ router.put("/edit/:id", helpers.isLoggedIn, async function (req, res, next) {
     });
     res.status(201).json(video[1]);
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -302,7 +297,7 @@ router.delete(
 
       res.status(201).json(video);
     } catch (err) {
-      res.status(500).json({ err });
+      res.status(500).json({ err : "Terjadi Kesalahan" });
     }
   }
 );
@@ -357,8 +352,7 @@ router.get("/like/:id", helpers.isLoggedIn, async function (req, res, next) {
 
     res.json(videoLike);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 

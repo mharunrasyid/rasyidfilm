@@ -16,6 +16,22 @@
 </head>
 
 <body data-theme="">
+    <div class="error-alert" style="top: 30px;">
+        <i class="fas fa-times error-close"></i>
+        <i class="fas fa-exclamation-triangle error-i"></i>
+        <div class="text-alert-error">
+            <div>Error</div>
+            <div class="err-desc"></div>
+        </div>
+    </div>
+    <div class="succes-alert" style="top: 30px;">
+        <i class="fas fa-times succes-close"></i>
+        <i class="far fa-check-circle succes-i"></i>
+        <div class="text-alert-succes">
+            <div>Succes</div>
+            <div class="succes-desc"></div>
+        </div>
+    </div>
     <div class="container-add-video">
         <div class="header-add-video">
             <h1>Add Video</h1>
@@ -76,6 +92,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/login";
+    }
+
     $("#thumb-add-video").change(function (event) {
         var url = URL.createObjectURL(event.target.files[0]);
         $(this).parent().children('.thumbnail-btn-container').html(
@@ -233,17 +253,70 @@
             processData: false,
             success: function (response) {
                 if (response != 0) {
-                    alert('file uploaded');
+                    $(".succes-alert").css({
+                        visibility: "visible",
+                        opacity: "1"
+                    });
+
+                    $(".succes-desc").text("Video Uploaded");
+
+                    setTimeout(() => {
+                        $(".error-alert").css({
+                            visibility: "hidden",
+                            opacity: "0"
+                        });
+                    }, 500);
                 } else {
-                    alert('file not uploaded');
+                    $(".error-alert").css({
+                        visibility: "visible",
+                        opacity: "1"
+                    });
+
+                    $(".err-desc").text("Video Not Uploaded");
+
+                    setTimeout(() => {
+                        $(".error-alert").css({
+                            visibility: "hidden",
+                            opacity: "0"
+                        });
+                    }, 500);
                 }
             },
         }).done(function () {
-            window.location.href = "/studio"
+            setTimeout(() => {
+                window.location.href = "/studio"
+            }, 500);
         }).fail(function (err) {
-            console.log(err);
-        })
+            $(".error-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".err-desc").text(err.responseJSON.err);
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 5000);
+        });
+
     };
+
+    $(".error-close").click(function () {
+        $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+        });
+    })
+
+    $(".succes-close").click(function () {
+        $(".succes-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+        });
+    })
 </script>
 
 </html>

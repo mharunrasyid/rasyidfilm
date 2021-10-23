@@ -16,6 +16,22 @@
 </head>
 
 <body data-theme="">
+    <div class="error-alert">
+        <i class="fas fa-times error-close"></i>
+        <i class="fas fa-exclamation-triangle error-i"></i>
+        <div class="text-alert-error">
+            <div>Error</div>
+            <div class="err-desc"></div>
+        </div>
+    </div>
+    <div class="succes-alert">
+        <i class="fas fa-times succes-close"></i>
+        <i class="far fa-check-circle succes-i"></i>
+        <div class="text-alert-succes">
+            <div>Succes</div>
+            <div class="succes-desc"></div>
+        </div>
+    </div>
     <div class="container">
         <header class="nav-container">
             <div class="nav-logo">
@@ -135,6 +151,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/login";
+    }
+
     $(document).ready(function () {
         if (localStorage.getItem("theme") == "dark") {
             $('body').attr("data-theme", localStorage.getItem("theme"));
@@ -181,6 +201,20 @@
                 $("#emailInput").val(`${data.email}`);
                 $("#firstNameInput").val(`${data.firstname}`);
                 $("#lastNameInput").val(`${data.lastname}`);
+            }).fail(function (err) {
+                $(".error-alert").css({
+                    visibility: "visible",
+                    opacity: "1"
+                });
+
+                $(".err-desc").text(err.responseJSON.err);
+
+                setTimeout(() => {
+                    $(".error-alert").css({
+                        visibility: "hidden",
+                        opacity: "0"
+                    });
+                }, 5000);
             });
         }
     }
@@ -408,10 +442,36 @@
                 'Authorization': `Bearer ${localStorage.getItem("token")}`
             }
         }).done(function () {
-            window.location.href = `/editProfile`
+            loadData()
+            $(".succes-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".succes-desc").text("You're profile updated");
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 5000);
+            
         }).fail(function (err) {
-            console.log(err);
-        })
+            $(".error-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".err-desc").text(err.responseJSON.err);
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 5000);
+        });
     };
 
     $(".btn-delete-account").click(function () {
@@ -430,13 +490,39 @@
                 visibility: "hidden",
                 opacity: "0"
             })
-            
+
             localStorage.removeItem("token")
             window.location.href = `/login`;
         }).fail(function (err) {
-            console.log(err);
-        })
+            $(".error-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".err-desc").text(err.responseJSON.err);
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 5000);
+        });
     };
+
+    $(".error-close").click(function () {
+        $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+        });
+    })
+
+    $(".succes-close").click(function () {
+        $(".succes-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+        });
+    })
 </script>
 
 </html>

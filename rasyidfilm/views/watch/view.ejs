@@ -16,6 +16,14 @@
 </head>
 
 <body data-theme="" class="body-playvideo">
+  <div class="error-alert">
+    <i class="fas fa-times error-close"></i>
+    <i class="fas fa-exclamation-triangle error-i"></i>
+    <div class="text-alert-error">
+      <div>Error</div>
+      <div class="err-desc"></div>
+    </div>
+  </div>
   <div class="container" style="margin-bottom: 70px;">
     <header class="nav-container"
       style="box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;">
@@ -186,7 +194,20 @@
         $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
 
         $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
+      }).fail(function (err) {
+        $(".error-alert").css({
+          visibility: "visible",
+          opacity: "1"
+        });
 
+        $(".err-desc").text(err.responseJSON.err);
+
+        setTimeout(() => {
+          $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+          });
+        }, 5000);
       });
     }
 
@@ -267,6 +288,20 @@
 
         $(".content-container-play-video").addClass("content-container-play-video-auto");
       }
+    }).fail(function (err) {
+      $(".error-alert").css({
+        visibility: "visible",
+        opacity: "1"
+      });
+
+      $(".err-desc").text(err.responseJSON.err);
+
+      setTimeout(() => {
+        $(".error-alert").css({
+          visibility: "hidden",
+          opacity: "0"
+        });
+      }, 5000);
     });
   };
 
@@ -309,7 +344,21 @@
           $(`[data-commentId=${comments[i].id}]`).addClass("comment-delete-active");
         }
       }
-    })
+    }).fail(function (err) {
+      $(".error-alert").css({
+        visibility: "visible",
+        opacity: "1"
+      });
+
+      $(".err-desc").text(err.responseJSON.err);
+
+      setTimeout(() => {
+        $(".error-alert").css({
+          visibility: "hidden",
+          opacity: "0"
+        });
+      }, 5000);
+    });
 
     $(".comments-container").on("click", ".comment-delete-active", function () {
       let commentId = Number($(this).attr("data-commentId"));
@@ -327,8 +376,20 @@
         let queryUrlInner = window.location.href.split("/").pop()
         loadComment(queryUrlInner)
       }).fail(function (err) {
-        console.log(err);
-      })
+        $(".error-alert").css({
+          visibility: "visible",
+          opacity: "1"
+        });
+
+        $(".err-desc").text(err.responseJSON.err);
+
+        setTimeout(() => {
+          $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+          });
+        }, 5000);
+      });
     };
 
     if (!localStorage.getItem("token")) {
@@ -368,7 +429,21 @@
       }).done(function (data) {
         let queryUrlInner = window.location.href.split("/").pop()
         loadComment(queryUrlInner)
-      })
+      }).fail(function (err) {
+        $(".error-alert").css({
+          visibility: "visible",
+          opacity: "1"
+        });
+
+        $(".err-desc").text(err.responseJSON.err);
+
+        setTimeout(() => {
+          $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+          });
+        }, 5000);
+      });
     }
 
 
@@ -666,7 +741,21 @@
             })
           }
         });
-      })
+      }).fail(function (err) {
+        $(".error-alert").css({
+          visibility: "visible",
+          opacity: "1"
+        });
+
+        $(".err-desc").text(err.responseJSON.err);
+
+        setTimeout(() => {
+          $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+          });
+        }, 5000);
+      });
     }
   } else {
     $(".button-like-container").one("click", function () {
@@ -678,6 +767,13 @@
     })
 
   }
+
+  $(".error-close").click(function () {
+    $(".error-alert").css({
+      visibility: "hidden",
+      opacity: "0"
+    });
+  })
 
   $(".btn-cancel-add-comment").click(function () {
     $(".input-comment-container input").val("");

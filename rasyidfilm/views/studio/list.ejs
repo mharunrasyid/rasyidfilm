@@ -16,6 +16,22 @@
 </head>
 
 <body data-theme="">
+    <div class="error-alert">
+        <i class="fas fa-times error-close"></i>
+        <i class="fas fa-exclamation-triangle error-i"></i>
+        <div class="text-alert-error">
+            <div>Error</div>
+            <div class="err-desc"></div>
+        </div>
+    </div>
+    <div class="succes-alert">
+        <i class="fas fa-times succes-close"></i>
+        <i class="far fa-check-circle succes-i"></i>
+        <div class="text-alert-succes">
+            <div>Succes</div>
+            <div class="succes-desc"></div>
+        </div>
+    </div>
     <div class="container">
         <header class="nav-container">
             <div class="nav-logo">
@@ -123,6 +139,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/login";
+    }
+
     let dataQuery = null;
 
     $(document).ready(function () {
@@ -177,9 +197,35 @@
                 'Authorization': `Bearer ${localStorage.getItem("token")}`
             }
         }).fail(function (err) {
-            window.location.href = "/login";
+            $(".error-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".err-desc").text(err.responseJSON.err);
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 5000);
         });
     };
+
+    $(".error-close").click(function () {
+        $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+        });
+    })
+
+    $(".succes-close").click(function () {
+        $(".succes-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+        });
+    })
 
     const drawTable = (videos) => {
         let options = {
@@ -230,9 +276,38 @@
                 'Authorization': `Bearer ${localStorage.getItem("token")}`
             }
         }).done(function () {
-            window.location.href = `/studio`
+            $(".succes-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".succes-desc").text("Video was deleted");
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 300);
+
+            setTimeout(() => {
+                window.location.href = `/studio`
+            }, 300);
+
         }).fail(function (err) {
-            console.log(err);
+            $(".error-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".err-desc").text(err.responseJSON.err);
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 5000);
         })
     };
 

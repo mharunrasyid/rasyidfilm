@@ -17,6 +17,7 @@ body {
   --item-dropdown-color: rgb(107, 105, 105);
   --box-shadow-dropdown-color: rgba(100, 100, 111, 0.2);
   --pop-delete-background: #f2f2f4;
+  --box-shadow-popup-error: rgba(149, 157, 165, 0.2);
 }
 
 body[data-theme="dark"] {
@@ -38,6 +39,7 @@ body[data-theme="dark"] {
   --item-dropdown-color: rgba(255, 255, 255, 0.8);
   --box-shadow-dropdown-color: rgba(165, 164, 164, 0.2);
   --pop-delete-background: rgb(21, 21, 23);
+  --box-shadow-popup-error: transparent;
 }
 
 body {
@@ -1458,6 +1460,66 @@ a.username-video-play-video:hover {
 .btn-back-home-error {
   padding: 15px 30px;
   border-radius: 50px;
+}
+
+.error-alert,
+.succes-alert {
+  position: fixed;
+  z-index: 150;
+  top: 80px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  background: var(--primary-color-light);
+  border-radius: 5px;
+  box-shadow: var(--box-shadow-popup-error) 0px 8px 24px;
+  width: 80%;
+  transition: all 0.3s ease;
+  padding: 15px;
+  box-sizing: border-box;
+  max-width: 320px;
+  height: 60px;
+  border-left: 7px solid #e4545b;
+}
+
+.succes-alert {
+  border-left: 7px solid #74c85f;
+}
+
+.error-alert .error-i,
+.succes-i {
+  font-size: 25px;
+  color: #e4545b;
+  margin-right: 20px;
+}
+
+.succes-i {
+  color: #74c85f;
+}
+
+.text-alert-error div:first-child,
+.text-alert-succes div:first-child {
+  color: var(--title-video-color);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.text-alert-error div:last-child,
+.text-alert-succes div:last-child {
+  color: var(--title-video-color);
+  opacity: 0.5;
+}
+
+.error-close,
+.succes-close {
+  color: var(--title-video-color);
+  position: absolute;
+  top: 12px;
+  opacity: 0.5;
+  cursor: pointer;
+  right: 12px;
 }
 
 @keyframes loading {

@@ -13,7 +13,7 @@ router.get("/", async function (req, res, next) {
     const users = await models.User.findAll();
     res.json(users);
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -38,7 +38,7 @@ router.post("/add", async function (req, res, next) {
       }
     );
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -70,7 +70,7 @@ router.put("/edit", helpers.isLoggedIn, async function (req, res, next) {
       }
     );
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -106,7 +106,7 @@ router.delete("/delete", helpers.isLoggedIn, async function (req, res, next) {
 
     res.status(201).json({});
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 

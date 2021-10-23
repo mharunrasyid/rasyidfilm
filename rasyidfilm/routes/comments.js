@@ -39,7 +39,7 @@ router.get("/:idVideo", async function (req, res, next) {
     }
     res.json(data);
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err : "Terjadi Kesalahan" });
   }
 });
 
@@ -54,7 +54,7 @@ router.post(
       const comment = await models.Comment.create(req.body);
       res.status(201).json(comment);
     } catch (err) {
-      res.status(500).json({ err });
+      res.status(500).json({ err : "Terjadi Kesalahan" });
     }
   }
 );
@@ -88,7 +88,7 @@ router.delete(
       });
       res.status(201).json(comment);
     } catch (err) {
-      res.status(500).json({ err });
+      res.status(500).json({ err : "Terjadi Kesalahan" });
     }
   }
 );

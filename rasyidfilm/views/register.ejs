@@ -16,6 +16,14 @@
 </head>
 
 <body data-theme="" class="body-login">
+    <div class="error-alert" style="top: 30px;">
+        <i class="fas fa-times error-close"></i>
+        <i class="fas fa-exclamation-triangle error-i"></i>
+        <div class="text-alert-error">
+            <div>Error</div>
+            <div class="err-desc"></div>
+        </div>
+    </div>
     <div class="container-login container-register">
         <form action="" class="input-login-container input-register-container">
             <img src="images/default-img/logo-login.png" alt="image" class="logo-login" />
@@ -37,7 +45,8 @@
                 <input type="text" class="input-login" id="lastname" placeholder="Last Name" />
             </div>
             <button type="submit" class="btn-submit-login">Register</button>
-            <button type="button" class="btn-submit-login btn-submit-register" onclick="location.href='/login'">Back</button>
+            <button type="button" class="btn-submit-login btn-submit-register"
+                onclick="location.href='/login'">Back</button>
         </form>
     </div>
 </body>
@@ -82,13 +91,32 @@
         }).done(function (msg) {
             window.location.href = "/login"
         }).fail(function (err) {
-            console.log(err);
+            $(".error-alert").css({
+                visibility: "visible",
+                opacity: "1"
+            });
+
+            $(".err-desc").text(err.responseJSON.err);
+
+            setTimeout(() => {
+                $(".error-alert").css({
+                    visibility: "hidden",
+                    opacity: "0"
+                });
+            }, 5000);
             $("input#email").val('');
             $("input#password").val('');
             $("input#fistname").val('');
             $("input#lastname").val('');
         })
     };
+
+    $(".error-close").click(function () {
+        $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+        });
+    })
 </script>
 
 </html>

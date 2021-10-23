@@ -15,7 +15,15 @@
   <link rel="shortcut icon" href="#">
 </head>
 
-<body data-theme="dar">
+<body data-theme="">
+  <div class="error-alert">
+    <i class="fas fa-times error-close"></i>
+    <i class="fas fa-exclamation-triangle error-i"></i>
+    <div class="text-alert-error">
+      <div>Error</div>
+      <div class="err-desc"></div>
+    </div>
+  </div>
   <div class="container">
     <header class="nav-container">
       <div class="nav-logo">
@@ -174,8 +182,29 @@
         if (queryUrlChannel == data.id) {
           $(".sidebar-item-link-channel-sb").addClass("sidebar-item-link-active");
         }
+      }).fail(function (err) {
+        $(".error-alert").css({
+          visibility: "visible",
+          opacity: "1"
+        });
+
+        $(".err-desc").text(err.responseJSON.err);
+
+        setTimeout(() => {
+          $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+          });
+        }, 5000);
       });
     }
+
+    $(".error-close").click(function () {
+      $(".error-alert").css({
+        visibility: "hidden",
+        opacity: "0"
+      });
+    })
 
     $.ajax({
       url: `/api/videos/channel/${queryUrl}${search}`,
@@ -232,7 +261,21 @@
         $(".content-video-container-channel").html(videoCode);
         renderCardVideo();
       }
-    })
+    }).fail(function (err) {
+      $(".error-alert").css({
+        visibility: "visible",
+        opacity: "1"
+      });
+
+      $(".err-desc").text(err.responseJSON.err);
+
+      setTimeout(() => {
+        $(".error-alert").css({
+          visibility: "hidden",
+          opacity: "0"
+        });
+      }, 5000);
+    });
   }
 
   const searchData = (queryUrl) => {
