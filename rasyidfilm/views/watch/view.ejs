@@ -35,7 +35,8 @@
         </a>
       </div>
       <div class="nav-content nav-content-play-video">
-        <form action="" class="form-search-video form-search-video-play seacrh-videos-padding-right" style="max-width: 500px;">
+        <form action="" class="form-search-video form-search-video-play seacrh-videos-padding-right"
+          style="max-width: 500px;">
           <input type="search" placeholder="Search" name="searchVideo" class="input-watch-ft" />
           <i class="fas fa-times close-search"></i>
         </form>
@@ -79,6 +80,7 @@
         <a href="/" class="favicon-fixed">
           <img src="/images/default-img/logo.png" alt="image" class="logo-img logo-img-fixed" />
         </a>
+        <i class="fas fa-times close-fixed-sb"></i>
         <a href="/" class="sidebar-item-link">
           <i class="fas fa-home icon-item-link"></i>
           <span class="text-item-link">Home</span>
@@ -141,6 +143,7 @@
                 </div>
               </form>
               <div class="comments-container"></div>
+              <button class="load-more-comments" style="display: none;">Load More Comments</button>
             </div>
           </div>
           <div class="container-video-random-play-video"></div>
@@ -153,7 +156,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-  let queryUrl = window.location.href.split("/").pop()
+  if (!localStorage.getItem("token")) {
+    $(".form-search-video-play input").addClass("input-wacth-sp")
+  }
+
+  let dataQuery = null;
+  let commentsQuery = null;
+  let idVideoUrl = window.location.href.split("/").pop()
 
   $(document).ready(function () {
     if (localStorage.getItem("theme") == "dark") {
@@ -166,57 +175,9 @@
       $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
     }
 
-    loadData(queryUrl);
-    loadComment(queryUrl);
-  });
-
-  const loadData = (queryUrl) => {
-    if (localStorage.getItem("token")) {
-      $(".form-search-video-play").removeClass("seacrh-videos-padding-right")
-
-      $.ajax({
-        url: '/api/token',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem("token")}`
-        }
-      }).done(function (data) {
-        $(".btn-upload").css({
-          "display": "flex"
-        });
-        $(".nav-user").css({
-          "display": "flex"
-        });
-        $(".login-btn").css({
-          "display": "none"
-        });
-        $(".sidebar-item-link-channel-sb").css({
-          "display": "block"
-        });
-
-        $(".nav-username-profile").attr('href', `/channel/${data.id}`);
-        $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
-
-        $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
-      }).fail(function (err) {
-        $(".error-alert").css({
-          visibility: "visible",
-          opacity: "1"
-        });
-
-        $(".err-desc").text(err.responseJSON.err);
-
-        setTimeout(() => {
-          $(".error-alert").css({
-            visibility: "hidden",
-            opacity: "0"
-          });
-        }, 5000);
-      });
-    }
-
-    $.ajax({
-      url: `/api/videos/watch/${queryUrl}`,
-    }).done(function (data) {
+    loadData({
+      view: 1
+    }, idVideoUrl).done(function (data) {
       let options = {
         year: "numeric",
         month: "long",
@@ -224,9 +185,18 @@
       };
 
       let {
+        video,
         videos,
-        video
+        videosNoLimit,
+        pIndex,
+        limit
       } = data;
+
+      dataQuery = {
+        pIndex,
+        videosNoLimit,
+        limit
+      }
 
       $(".video-play-video source").attr('src', `/video/${video.UrlVideo}`);
       $(".video-play-video")[0].load();
@@ -241,56 +211,40 @@
       $(".username-sub-desc-sub-video-play-video").html(`${video.User.firstname.toUpperCase()} ${video.User.lastname.toUpperCase()} 
       <i class="fas fa-check-circle" style="opacity: .5;"></i>`)
 
-      if (videos.length) {
-        let videoRandomCode = '';
-        for (let i = 0; i < videos.length; i++) {
-          videoRandomCode += `<div class="sub-container-video-random-play-video" onclick="location.href='/watch/${videos[i].id}'">
-                                <div class="video-container-play-video">
-                                  <img src="/images/thumbnail/${videos[i].thumbnail}" alt="image" />
-                                  <div class="video-duration-play-video"></div>
-                                </div>
-                                <div class="text-video-user-container-play-video">
-                                  <div class="title-video-play-video">${videos[i].title}</div>
-                                  <a href="/channel/${videos[i].UserId}" class="username-video-play-video stopClick">${videos[i].User.firstname.toUpperCase()} ${videos[i].User.lastname.toUpperCase()}</a>
-                                  <div class="username-video-play-video info-video-play-video">
-                                    <span class="view-info">${videos[i].views}</span> views &bull;
-                                    <span class="date-info">${new Date(videos[i].createdAt).toLocaleString("id-ID", options)}</span>
-                                  </div>
-                                </div>
-                              </div>`;
+      drawVideos(videos, videosNoLimit);
+      drawProfile();
+    });
 
-          var videoElement = document.createElement('video');
-          videoElement.src = `/video/${videos[i].UrlVideo}`;
-          let videoDuration = ""
-          videoElement.onloadedmetadata = function () {
-            var hour = Math.floor(this.duration / 3600);
-            var minutes = Math.floor((this.duration / 60) % 60);
-            var seconds = Math.round((this.duration % 60));
+    loadComment({}, idVideoUrl).done(function (data) {
+      let {
+        comments,
+        totalComments,
+        commentsNoLimit,
+        pIndex,
+        limit,
+      } = data;
 
-            videoDuration = `${hour ? hour + "." : ""}${minutes}.${seconds}`;
-            document.querySelectorAll(".video-duration-play-video")[i].textContent = videoDuration;
-          }
-        }
-        $(".container-video-random-play-video").html(videoRandomCode);
-      } else {
-        $(".sub-container-video-play-video").css({
-          "width": "100%",
-        })
-        $(".container-video-play-video").css({
-          "width": "100%"
-        })
-        $(".video-play-video").css({
-          "height": "45vw",
-          "maxHeight": "520px"
-        })
-        $(".content-container-play-video").css({
-          "maxWidth": "1200px",
-          "marginLeft": "auto !important",
-          "marginRight": "auto !important",
-        })
-
-        $(".content-container-play-video").addClass("content-container-play-video-auto");
+      commentsQuery = {
+        pIndex,
+        commentsNoLimit,
+        limit
       }
+
+      if (commentsNoLimit.length > 3) {
+        $(".load-more-comments").css({
+          display: "block"
+        })
+      }
+
+      drawComments(totalComments, comments);
+    });
+  });
+
+  const loadData = (queryUrl, idVideoUrl) => {
+    return $.ajax({
+      url: `/api/videos/watch/${idVideoUrl}`,
+      method: 'GET',
+      data: queryUrl,
     }).fail(function (err) {
       $(".error-alert").css({
         visibility: "visible",
@@ -308,45 +262,122 @@
     });
   };
 
+  const drawVideos = (videos, videosNoLimit) => {
+    let options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
 
-  const loadComment = (queryUrl) => {
-    $.ajax({
-      url: `/api/comments/${queryUrl}`,
-    }).done(function (data) {
-      let options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-
-      let {
-        comments,
-        totalComments
-      } = data
-
-      $(".total-comment-play-video span").text(`${totalComments.length}`);
-      let commentsCode = ``;
-      for (let i = 0; i < comments.length; i++) {
-        commentsCode += `<div class="sub-comments-container">
-                            <a href="/channel/${comments[i].UserId}">
-                              <img src="/images/default-img/profile.png" alt="image" />
-                            </a>
-                            <div class="text-sub-comments-container">
-                              <a href="/channel/${comments[i].UserId}" class="username-comment">${comments[i].User.firstname.toUpperCase()} ${comments[i].User.lastname.toUpperCase()}</a>
-                              <span>${new Date(comments[i].createdAt).toLocaleString("id-ID", options)}</span>
-                              <div class="desc-comment">${comments[i].desc}</div>
-                            </div>
-                            <i class="fas fa-trash-alt delete-comment" data-commentId="${comments[i].id}"></i>
-                          </div>`;
+    if (videos.length != 0) {
+      let videoRandomCode = '';
+      for (let i = 0; i < videos.length; i++) {
+        videoRandomCode += `<div class="sub-container-video-random-play-video" onclick="location.href='/watch/${videos[i].id}'">
+                                <div class="video-container-play-video">
+                                  <img src="/images/thumbnail/${videos[i].thumbnail}" alt="image" />
+                                  <div class="video-duration-play-video"></div>
+                                </div>
+                                <div class="text-video-user-container-play-video">
+                                  <div class="title-video-play-video">${videos[i].title}</div>
+                                  <a href="/channel/${videos[i].UserId}" class="username-video-play-video stopClick">${videos[i].User.firstname.toUpperCase()} ${videos[i].User.lastname.toUpperCase()}</a>
+                                  <div class="username-video-play-video info-video-play-video">
+                                    <span class="view-info">${videos[i].views}</span> views &bull;
+                                    <span class="date-info">${new Date(videos[i].createdAt).toLocaleString("id-ID", options)}</span>
+                                  </div>
+                                </div>
+                              </div>`;
       }
+      $(".container-video-random-play-video").append(videoRandomCode);
 
-      $(".comments-container").html(commentsCode);
+      for (let i = 0; i < videosNoLimit.length; i++) {
+        var videoElement = document.createElement('video');
+        videoElement.src = `/video/${videosNoLimit[i].UrlVideo}`;
+        let videoDuration = ""
+        videoElement.onloadedmetadata = function () {
+          var hour = Math.floor(this.duration / 3600);
+          var minutes = Math.floor((this.duration / 60) % 60);
+          var seconds = Math.round((this.duration % 60));
 
-      for (let i = 0; i < comments.length; i++) {
-        if (Number(localStorage.getItem("UserIdLogin")) == comments[i].UserId) {
-          $(`[data-commentId=${comments[i].id}]`).addClass("comment-delete-active");
+          videoDuration = `${hour ? hour + "." : ""}${minutes}.${seconds - 1}`;
+          if ($(".video-duration-play-video")[i]) {
+            document.querySelectorAll(".video-duration-play-video")[i].textContent = videoDuration;
+          }
         }
       }
+    } else {
+      $(".sub-container-video-play-video").css({
+        "width": "100%",
+      })
+      $(".container-video-play-video").css({
+        "width": "100%"
+      })
+      $(".video-play-video").css({
+        "height": "45vw",
+        "maxHeight": "520px"
+      })
+      $(".content-container-play-video").css({
+        "maxWidth": "1200px",
+        "marginLeft": "auto !important",
+        "marginRight": "auto !important",
+      })
+
+      $(".content-container-play-video").addClass("content-container-play-video-auto");
+    }
+  }
+
+  const drawProfile = () => {
+    if (localStorage.getItem("token")) {
+      $(".form-search-video-play").removeClass("seacrh-videos-padding-right")
+
+      $.ajax({
+        url: '/api/token',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }
+      }).done(function (data) {
+        $(".btn-upload").css({
+          "display": "flex"
+        });
+
+        $(".nav-user").css({
+          "display": "flex"
+        });
+
+        $(".login-btn").css({
+          "display": "none"
+        });
+
+        $(".sidebar-item-link-channel-sb").css({
+          "display": "block"
+        });
+
+        $(".nav-username-profile").attr('href', `/channel/${data.id}`);
+        $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
+        $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
+
+      }).fail(function (err) {
+        $(".error-alert").css({
+          visibility: "visible",
+          opacity: "1"
+        });
+
+        $(".err-desc").text(err.responseJSON.err);
+
+        setTimeout(() => {
+          $(".error-alert").css({
+            visibility: "hidden",
+            opacity: "0"
+          });
+        }, 5000);
+      });
+    }
+  }
+
+  const loadComment = (queryComment, idVideoUrl) => {
+    return $.ajax({
+      url: `/api/comments/${idVideoUrl}`,
+      method: 'GET',
+      data: queryComment,
     }).fail(function (err) {
       $(".error-alert").css({
         visibility: "visible",
@@ -362,138 +393,238 @@
         });
       }, 5000);
     });
+  }
 
-    $(".comments-container").on("click", ".comment-delete-active", function () {
-      let commentId = Number($(this).attr("data-commentId"));
-      deleteComment(commentId)
-    })
-
-    const deleteComment = (idComment) => {
-      $.ajax({
-        method: "DELETE",
-        url: `/api/comments/delete/${idComment}`,
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem("token")}`
-        }
-      }).done(function () {
-        let queryUrlInner = window.location.href.split("/").pop()
-        loadComment(queryUrlInner)
-      }).fail(function (err) {
-        $(".error-alert").css({
-          visibility: "visible",
-          opacity: "1"
-        });
-
-        $(".err-desc").text(err.responseJSON.err);
-
-        setTimeout(() => {
-          $(".error-alert").css({
-            visibility: "hidden",
-            opacity: "0"
-          });
-        }, 5000);
-      });
+  const drawComments = (totalComments, comments) => {
+    let options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
 
-    if (!localStorage.getItem("token")) {
-      $(".input-comment-container input").focus(function () {
-        window.location.href = "/login"
-      });
+    $(".total-comment-play-video span").text(`${totalComments.length}`);
+    let commentsCode = ``;
+    for (let i = 0; i < comments.length; i++) {
+      commentsCode += `<div class="sub-comments-container">
+                            <a href="/channel/${comments[i].UserId}">
+                              <img src="/images/default-img/profile.png" alt="image" />
+                            </a>
+                            <div class="text-sub-comments-container">
+                              <a href="/channel/${comments[i].UserId}" class="username-comment">${comments[i].User.firstname.toUpperCase()} ${comments[i].User.lastname.toUpperCase()}</a>
+                              <span>${new Date(comments[i].createdAt).toLocaleString("id-ID", options)}</span>
+                              <div class="desc-comment">${comments[i].desc}</div>
+                            </div>
+                            <i class="fas fa-trash-alt delete-comment" data-commentId="${comments[i].id}"></i>
+                          </div>`;
+    }
 
-      $(".btn-container-input-comment-container button").click(function () {
-        window.location.href = "/login"
-      });
+    $(".comments-container").append(commentsCode);
 
-      $(".add-comment-container").submit(function (event) {
-        event.preventDefault();
-        window.location.href = "/login"
+    for (let i = 0; i < comments.length; i++) {
+      if (Number(localStorage.getItem("UserIdLogin")) == comments[i].UserId) {
+        $(`[data-commentId=${comments[i].id}]`).addClass("comment-delete-active");
+      }
+    }
+  }
+
+  $(".load-more-comments").click(function () {
+    if (commentsQuery.pIndex != Math.ceil(commentsQuery.commentsNoLimit.length / 3)) {
+      loadComment({
+        page: commentsQuery.pIndex + 1,
+      }, idVideoUrl).done(function (data) {
+        let {
+          comments,
+          totalComments,
+          commentsNoLimit,
+          pIndex,
+          limit,
+        } = data;
+
+        commentsQuery = {
+          pIndex,
+          commentsNoLimit,
+          limit
+        }
+
+        drawComments(totalComments, comments);
       });
     }
+
+    if ((commentsQuery.pIndex + 1) == Math.ceil(commentsQuery.commentsNoLimit.length / 3)) {
+      $(".load-more-comments").css({
+        display: "none"
+      })
+    }
+  })
+
+  $(".comments-container").on("click", ".comment-delete-active", function () {
+    let commentId = Number($(this).attr("data-commentId"));
+    deleteComment(commentId)
+  })
+
+  const deleteComment = (idComment) => {
+    $.ajax({
+      method: "DELETE",
+      url: `/api/comments/delete/${idComment}`,
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }
+    }).done(function () {
+      let idVideoUrlInner = window.location.href.split("/").pop()
+      $(".comments-container").html("");
+
+      loadComment({
+        page: 0,
+        limit: commentsQuery.commentsNoLimit.length
+      }, idVideoUrlInner).done(function (data) {
+        let {
+          comments,
+          totalComments,
+          commentsNoLimit,
+          pIndex,
+          limit,
+        } = data;
+
+        commentsQuery = {
+          pIndex,
+          commentsNoLimit,
+          limit
+        }
+
+        drawComments(totalComments, comments)
+
+        $(".load-more-comments").css({
+          display: "none"
+        })
+      });
+    }).fail(function (err) {
+      $(".error-alert").css({
+        visibility: "visible",
+        opacity: "1"
+      });
+
+      $(".err-desc").text(err.responseJSON.err);
+
+      setTimeout(() => {
+        $(".error-alert").css({
+          visibility: "hidden",
+          opacity: "0"
+        });
+      }, 5000);
+    });
+  };
+
+  if (!localStorage.getItem("token")) {
+    $(".input-comment-container input").focus(function () {
+      window.location.href = "/login"
+    });
+
+    $(".btn-container-input-comment-container button").click(function () {
+      window.location.href = "/login"
+    });
 
     $(".add-comment-container").submit(function (event) {
       event.preventDefault();
-      if ($("#inputAdd").val() != "") {
-        const descComment = $("#inputAdd").val();
-        addComment(descComment);
-        $("#inputAdd").val("")
-      }
+      window.location.href = "/login"
     });
-
-    const addComment = (data) => {
-      $.ajax({
-        method: "POST",
-        url: `/api/comments/${queryUrl}/add`,
-        data: {
-          desc: data
-        },
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem("token")}`
-        }
-      }).done(function (data) {
-        let queryUrlInner = window.location.href.split("/").pop()
-        loadComment(queryUrlInner)
-      }).fail(function (err) {
-        $(".error-alert").css({
-          visibility: "visible",
-          opacity: "1"
-        });
-
-        $(".err-desc").text(err.responseJSON.err);
-
-        setTimeout(() => {
-          $(".error-alert").css({
-            visibility: "hidden",
-            opacity: "0"
-          });
-        }, 5000);
-      });
-    }
-
-
-    $(".container-video-random-play-video").on("click", ".stopClick", function (e) {
-      e.stopPropagation();
-    });
-
-    const searchData = (queryUrl) => {
-      $.ajax({
-        url: `/api/videos${queryUrl ? queryUrl : ""}`
-      }).done(function (data) {
-        window.location.href = `/${queryUrl ? queryUrl : ""}`;
-      }).fail(function (err) {
-        window.location.href = `/${queryUrl ? queryUrl : ""}`;
-      });
-    };
-
-    $(".form-search-video-play").submit(function (event) {
-      event.preventDefault();
-
-      let inputSearch = $(".form-search-video-play input").val();
-      urlSearch = `?searchName=${inputSearch}`;
-      searchData(urlSearch);
-    })
-
-    $('.nav-hamburger').click(function () {
-      if ($(".sidebar-container-fixed").css('marginLeft') == '0px') {
-        $('.sidebar-theme').css({
-          "visibility": "hidden"
-        });
-
-        $(".overlay").removeClass("overlay-show-watch");
-      } else {
-        $('.sidebar-item-link').animate({
-          paddingLeft: "20px"
-        });
-
-        $('.sidebar-theme').css({
-          "visibility": "visible"
-        });
-
-        $(".overlay").addClass("overlay-show-watch");
-
-        $(".sidebar-container-fixed").addClass("sidebar-container-fixed-margin-watch");
-      }
-    })
   }
+
+  $(".add-comment-container").submit(function (event) {
+    event.preventDefault();
+    if ($("#inputAdd").val() != "") {
+      const descComment = $("#inputAdd").val();
+      addComment(descComment);
+      $("#inputAdd").val("")
+    }
+  });
+
+  const addComment = (data) => {
+    $.ajax({
+      method: "POST",
+      url: `/api/comments/${idVideoUrl}/add`,
+      data: {
+        desc: data
+      },
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }
+    }).done(function (data) {
+      let idVideoUrlInner = window.location.href.split("/").pop()
+      $(".comments-container").html("");
+
+      loadComment({
+        page: 0,
+        limit: commentsQuery.commentsNoLimit.length + 1
+      }, idVideoUrlInner).done(function (data) {
+        let {
+          comments,
+          totalComments,
+          commentsNoLimit,
+          pIndex,
+          limit,
+        } = data;
+
+        commentsQuery = {
+          pIndex,
+          commentsNoLimit,
+          limit
+        }
+
+        drawComments(totalComments, comments)
+
+        $(".load-more-comments").css({
+          display: "none"
+        })
+      });
+    }).fail(function (err) {
+      $(".error-alert").css({
+        visibility: "visible",
+        opacity: "1"
+      });
+
+      $(".err-desc").text(err.responseJSON.err);
+
+      setTimeout(() => {
+        $(".error-alert").css({
+          visibility: "hidden",
+          opacity: "0"
+        });
+      }, 5000);
+    });
+  }
+
+
+  $(".container-video-random-play-video").on("click", ".stopClick", function (e) {
+    e.stopPropagation();
+  });
+
+  const searchData = (queryUrl) => {
+    $.ajax({
+      url: `/api/videos${queryUrl ? queryUrl : ""}`
+    }).done(function (data) {
+      window.location.href = `/${queryUrl ? queryUrl : ""}`;
+    }).fail(function (err) {
+      window.location.href = `/${queryUrl ? queryUrl : ""}`;
+    });
+  };
+
+  $(".form-search-video-play").submit(function (event) {
+    event.preventDefault();
+
+    let inputSearch = $(".form-search-video-play input").val();
+    urlSearch = `?searchName=${inputSearch}`;
+    searchData(urlSearch);
+  })
+
+  $('.nav-hamburger').click(function () {
+    if ($(".sidebar-container-fixed").css('marginLeft') == '0px') {
+      $(".overlay").removeClass("overlay-show-watch");
+    } else {
+      $(".overlay").addClass("overlay-show-watch");
+      $(".sidebar-container-fixed").addClass("sidebar-container-fixed-margin-watch");
+    }
+  })
+
 
   $(".search-btn").on("click", function () {
     $(".form-search-video").addClass("form-search-video-fixed");
@@ -538,12 +669,13 @@
   });
 
   $(".overlay").on("click", function () {
-    $('.sidebar-theme').css({
-      "visibility": "hidden"
-    });
-
     $(".sidebar-container-fixed").removeClass("sidebar-container-fixed-margin-watch");
+    $(".overlay").removeClass("overlay-show-watch");
+  })
 
+
+  $(".close-fixed-sb").on("click", function () {
+    $(".sidebar-container-fixed").removeClass("sidebar-container-fixed-margin-watch");
     $(".overlay").removeClass("overlay-show-watch");
   })
 
@@ -581,6 +713,7 @@
     ".nav-user .profile-img-container .dropdown-profile-container .dropdown-profile-container-link-signout",
     function () {
       localStorage.removeItem("token")
+      localStorage.removeItem("UserIdLogin")
     })
 
   $(".text-custom-height").click(function () {
@@ -619,6 +752,7 @@
     $(document).ready(function () {
       loadLike()
     })
+
     $(".button-like-container").one("click", function () {
       $(".button-like-container .angka-like").text(`${Number($(".button-like-container .angka-like").text()) + 1}`);
       loadLike(localStorage.getItem("UserIdLogin"), "");
@@ -661,7 +795,7 @@
 
     const loadLike = (likes, dislikes) => {
       $.ajax({
-        url: `/api/videos/like/${queryUrl}?likes=${likes ? likes : ""}&dislikes=${dislikes ? dislikes : ""}`,
+        url: `/api/videos/like/${idVideoUrl}?likes=${likes ? likes : ""}&dislikes=${dislikes ? dislikes : ""}`,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`
         }
@@ -740,6 +874,39 @@
   $(".btn-cancel-add-comment").click(function () {
     $(".input-comment-container input").val("");
   })
+
+  let checkScroll;
+
+  $(window).scroll(function () {
+    checkScroll = Math.ceil($(window).scrollTop()) >= $(document).height() - $(window).height();
+
+    if (dataQuery) {
+      if ((dataQuery.pIndex + 1) != Math.ceil(dataQuery.videosNoLimit.length / 5)) {
+        if (checkScroll) {
+          loadData({
+            page: dataQuery.pIndex + 1,
+            limit: 5
+          }, idVideoUrl).done(function (data) {
+            let {
+              video,
+              videos,
+              limit,
+              videosNoLimit,
+              pIndex,
+            } = data;
+
+            dataQuery = {
+              pIndex,
+              limit,
+              videosNoLimit
+            }
+
+            drawVideos(videos, videosNoLimit);
+          })
+        }
+      }
+    }
+  });
 </script>
 
 </html>

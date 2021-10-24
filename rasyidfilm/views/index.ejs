@@ -92,6 +92,7 @@
         <a href="/" class="favicon-fixed">
           <img src="images/default-img/logo.png" alt="image" class="logo-img logo-img-fixed" />
         </a>
+        <i class="fas fa-times close-fixed-sb"></i>
         <a href="/" class="sidebar-item-link sidebar-item-link-active">
           <i class="fas fa-home icon-item-link"></i>
           <span class="text-item-link">Home</span>
@@ -114,6 +115,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+  let dataQuery = null;
+
   const renderCardVideo = () => {
     $(".video-thumbnail").removeClass("loading");
     $(".video-duration").css({
@@ -141,16 +144,112 @@
       $(".dark-theme-btn").removeClass("icon-sidebar-theme-active");
     }
 
-    let url = window.location.href.split("?").pop();
+    let url = window.location.href.split("searchName=").pop();
     if (url.includes("http")) {
       url = ""
     }
 
-    loadData(`?${url}`);
+    $(".form-search-video input").val(url);
+
+
+    loadData({
+      searchName: url
+    }).done(function (data) {
+      let {
+        videos,
+        videosNoLimit,
+        pIndex,
+        limit
+      } = data;
+
+      dataQuery = {
+        pIndex,
+        videosNoLimit,
+        limit
+      }
+
+      drawVideos(videos, videosNoLimit);
+      drawProfile();
+    });
+
     window.history.replaceState({}, "", "/");
   });
 
   const loadData = (queryUrl) => {
+    return $.ajax({
+      url: `/api/videos`,
+      method: 'GET',
+      data: queryUrl,
+    }).fail(function (err) {
+      $(".error-alert").css({
+        visibility: "visible",
+        opacity: "1"
+      });
+
+      $(".err-desc").text(err.responseJSON.err);
+
+      setTimeout(() => {
+        $(".error-alert").css({
+          visibility: "hidden",
+          opacity: "0"
+        });
+      }, 5000);
+    });
+  };
+
+  const drawVideos = (videos, videosNoLimit) => {
+    let options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+
+    let videoCode = "";
+    if (videos.length == 0) {
+      videoCode = `<img src="images/default-img/no-data.png" alt="image" class="no-data-img" />`
+    } else {
+      for (let i = 0; i < videos.length; i++) {
+        videoCode += `<div class="video-container" onclick="location.href='/watch/${videos[i].id}'">
+                          <div class="video-thumbnail loading" style="background-image: url(images/thumbnail/${videos[i].thumbnail}); background-repeat: no-repeat;width: 100%;">
+                            <div class="video-duration"></div>
+                          </div>
+                          <div class="text-video-container">
+                            <a href="/channel/${videos[i].User.id}" class="container-video-profile-img loading stopClick">
+                              <img src="images/default-img/profile.png" alt="image" class="video-profile-img" />
+                            </a>
+                            <div class="text-video-user-container">
+                              <div class="title-video loading">${videos[i].title}</div>
+                              <a href="/channel/${videos[i].User.id}" class="username-video loading stopClick">${videos[i].User.firstname.toUpperCase()} ${videos[i].User.lastname.toUpperCase()}</a>
+                              <div class="username-video info-video loading">
+                                <span class="view-info">${videos[i].views}</span> views &bull;
+                                <span class="date-info">${new Date(videos[i].createdAt).toLocaleString("id-ID", options)}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>`;
+      }
+    }
+
+    $(".content-container").append(videoCode);
+    for (let i = 0; i < videosNoLimit.length; i++) {
+      var videoElement = document.createElement('video');
+      videoElement.src = `/video/${videosNoLimit[i].UrlVideo}`;
+      let videoDuration = ""
+      videoElement.onloadedmetadata = function () {
+        var hour = Math.floor(this.duration / 3600);
+        var minutes = Math.floor((this.duration / 60) % 60);
+        var seconds = Math.round((this.duration % 60));
+
+        videoDuration = `${hour ? hour + "." : ""}${minutes}.${seconds - 1}`;
+        if ($(".video-duration")[i]) {
+          document.querySelectorAll(".video-duration")[i].textContent = videoDuration;
+        }
+      }
+    }
+    renderCardVideo();
+  }
+
+  const drawProfile = () => {
     if (localStorage.getItem("token")) {
       $.ajax({
         url: '/api/token',
@@ -176,7 +275,6 @@
 
         $(".nav-username-profile").attr('href', `/channel/${data.id}`);
         $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
-
         $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
       }).fail(function (err) {
         $(".error-alert").css({
@@ -194,79 +292,34 @@
         }, 5000);
       });
     }
-
-    $.ajax({
-      url: `/api/videos${queryUrl ? queryUrl : ""}`,
-    }).done(function (videos) {
-      let options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-
-      let videoCode = "";
-      if (videos.length == 0) {
-        videoCode = `<img src="images/default-img/no-data.png" alt="image" class="no-data-img" />`
-      } else {
-        for (let i = 0; i < videos.length; i++) {
-          videoCode += `<div class="video-container" onclick="location.href='/watch/${videos[i].id}'">
-                          <div class="video-thumbnail loading" style="background-image: url(images/thumbnail/${videos[i].thumbnail}); background-repeat: no-repeat;width: 100%;">
-                            <div class="video-duration"></div>
-                          </div>
-                          <div class="text-video-container">
-                            <a href="/channel/${videos[i].User.id}" class="container-video-profile-img loading stopClick">
-                              <img src="images/default-img/profile.png" alt="image" class="video-profile-img" />
-                            </a>
-                            <div class="text-video-user-container">
-                              <div class="title-video loading">${videos[i].title}</div>
-                              <a href="/channel/${videos[i].User.id}" class="username-video loading stopClick">${videos[i].User.firstname.toUpperCase()} ${videos[i].User.lastname.toUpperCase()}</a>
-                              <div class="username-video info-video loading">
-                                <span class="view-info">${videos[i].views}</span> views &bull;
-                                <span class="date-info">${new Date(videos[i].createdAt).toLocaleString("id-ID", options)}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>`;
-
-          var videoElement = document.createElement('video');
-          videoElement.src = `/video/${videos[i].UrlVideo}`;
-          let videoDuration = ""
-          videoElement.onloadedmetadata = function () {
-            var hour = Math.floor(this.duration / 3600);
-            var minutes = Math.floor((this.duration / 60) % 60);
-            var seconds = Math.round((this.duration % 60));
-
-            videoDuration = `${hour ? hour + "." : ""}${minutes}.${seconds}`;
-            document.querySelectorAll(".video-duration")[i].textContent = videoDuration;
-          }
-        }
-      }
-
-      $(".content-container").html(videoCode);
-      renderCardVideo();
-    }).fail(function (err) {
-      $(".error-alert").css({
-        visibility: "visible",
-        opacity: "1"
-      });
-
-      $(".err-desc").text(err.responseJSON.err);
-
-      setTimeout(() => {
-        $(".error-alert").css({
-          visibility: "hidden",
-          opacity: "0"
-        });
-      }, 5000);
-    });
-  };
+  }
 
   $(".form-search-video").submit(function (event) {
     event.preventDefault();
 
+    $(".content-container").html("");
     let inputSearch = $(".form-search-video input").val();
-    urlSearch = `?searchName=${inputSearch}`;
-    loadData(urlSearch);
+
+    loadData({
+      page: 0,
+      limit: 0,
+      searchName: inputSearch
+    }).done(function (data) {
+      let {
+        videos,
+        videosNoLimit,
+        pIndex,
+        limit
+      } = data;
+
+      dataQuery = {
+        pIndex,
+        videosNoLimit,
+        limit
+      }
+
+      drawVideos(videos, videosNoLimit);
+    });;
   });
 
   $(".nav-hamburger").click(function () {
@@ -384,6 +437,24 @@
     $(".overlay").removeClass("overlay-show");
   });
 
+  $(".close-fixed-sb").on("click", function () {
+    $(".sidebar-container").animate({
+      width: "52px",
+    });
+
+    $(".sidebar-container-fixed").removeClass("sidebar-container-fixed-margin");
+
+    $(".sidebar-item-link").animate({
+      paddingLeft: "13px",
+    });
+
+    $(".content-container").animate({
+      marginLeft: "52px",
+    });
+
+    $(".overlay").removeClass("overlay-show");
+  })
+
   $(".light-theme-btn").click(function () {
     localStorage.setItem("theme", "light");
     $('body').attr("data-theme", localStorage.getItem("theme"));
@@ -418,6 +489,7 @@
     ".nav-user .profile-img-container .dropdown-profile-container .dropdown-profile-container-link-signout",
     function () {
       localStorage.removeItem("token")
+      localStorage.removeItem("UserIdLogin")
     })
 
   $(".stopClick").click(function (e) {
@@ -430,6 +502,44 @@
       opacity: "0"
     });
   })
+
+  $(window).scroll(function () {
+    let pageScroll;
+    let limitScroll;
+
+    if (dataQuery.videosNoLimit.length > 10) {
+      pageScroll = dataQuery.pIndex + 1;
+      limitScroll = 5;
+    } else {
+      pageScroll = dataQuery.pIndex;
+      limitScroll = 10;
+    }
+
+    if (pageScroll != Math.ceil(dataQuery.videosNoLimit.length / limitScroll)) {
+      if (Math.ceil($(window).scrollTop()) >= $(document).height() - $(window).height()) {
+        loadData({
+          searchName: $(".form-search-video input").val(),
+          page: dataQuery.pIndex + 1,
+          limit: 5
+        }).done(function (data) {
+          let {
+            videos,
+            limit,
+            videosNoLimit,
+            pIndex,
+          } = data;
+
+          dataQuery = {
+            pIndex,
+            limit,
+            videosNoLimit
+          }
+
+          drawVideos(videos, videosNoLimit);
+        })
+      }
+    }
+  });
 </script>
 
 </html>

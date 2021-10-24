@@ -101,6 +101,7 @@
                 <a href="/" class="favicon-fixed">
                     <img src="/images/default-img/logo.png" alt="image" class="logo-img logo-img-fixed" />
                 </a>
+                <i class="fas fa-times close-fixed-sb"></i>
                 <a href="/" class="sidebar-item-link">
                     <i class="fas fa-home icon-item-link"></i>
                     <span class="text-item-link">Home</span>
@@ -369,6 +370,24 @@
         $(".overlay").removeClass("overlay-show");
     })
 
+    $(".close-fixed-sb").on("click", function () {
+        $(".sidebar-container").animate({
+            width: "52px",
+        });
+
+        $(".sidebar-container-fixed").removeClass("sidebar-container-fixed-margin");
+
+        $(".sidebar-item-link").animate({
+            paddingLeft: "13px",
+        });
+
+        $(".content-container").animate({
+            marginLeft: "52px",
+        });
+
+        $(".overlay").removeClass("overlay-show");
+    })
+
     $(".light-theme-btn").click(function () {
         localStorage.setItem("theme", "light");
         $('body').attr("data-theme", localStorage.getItem("theme"));
@@ -409,6 +428,7 @@
         ".nav-user .profile-img-container .dropdown-profile-container .dropdown-profile-container-link-signout",
         function () {
             localStorage.removeItem("token")
+            localStorage.removeItem("UserIdLogin")
         })
 
     $(".input-form-edit-profile-container input").focus(function () {
@@ -513,6 +533,7 @@
             })
 
             localStorage.removeItem("token")
+            localStorage.removeItem("UserIdLogin")
             window.location.href = `/login`;
         }).fail(function (err) {
             $(".error-alert").css({

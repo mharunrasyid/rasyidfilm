@@ -11,7 +11,20 @@ const fs = require("fs");
 /* GET videos listing. */
 router.get("/", async function (req, res, next) {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    let offset;
+
+    if (page == 1) {
+      offset = 0;
+    } else {
+      offset = (page - 1) * limit + 5;
+    }
+
     const videos = await models.Video.findAll({
+      limit: limit,
+      offset: offset,
       include: [
         {
           model: models.User,
@@ -26,9 +39,31 @@ router.get("/", async function (req, res, next) {
       },
     });
 
-    res.json(videos);
+    const videosNoLimit = await models.Video.findAll({
+      include: [
+        {
+          model: models.User,
+          attributes: ["id", "email", "firstname", "lastname", "createdAt"],
+        },
+      ],
+      order: [["views", "DESC"]],
+      where: {
+        title: {
+          [Op.like]: `%${req.query.searchName ? req.query.searchName : ""}%`,
+        },
+      },
+    });
+
+    data = {
+      videos,
+      videosNoLimit: videosNoLimit,
+      pIndex: page,
+      limit,
+    };
+
+    res.json(data);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
@@ -78,13 +113,41 @@ router.get("/studio", helpers.isLoggedIn, async function (req, res, next) {
 
     res.json(data);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
 router.get("/watch/:id", async function (req, res, next) {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    let offset;
+
+    if (page == 1) {
+      offset = 0;
+    } else {
+      offset = (page - 1) * limit + 5;
+    }
+
     const videos = await models.Video.findAll({
+      limit: limit,
+      offset: offset,
+      include: [
+        {
+          model: models.User,
+          attributes: ["id", "email", "firstname", "lastname", "createdAt"],
+        },
+      ],
+      order: [["views", "DESC"]],
+      where: {
+        id: {
+          [Op.not]: req.params.id,
+        },
+      },
+    });
+
+    const videosNoLimit = await models.Video.findAll({
       include: [
         {
           model: models.User,
@@ -113,28 +176,45 @@ router.get("/watch/:id", async function (req, res, next) {
 
     if (!video) return res.status(500).json({ err: "video not found!" });
 
-    req.body.views = video.views + 1;
-    const videoEdit = await models.Video.update(req.body, {
-      where: {
-        id: Number(req.params.id),
-      },
-      returning: true,
-      plain: true,
-    });
+    if (req.query.view) {
+      req.body.views = video.views + Number(req.query.view);
+      const videoEdit = await models.Video.update(req.body, {
+        where: {
+          id: Number(req.params.id),
+        },
+        returning: true,
+        plain: true,
+      });
+    }
+
 
     data = {
       videos,
       video,
+      videosNoLimit: videosNoLimit,
+      pIndex: page,
+      limit,
     };
 
     res.json(data);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
 router.get("/channel/:id", async function (req, res, next) {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    let offset;
+
+    if (page == 1) {
+      offset = 0;
+    } else {
+      offset = (page - 1) * limit + 5;
+    }
+
     const checkUser = await models.User.findOne({
       where: {
         id: req.params.id,
@@ -150,6 +230,24 @@ router.get("/channel/:id", async function (req, res, next) {
     });
 
     const videos = await models.Video.findAll({
+      limit: limit,
+      offset: offset,
+      include: [
+        {
+          model: models.User,
+          attributes: ["id", "email", "firstname", "lastname", "createdAt"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+      where: {
+        UserId: req.params.id,
+        title: {
+          [Op.like]: `%${req.query.searchVideo ? req.query.searchVideo : ""}%`,
+        },
+      },
+    });
+
+    const videosNoLimit = await models.Video.findAll({
       include: [
         {
           model: models.User,
@@ -168,11 +266,14 @@ router.get("/channel/:id", async function (req, res, next) {
     data = {
       user,
       videos,
+      videosNoLimit: videosNoLimit,
+      pIndex: page,
+      limit,
     };
 
     res.json(data);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
@@ -205,7 +306,7 @@ router.post("/add", helpers.isLoggedIn, async function (req, res, next) {
     const video = await models.Video.create(req.body);
     res.status(201).json(video);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
@@ -222,7 +323,7 @@ router.get("/edit/:id", helpers.isLoggedIn, async function (req, res, next) {
 
     res.status(201).json(video);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
@@ -262,7 +363,7 @@ router.put("/edit/:id", helpers.isLoggedIn, async function (req, res, next) {
     });
     res.status(201).json(video[1]);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
@@ -297,7 +398,7 @@ router.delete(
 
       res.status(201).json(video);
     } catch (err) {
-      res.status(500).json({ err : "Terjadi Kesalahan" });
+      res.status(500).json({ err: "Terjadi Kesalahan" });
     }
   }
 );
@@ -352,7 +453,7 @@ router.get("/like/:id", helpers.isLoggedIn, async function (req, res, next) {
 
     res.json(videoLike);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 

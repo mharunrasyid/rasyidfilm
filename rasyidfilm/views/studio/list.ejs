@@ -104,6 +104,7 @@
                         <img src="/images/default-img/logo.png" alt="image" class="logo-img logo-img-fixed"
                             style="margin: 15px auto;" />
                     </a>
+                    <i class="fas fa-times close-fixed-sb" style="top: 10px;right: 10px;"></i>
                     <a href="/studio sidebar-item-link-active" class="a-image-profile-content">
                         <img src="/images/default-img/profile.png" alt="image" class="image-profile-content" />
                     </a>
@@ -256,14 +257,15 @@
             month: "long",
             day: "numeric",
         };
+
         let trCode = "";
         videos.forEach((m) => {
             trCode += `<tr style="font-family:sans-serif;">
                                     <td>${m.id}</td>
                                     <td>${m.title}</td>
                                     <td>${m.UrlVideo}</td>
-                                    <td>${m.likes}</td>
-                                    <td>${m.dislikes}</td>
+                                    <td>${m.likes.length}</td>
+                                    <td>${m.dislikes.length}</td>
                                     <td>${m.views}</td>
                                     <td>${m.thumbnail}</td>
                                     <td>${new Date(m.createdAt).toLocaleString("id-ID",options)}</td>
@@ -579,6 +581,24 @@
         $(".overlay").removeClass("overlay-show");
     });
 
+    $(".close-fixed-sb").on("click", function () {
+        $(".sidebar-container").animate({
+            width: "52px",
+        });
+
+        $(".sidebar-container-fixed").removeClass("sidebar-container-fixed-margin");
+
+        $(".sidebar-item-link").animate({
+            paddingLeft: "13px",
+        });
+
+        $(".content-container").animate({
+            marginLeft: "52px",
+        });
+
+        $(".overlay").removeClass("overlay-show");
+    })
+
     $(".light-theme-btn").click(function () {
         localStorage.setItem("theme", "light");
         $('body').attr("data-theme", localStorage.getItem("theme"));
@@ -612,6 +632,7 @@
         ".nav-user .profile-img-container .dropdown-profile-container .dropdown-profile-container-link-signout",
         function () {
             localStorage.removeItem("token")
+            localStorage.removeItem("UserIdLogin")
         })
 </script>
 

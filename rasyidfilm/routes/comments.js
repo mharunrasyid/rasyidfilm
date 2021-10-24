@@ -6,7 +6,26 @@ const helpers = require("../helpers/util");
 /* GET comments listing. */
 router.get("/:idVideo", async function (req, res, next) {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 3;
+
     const comments = await models.Comment.findAll({
+      limit: limit,
+      offset: (page - 1) * limit,
+      include: [
+        {
+          model: models.User,
+          attributes: ["id", "email", "firstname", "lastname", "createdAt"],
+        },
+        { model: models.Video },
+      ],
+      order: [["createdAt", "DESC"]],
+      where: {
+        VideoId: req.params.idVideo,
+      },
+    });
+
+    const commentsNoLimit = await models.Comment.findAll({
       include: [
         {
           model: models.User,
@@ -34,12 +53,15 @@ router.get("/:idVideo", async function (req, res, next) {
     });
 
     let data = {
-        comments,
-        totalComments
-    }
+      comments,
+      totalComments,
+      commentsNoLimit,
+      pIndex: page,
+      limit,
+    };
     res.json(data);
   } catch (err) {
-    res.status(500).json({ err : "Terjadi Kesalahan" });
+    res.status(500).json({ err: "Terjadi Kesalahan" });
   }
 });
 
@@ -54,7 +76,7 @@ router.post(
       const comment = await models.Comment.create(req.body);
       res.status(201).json(comment);
     } catch (err) {
-      res.status(500).json({ err : "Terjadi Kesalahan" });
+      res.status(500).json({ err: "Terjadi Kesalahan" });
     }
   }
 );
@@ -88,7 +110,7 @@ router.delete(
       });
       res.status(201).json(comment);
     } catch (err) {
-      res.status(500).json({ err : "Terjadi Kesalahan" });
+      res.status(500).json({ err: "Terjadi Kesalahan" });
     }
   }
 );

@@ -115,7 +115,7 @@ body {
 }
 
 .form-search-video input {
-  width: 99%;
+  width: 100%;
   height: 40px;
   font-size: 16px;
   color: var(--secoodary-color);
@@ -375,7 +375,6 @@ main {
   width: 100%;
   padding: 10px 0;
   display: flex;
-  align-items: center;
 }
 
 .container-video-profile-img {
@@ -771,7 +770,8 @@ main {
 .btn-form-edit-profile-container button,
 .btn-delete-account-form-edit-profile,
 .btn-box-popup-delete-account-container button,
-.btn-back-home-error {
+.btn-back-home-error,
+.load-more-comments {
   border: none;
   outline: none;
   padding: 10px 15px;
@@ -1078,6 +1078,7 @@ main {
 
 .sub-container-video-play-video {
   width: 67%;
+  margin-bottom: 20px;
 }
 
 .container-video-random-play-video {
@@ -2010,7 +2011,8 @@ a.username-video-play-video:hover {
   }
 
   .input-comment-container {
-    width: 200px;
+    width: 75%;
+    min-width: 200px !important;
   }
 
   .small-logo-img {
@@ -2041,6 +2043,7 @@ a.username-video-play-video:hover {
     width: 100% !important;
     object-fit: cover;
     height: 30%;
+    max-height: 180px !important;
   }
 }
 
@@ -2148,16 +2151,25 @@ a.username-video-play-video:hover {
 .sidebar-container-fixed {
   z-index: 999999999 !important;
   border: none;
-  margin-left: -230px;
-  width: 0 !important;
+  margin-left: -260px;
   padding-top: 0;
   transition: all 0.5s ease;
   height: 100%;
-  width: 220px !important;
+  width: 255px !important;
 }
 
 .title-profile-content-container-fixed {
   display: block !important;
+}
+
+.close-fixed-sb {
+  position: absolute;
+  top: 20px;
+  color: var(--primary-color-dark-inverted);
+  font-size: 25px;
+  cursor: pointer;
+  opacity: 0.5;
+  right: 20px;
 }
 
 @media screen and (max-width: 955px) {
@@ -2183,8 +2195,32 @@ a.username-video-play-video:hover {
   opacity: 1;
 }
 
+.input-wacth-sp {
+  width: 100% !important;
+}
+
 @media screen and (min-width: 1010px) {
   .input-watch-ft {
-    margin-left: -20%;
+    margin-left: -10%;
   }
+
+  .input-wacth-sp {
+    margin-left: -30%;
+  }
+}
+
+.load-more-comments {
+  background: transparent;
+  box-sizing: border-box;
+  border: 3px solid rgb(252, 116, 25);
+  color: rgb(252, 116, 25);
+  font-weight: bold;
+  margin: 10px 0;
+  width: 100%;
+  padding: 15px 5px;
+}
+
+.load-more-comments:hover {
+  background: rgb(252, 116, 25);
+  color: white;
 }
