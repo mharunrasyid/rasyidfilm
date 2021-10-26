@@ -151,6 +151,7 @@
     dropArea.addEventListener("drop", (event) => {
         event.preventDefault();
         file = event.dataTransfer.files[0];
+        input.files = event.dataTransfer.files;
         showFile();
     });
 
