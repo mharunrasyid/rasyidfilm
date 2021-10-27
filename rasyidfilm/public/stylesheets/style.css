@@ -1937,6 +1937,17 @@ a.username-video-play-video:hover {
   }
 }
 
+@media screen and (max-width: 500px) {
+  .sidebar-container {
+    width: 0 !important;
+    border: none;
+  }
+
+  .content-container {
+    margin-left: 0 !important;
+  }
+}
+
 @media screen and (max-width: 490px) {
   .input-search-container-channel {
     display: none;
@@ -1969,14 +1980,6 @@ a.username-video-play-video:hover {
 @media screen and (max-width: 400px) {
   .text-container-error-page div:first-child {
     font-size: 25px;
-  }
-  .content-container {
-    margin-left: 0 !important;
-  }
-
-  .sidebar-container {
-    width: 0 !important;
-    border: none;
   }
 
   .small-logo-img {
