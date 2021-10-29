@@ -4,7 +4,7 @@ var models = require("../models");
 var jwt = require("jsonwebtoken");
 
 const helpers = require("../helpers/util");
-const bcrypt = require("bcrypt");
+var bcrypt = require('bcryptjs');
 const { response } = require("../app");
 const saltRounds = 10;
 

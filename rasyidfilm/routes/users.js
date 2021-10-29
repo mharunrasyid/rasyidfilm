@@ -2,7 +2,7 @@ var express = require("express");
 var models = require("../models");
 var router = express.Router();
 
-const bcrypt = require("bcrypt");
+var bcrypt = require('bcryptjs');
 const helpers = require("../helpers/util");
 const saltRounds = 10;
 const fs = require("fs");
