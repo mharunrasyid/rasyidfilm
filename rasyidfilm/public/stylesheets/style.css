@@ -394,9 +394,10 @@ main {
 }
 
 .title-video {
+  word-break: break-all;
   font-weight: bold;
   font-size: 17px;
-  margin-bottom: 5px;
+  margin-bottom: 12px;
   text-decoration: none;
   color: transparent;
 }
@@ -405,6 +406,7 @@ main {
   text-decoration: none;
   color: transparent;
   font-size: 14px;
+  word-break: break-all;
 }
 
 .color-title-video {
@@ -1110,9 +1112,11 @@ main {
   color: var(--title-video-color);
   margin-bottom: 10px;
   line-height: 30px;
+  word-break: break-all;
 }
 
 .header-sub-video-play-video-container .info-play-video {
+  word-break: break-all;
   color: grey;
 }
 
@@ -1152,11 +1156,13 @@ main {
 
 .username-sub-desc-sub-video-play-video {
   font-weight: bold;
+  word-break: break-all;
   color: var(--title-video-color);
 }
 
 .description-sub-desc-sub-video-play-video {
   margin: 15px 0;
+  word-break: break-all;
   max-height: 122px;
   font-size: 16px;
   opacity: 0.8;
@@ -1242,6 +1248,7 @@ main {
 }
 
 .username-comment {
+  word-break: break-all;
   text-decoration: none;
   color: var(--title-video-color);
   overflow: hidden;
@@ -1256,10 +1263,12 @@ main {
 .text-sub-comments-container span {
   color: rgb(126, 126, 126);
   font-size: 14px;
+  word-break: break-all;
   margin-left: -12px;
 }
 
 .desc-comment {
+  word-break: break-all;
   padding-right: 40px;
   margin-top: 10px;
   color: var(--title-video-color);
@@ -1332,11 +1341,13 @@ main {
   font-weight: bold;
   color: var(--title-video-color);
   margin-bottom: 6px;
+  word-break: break-all;
   font-size: 18px;
 }
 
 a.username-video-play-video {
   margin: 5px 0;
+  word-break: break-all;
 }
 
 a.username-video-play-video:hover {
@@ -1345,6 +1356,7 @@ a.username-video-play-video:hover {
 
 .username-video-play-video {
   font-size: 12.5px;
+  word-break: break-all;
   color: rgb(131, 130, 130);
 }
 
