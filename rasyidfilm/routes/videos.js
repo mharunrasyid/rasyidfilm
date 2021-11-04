@@ -107,7 +107,6 @@ router.get("/studio", helpers.isLoggedIn, async function (req, res, next) {
     data = {
       videos,
       videosNoLimit: videosNoLimit.length,
-      userToken: req.body.userToken,
       pIndex: page,
     };
 

@@ -67,9 +67,7 @@ body {
   padding: 10px 15px;
   justify-content: flex-start;
   width: 100%;
-  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
-    rgba(17, 17, 26, 0.1) 0px 8px 32px;
-
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
   position: fixed;
   z-index: 100;
 }
@@ -233,6 +231,10 @@ body {
 
 .nav-username-profile {
   font-weight: bold;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-decoration: none;
   opacity: 0.5;
   color: var(--primary-color-dark-inverted);
@@ -394,7 +396,7 @@ main {
 }
 
 .title-video {
-  word-break: break-all;
+  overflow-wrap: anywhere;
   font-weight: bold;
   font-size: 17px;
   margin-bottom: 12px;
@@ -406,7 +408,7 @@ main {
   text-decoration: none;
   color: transparent;
   font-size: 14px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .color-title-video {
@@ -974,6 +976,8 @@ main {
 .header-profile-content-video-container-channel div {
   font-size: 25px;
   color: var(--primary-color-dark-inverted);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-btn-content-video-container-channel {
@@ -1112,11 +1116,11 @@ main {
   color: var(--title-video-color);
   margin-bottom: 10px;
   line-height: 30px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .header-sub-video-play-video-container .info-play-video {
-  word-break: break-all;
+  overflow-wrap: anywhere;
   color: grey;
 }
 
@@ -1156,13 +1160,13 @@ main {
 
 .username-sub-desc-sub-video-play-video {
   font-weight: bold;
-  word-break: break-all;
+  overflow-wrap: anywhere;
   color: var(--title-video-color);
 }
 
 .description-sub-desc-sub-video-play-video {
   margin: 15px 0;
-  word-break: break-all;
+  overflow-wrap: anywhere;
   max-height: 122px;
   font-size: 16px;
   opacity: 0.8;
@@ -1248,7 +1252,7 @@ main {
 }
 
 .username-comment {
-  word-break: break-all;
+  overflow-wrap: anywhere;
   text-decoration: none;
   color: var(--title-video-color);
   overflow: hidden;
@@ -1263,12 +1267,12 @@ main {
 .text-sub-comments-container span {
   color: rgb(126, 126, 126);
   font-size: 14px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
   margin-left: -12px;
 }
 
 .desc-comment {
-  word-break: break-all;
+  overflow-wrap: anywhere;
   padding-right: 40px;
   margin-top: 10px;
   color: var(--title-video-color);
@@ -1341,13 +1345,13 @@ main {
   font-weight: bold;
   color: var(--title-video-color);
   margin-bottom: 6px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
   font-size: 18px;
 }
 
 a.username-video-play-video {
   margin: 5px 0;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 a.username-video-play-video:hover {
@@ -1356,7 +1360,7 @@ a.username-video-play-video:hover {
 
 .username-video-play-video {
   font-size: 12.5px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
   color: rgb(131, 130, 130);
 }
 
@@ -1786,7 +1790,7 @@ a.username-video-play-video:hover {
   }
 }
 
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 760px) {
   .video-play-video {
     position: sticky;
     top: 65px;
@@ -1833,7 +1837,7 @@ a.username-video-play-video:hover {
   .video-container:nth-child(3),
   .video-container,
   .video-container-channel {
-    width: 46%;
+    width: 45%;
   }
 
   .video-container:nth-child(2) .video-thumbnail {

@@ -184,7 +184,6 @@
             let {
                 videos,
                 videosNoLimit,
-                userToken,
                 pIndex,
             } = data;
 
@@ -208,7 +207,7 @@
             }
 
             drawTable(videos)
-            drawProfile(userToken)
+            drawProfile()
         })
     });
 
@@ -268,8 +267,8 @@
                                     <td>${m.dislikes.length}</td>
                                     <td>${m.views}</td>
                                     <td>${m.thumbnail}</td>
-                                    <td>${new Date(m.createdAt).toLocaleString("id-ID",options)}</td>
-                                    <td>${new Date(m.updatedAt).toLocaleString("id-ID",options)}</td>
+                                    <td>${new Date(m.createdAt).toLocaleString("id-ID", options)}</td>
+                                    <td>${new Date(m.updatedAt).toLocaleString("id-ID", options)}</td>
                                     <td>
                                         <button class="btn-edit-table-content" onclick="location.href='/studio/edit/${m.id}'">Edit</button>
                                         <button class="btn-delete-table-content" data-idVideo="${m.id}">Delete</button>
@@ -280,13 +279,35 @@
         $(".table-content tbody").html(trCode);
     }
 
-    const drawProfile = (userToken) => {
+    const drawProfile = () => {
+        if (localStorage.getItem("token")) {
+            $.ajax({
+                url: '/api/token',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            }).done(function (data) {
+                $(".nav-username-profile").attr('href', `/channel/${data.userId}`);
+                $(".nav-username-profile").text(
+                    `${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
+                $(".sub-title-profile-content").text(
+                    `${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
+            }).fail(function (err) {
+                $(".error-alert").css({
+                    visibility: "visible",
+                    opacity: "1"
+                });
 
-        $(".nav-username-profile").attr('href', `/channel/${userToken.userId}`);
-        $(".nav-username-profile").text(
-            `${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}`);
-        $(".sub-title-profile-content").text(
-            `${userToken.firstname.toUpperCase()} ${userToken.lastname.toUpperCase()}`);
+                $(".err-desc").text(err.responseJSON.err);
+
+                setTimeout(() => {
+                    $(".error-alert").css({
+                        visibility: "hidden",
+                        opacity: "0"
+                    });
+                }, 5000);
+            });
+        }
     }
 
     $(".table-content").on("click", ".btn-delete-table-content", function () {
@@ -344,7 +365,6 @@
             let {
                 videos,
                 videosNoLimit,
-                userToken,
                 pIndex,
             } = data;
 
@@ -380,7 +400,6 @@
             let {
                 videos,
                 videosNoLimit,
-                userToken,
                 pIndex,
             } = data;
 
@@ -416,7 +435,6 @@
             let {
                 videos,
                 videosNoLimit,
-                userToken,
                 pIndex,
             } = data;
 
