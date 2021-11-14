@@ -134,8 +134,8 @@
               <form action="" class="add-comment-container">
                 <img src="/images/default-img/profile.png" alt="image" />
                 <div class="input-comment-container">
-                  <input type="text" name="inputAdd" id="inputAdd" placeholder="Write a public comment..."
-                    autocomplete="off" />
+                  <textarea type="text" name="inputAdd" id="inputAdd" oninput="auto_grow(this)"
+                    placeholder="Write a public comment..." autocomplete="off" /></textarea>
                   <div class="btn-container-input-comment-container">
                     <button type="button" class="btn-cancel-add-comment">Cancel</button>
                     <button class="btn-add-comment" id="btn-add-comment-click">Comment</button>
@@ -357,20 +357,6 @@
         $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
         $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
 
-      }).fail(function (err) {
-        $(".error-alert").css({
-          visibility: "visible",
-          opacity: "1"
-        });
-
-        $(".err-desc").text(err.responseJSON.err);
-
-        setTimeout(() => {
-          $(".error-alert").css({
-            visibility: "hidden",
-            opacity: "0"
-          });
-        }, 5000);
       });
     }
   }
@@ -537,6 +523,9 @@
       const descComment = $("#inputAdd").val();
       addComment(descComment);
       $("#inputAdd").val("")
+      $("#inputAdd").css({
+        height: "30px"
+      })
     }
   });
 
@@ -909,6 +898,11 @@
       }
     }
   });
+
+  function auto_grow(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+  }
 </script>
 
 </html>

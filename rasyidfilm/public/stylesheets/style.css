@@ -282,7 +282,7 @@ main {
 .sidebar-theme {
   position: absolute;
   bottom: 0;
-  width: 100px;
+  width: 90px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -1208,9 +1208,12 @@ main {
   flex-direction: column;
 }
 
-.input-comment-container input {
+.input-comment-container textarea {
   height: 30px;
   border: none;
+  resize: none;
+  overflow: hidden;
+  font-family: sans-serif;
   outline: none;
   color: var(--title-video-color);
   border-bottom: 2px solid var(--border-table-content);

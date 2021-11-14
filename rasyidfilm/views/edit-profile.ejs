@@ -219,20 +219,6 @@
                 $("#emailInput").val(`${data.email}`);
                 $("#firstNameInput").val(`${data.firstname}`);
                 $("#lastNameInput").val(`${data.lastname}`);
-            }).fail(function (err) {
-                $(".error-alert").css({
-                    visibility: "visible",
-                    opacity: "1"
-                });
-
-                $(".err-desc").text(err.responseJSON.err);
-
-                setTimeout(() => {
-                    $(".error-alert").css({
-                        visibility: "hidden",
-                        opacity: "0"
-                    });
-                }, 5000);
             });
         }
     }

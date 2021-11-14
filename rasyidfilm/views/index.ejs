@@ -151,7 +151,6 @@
 
     $(".form-search-video input").val(url);
 
-
     loadData({
       searchName: url
     }).done(function (data) {
@@ -276,21 +275,7 @@
         $(".nav-username-profile").attr('href', `/channel/${data.id}`);
         $(".sidebar-item-link-channel-sb").attr('href', `/channel/${data.id}`)
         $(".nav-username-profile").text(`${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
-      }).fail(function (err) {
-        $(".error-alert").css({
-          visibility: "visible",
-          opacity: "1"
-        });
-
-        $(".err-desc").text(err.responseJSON.err);
-
-        setTimeout(() => {
-          $(".error-alert").css({
-            visibility: "hidden",
-            opacity: "0"
-          });
-        }, 5000);
-      });
+      })
     }
   }
 
