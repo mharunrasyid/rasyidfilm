@@ -35,7 +35,7 @@
         </a>
       </div>
       <div class="nav-content nav-content-play-video">
-        <form action="" class="form-search-video form-search-video-play seacrh-videos-padding-right"
+        <form action="" class="form-search-video form-search-video-play"
           style="max-width: 500px;">
           <input type="search" placeholder="Search" name="searchVideo" class="input-watch-ft" />
           <i class="fas fa-times close-search"></i>
@@ -298,7 +298,7 @@
           var minutes = Math.floor((this.duration / 60) % 60);
           var seconds = Math.round((this.duration % 60));
 
-          videoDuration = `${hour ? hour + "." : ""}${minutes}.${seconds - 1}`;
+          videoDuration = `${hour ? hour + "." : ""}${minutes}.${String(seconds).length > 1 ? seconds - 1 : "0" + (seconds - 1)}`;
           if ($(".video-duration-play-video")[i]) {
             document.querySelectorAll(".video-duration-play-video")[i].textContent = videoDuration;
           }

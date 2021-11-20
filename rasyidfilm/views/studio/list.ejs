@@ -42,7 +42,7 @@
                 </a>
             </div>
             <div class="nav-content nav-content-studio">
-                <form action="" class="form-search-video">
+                <form action="" class="form-search-video form-search-video-studio">
                     <input type="search" placeholder="Search For Your Video Title" />
                     <i class="fas fa-times close-search"></i>
                 </form>
@@ -287,7 +287,7 @@
                     'Authorization': `Bearer ${localStorage.getItem("token")}`
                 }
             }).done(function (data) {
-                $(".nav-username-profile").attr('href', `/channel/${data.userId}`);
+                $(".nav-username-profile").attr('href', `/channel/${data.id}`);
                 $(".nav-username-profile").text(
                     `${data.firstname.toUpperCase()} ${data.lastname.toUpperCase()}`);
                 $(".sub-title-profile-content").text(
