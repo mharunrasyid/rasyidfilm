@@ -300,7 +300,7 @@ main {
   height: 40px;
   border-radius: 10px;
   background: var(--active-sidebar-color);
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   margin-left: 15px;
 }
 
