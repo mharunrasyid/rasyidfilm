@@ -14,11 +14,18 @@ module.exports = (sequelize, DataTypes) => {
       Video.belongsTo(models.User);
       Video.hasMany(models.Comment, { onDelete: 'cascade' });
     }
-  };
+  }
   Video.init({
     UserId: DataTypes.INTEGER,
-    title: DataTypes.STRING(100),
+    title: DataTypes.STRING(150),
     UrlVideo: DataTypes.TEXT,
+    views: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    private: DataTypes.BOOLEAN,
+    desc: DataTypes.TEXT,
+    thumbnail: DataTypes.TEXT,
     likes: {
       type: DataTypes.ARRAY(DataTypes.INTEGER),
       defaultValue: []
@@ -26,13 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     dislikes: {
       type: DataTypes.ARRAY(DataTypes.INTEGER),
       defaultValue: []
-    },
-    views: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    },
-    desc: DataTypes.TEXT,
-    thumbnail: DataTypes.TEXT
+    }
   }, {
     sequelize,
     modelName: 'Video',

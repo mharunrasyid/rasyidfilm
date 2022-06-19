@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Videos', {
       id: {
         allowNull: false,
@@ -9,19 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       UserId: {
-        allowNull: false,
         type: Sequelize.INTEGER
       },
       title: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       UrlVideo: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      likes: {
-        type: Sequelize.INTEGER
+        type: Sequelize.TEXT
       },
       views: {
         type: Sequelize.INTEGER
@@ -30,12 +24,10 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       desc: {
-        allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       thumbnail: {
-        allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -47,7 +39,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Videos');
   }
 };

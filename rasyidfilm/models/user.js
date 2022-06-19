@@ -1,5 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,17 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Comment, { onDelete: 'cascade' });
     }
   }
-  User.init(
-    {
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
-      firstname: DataTypes.STRING,
-      lastname: DataTypes.STRING,
-    },
-    {
-      sequelize,
-      modelName: "User",
-    }
-  );
+  User.init({
+    firstname: DataTypes.STRING(100),
+    lastname: DataTypes.STRING(100),
+    email: DataTypes.STRING(150),
+    password: DataTypes.TEXT
+  }, {
+    sequelize,
+    modelName: 'User',
+  });
   return User;
 };

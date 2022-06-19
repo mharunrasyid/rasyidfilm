@@ -16,11 +16,26 @@ module.exports = {
       queryInterface.changeColumn("Comments", "VideoId", {
         type: Sequelize.INTEGER,
         allowNull: false,
-      }),
+        onDelete: "CASCADE",
+        references: {
+          model: "Videos",
+          key: "id",
+          as: "VideoId",
+        },
+      })
     ]);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Comments");
+    return Promise.all([
+      queryInterface.changeColumn("Comments", "UserId", {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      }),
+      queryInterface.changeColumn("Comments", "VideoId", {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      })
+    ]);
   },
 };

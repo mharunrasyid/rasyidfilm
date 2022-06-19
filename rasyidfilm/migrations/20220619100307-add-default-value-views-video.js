@@ -1,28 +1,30 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.changeColumn(
         "Videos",
-        "UrlVideo",
+        "views",
         {
-          type: Sequelize.TEXT,
-          allowNull: false,
+          type: Sequelize.INTEGER,
+          allowNull: true,
+          defaultValue: 0,
         }
-      ),
-      queryInterface.changeColumn(
-        "Videos",
-        "thumbnail",
-        {
-          type: Sequelize.TEXT,
-          allowNull: false,
-        }
-      ),
+      )
     ]);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Videos");
-  }
+    return Promise.all([
+      queryInterface.changeColumn(
+        "Videos",
+        "views",
+        {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        }
+      )
+    ]);
+  },
 };
